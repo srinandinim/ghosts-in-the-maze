@@ -1,5 +1,7 @@
 # Log Notes 
 ## September 24, 2022 Tej's Working Session
+- Added functionality to run an agent with n number of ghosts to run simulations. Code could be more modular though.
+- Added functionality for ghosts so that you can find their location and move according to the assignment probabilities
 - Added functionality to visualize the generated environment, will need to add visualization scripts for env, ghost, and agent later on.
 - I noticed that we should use DFS, not BFS for validating the maze since we just need to show a path exists, not necessarly an optimal path. We want to save on space complexity and that's also one of the questions that Cowan has on Assignment 1. 
 - We can reuse your BFS implementation for Agent 1, but I have went ahead and updated validate_maze to be DFS so that it's optimal.

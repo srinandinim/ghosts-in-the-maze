@@ -42,15 +42,24 @@ def create_game(num_ghosts=1):
             for i in range(len(ghosts)):
                 print(f"Ghost {i} Location:\t {ghosts[i].location}")
 
+    def run_agent1_ntimes(n):
+        survival_rates = []
+        for i in range(n):
+            survival_rates.append(run_agent1())
+        success = sum(survival_rates)
+        failures = len(survival_rates) - success
+        succ_rate = success / len(survival_rates)
+        print(f"Survival for 5x5 maze with 5 ghosts for Agent 1 {n} times is:\tSuccess: {success}\tFailures: {failures}\tSuccess Rate: {succ_rate}")
 
     print("The environment can be seen below:")
     print("----------------------------------")
     print(env)    
     print("----------------------------------")
-    run_agent1()
+    run_agent1_ntimes(10000)
 
 
 if __name__ == '__main__':
-    create_game(num_ghosts=3)
+    create_game(num_ghosts=2)
+
 
 
