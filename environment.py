@@ -58,7 +58,7 @@ class Environment:
         """
         while len(queue) > 0:
             curr = queue.pop(0)
-            visited[curr[0]][curr[1]] = 1 
+            visited.add(curr)
 
             if curr[0] == curr[1] == Environment.SIZE - 1:
                 return True 
