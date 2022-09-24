@@ -1,9 +1,12 @@
 from queue import Empty
 from block import Block
 
+import matplotlib.pyplot as plt
+import numpy as np 
+
 class Environment:
 
-    SIZE = 5
+    SIZE = 8
     BLOCKING_PROBABILITY = 0.28
     DIRECTIONS = [[0,1], [1,0], [0,-1], [-1,0]]
 
@@ -37,7 +40,7 @@ class Environment:
 
     def dfs(self, curr, visited):
         """
-        dfs to see is path from source node to bottom right goal node. 
+        dfs to see is path from source node to bottom right goal node
         """
         visited.add(curr)
         if curr[0] == curr[1] == Environment.SIZE - 1:
@@ -70,6 +73,15 @@ class Environment:
                     if self.maze[x][y].get_blocked() == False: 
                         queue.append((x, y))
         return False 
+
+    def get_picture(self):
+        """
+        renders image of generated environment
+        """
+        array = [[1 if str(cell)=="T" else 0 for cell in row] for row in self.maze] 
+        array = np.array(array)
+        plt.imshow(array, cmap='Greys')
+        plt.show()
 
     def __str__(self):
         return '\n'.join(['\t'.join([str(cell) for cell in row]) for row in self.maze])
