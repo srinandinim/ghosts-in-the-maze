@@ -73,7 +73,9 @@ class Agent1(Agent):
             current = prev[current]
         return list(reversed(path))
 
-
+    def update_location(self, new_location):
+        # change the old location to new location
+        self.location = new_location 
 
                 
 

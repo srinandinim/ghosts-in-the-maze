@@ -6,7 +6,7 @@ import numpy as np
 
 class Environment:
 
-    SIZE = 8
+    SIZE = 4
     BLOCKING_PROBABILITY = 0.28
     DIRECTIONS = [[0,1], [1,0], [0,-1], [-1,0]]
 
