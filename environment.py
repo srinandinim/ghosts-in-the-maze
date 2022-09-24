@@ -1,5 +1,6 @@
 from queue import Empty
 from block import Block
+import matplotlib.pyplot as plt 
 
 class Environment:
 
