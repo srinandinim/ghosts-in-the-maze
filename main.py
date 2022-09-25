@@ -7,6 +7,6 @@ if __name__ == '__main__':
     # run_agents.simulation_statistics_verbose(num_simulations=1000, num_ghosts=5)
 
     env = Environment(num_ghosts=2)
-    agent2 = Agent2() 
-    path = agent2.run_agent2_verbose(env)
+    agent1 = Agent1() 
+    path = agent1.run_agent1_verbose(env)
 

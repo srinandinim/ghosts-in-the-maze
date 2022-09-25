@@ -137,10 +137,14 @@ class Agent1(Agent):
                     self.isalive = False 
                     return 0 
             # for debugging, print out the agent location and ghost locations
-            print(f"\nAgent 1 Location:\t {self.location}")
+            # for debugging, print out the agent location and ghost locations
+            print(f"\nAgent 2 Location:\t {self.location}")
             for i in range(len(env.ghosts)):
                 print(f"Ghost {i} Location:\t {env.ghosts[i].location}")
-            env.get_picture()
+            color_array = env.get_picture()
+            color_array[self.location[0]][self.location[1]] = 3 
+            picture = plt.imshow(color_array, cmap='Greys')
+            plt.show()
 
 
     def run_agent1(self, env):
