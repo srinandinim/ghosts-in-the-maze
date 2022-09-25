@@ -36,14 +36,6 @@ class Agent:
         print(env)    
         print("----------------------------------\n")
     
-    def simulation_statistics(self, num_simulations, num_ghosts):
-        """
-        run simulation n times and get statistics on survival, and more
-        """
-        rewards_agent1 = [] 
-        for i in range(num_simulations):
-            env = Environment(num_ghosts=num_ghosts) 
-            agent1 = Agent1()  
 
 class Agent1(Agent):
 
@@ -145,6 +137,7 @@ class Agent1(Agent):
             color_array[self.location[0]][self.location[1]] = 3 
             picture = plt.imshow(color_array, cmap='Greys')
             plt.show()
+            return 0 
 
 
     def run_agent1(self, env):
@@ -162,6 +155,7 @@ class Agent1(Agent):
                 if self.location == ghost.get_location():
                     self.isalive = False 
                     return 0 
+        return 0
 
 class Agent2(Agent1):
     """
@@ -210,21 +204,21 @@ class Agent2(Agent1):
         will be used if all paths are blocked, then make sure to walk towards opposite direction
         """
         min_distance = final_variables.SIZE * final_variables.SIZE + 1 
-        min_ghost = None 
+        min_coords = (final_variables.SIZE, final_variables.SIZE)
 
         for ghost in env.ghosts:
             if not env.maze[ghost.location[0]][ghost.location[1]].get_blocked():
                 dist = self.manhattan_distance(self.location, ghost.get_location())
                 if dist < min_distance:
                     min_distance = dist 
-                    min_ghost = ghost
-        return min_ghost  
+                    min_coords = ghost.location 
+        return min_coords  
 
-    def ghost_actionspace(self, env, ghost):
+    def ghost_actionspace(self, env, ghost_location):
         ghost_actions = {}
         for d in self.DIRECTIONS:
-            dx = d[0] + ghost.get_location()[0]
-            dy = d[1] + ghost.get_location()[1]
+            dx = d[0] + ghost_location[0]
+            dy = d[1] + ghost_location[1]
             new_pos = (dx, dy)
             if self.is_valid_position(new_pos):
                 if env.maze[dx][dy].get_blocked():
@@ -251,7 +245,7 @@ class Agent2(Agent1):
         possible_moves = [ (x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1) ]
         possible_valid_moves = []
         for move in possible_moves:
-            if not env.maze[move[0]][move[1]].get_blocked() and self.is_valid_position(move):
+            if self.is_valid_position(move) and not env.maze[move[0]][move[1]].get_blocked():
                 possible_valid_moves.append(move)
 
         if len(possible_valid_moves) == 0: 
@@ -259,10 +253,10 @@ class Agent2(Agent1):
         
         distances = {}
         for possible_move in possible_valid_moves:
-            distances[possible_move] = self.manhattan_distance(nearest_ghost.get_location(), possible_move)
+            distances[possible_move] = self.manhattan_distance(self.nearest_visible_ghost(env), possible_move)
         
         max_dist = 0
-        max_move = None 
+        max_move = self.location 
         for move, dist in distances.items():
             if dist > max_dist:
                 max_dist = dist 
@@ -312,4 +306,26 @@ class Agent2(Agent1):
             color_array[self.location[0]][self.location[1]] = 3 
             picture = plt.imshow(color_array, cmap='Greys')
             plt.show()
+
+    def run_agent2(self, env):
+        path = self.plan_path(env, self.location)
+        while self.isalive:
+            if self.location == (final_variables.SIZE-1, final_variables.SIZE-1):
+                return 1 
+            action = path.pop(0) 
+            if action not in self.ghost_actionspace(env, self.nearest_visible_ghost(env)).keys():
+                self.location = action 
+            else:
+                path = self.plan_path(env, self.location)
+                action = path.pop(0) 
+                if action not in self.ghost_actionspace(env, self.nearest_visible_ghost(env)).keys():
+                    self.location = action 
+                else:
+                    self.location = self.move_agent_away_from_nearest_ghost(env, self.nearest_visible_ghost(env))
+            for ghost in env.ghosts:
+                ghost.update_location(env)
+                if self.location == ghost.get_location():
+                    self.isalive = False 
+                    return 0 
+        return 0 
 

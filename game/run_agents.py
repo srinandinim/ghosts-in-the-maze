@@ -11,7 +11,7 @@ args = parser.parse_args()
 num_ghosts = args.num_ghosts 
 num_simulations = args.num_sims 
 
-def simulation_statistics(num_simulations, num_ghosts):
+def simulation_statistics_agent1(num_simulations, num_ghosts):
     """
     run simulation n times and get statistics on survival, and more
     """
@@ -23,9 +23,23 @@ def simulation_statistics(num_simulations, num_ghosts):
     wins = sum(rewards_agent1)
     losses = len(rewards_agent1) - wins 
     survival = wins / (wins + losses)
-    print(f"Wins: {wins}\tLosses: {losses}\tSurvival Rate: {round(survival*100,2)}%")  
+    print(f"Agent1: Wins: {wins}\tLosses: {losses}\tSurvival Rate: {round(survival*100,2)}%")  
 
-def simulation_statistics_verbose(num_simulations, num_ghosts):
+def simulation_statistics_agent2(num_simulations, num_ghosts):
+    """
+    run simulation n times and get statistics on survival, and more
+    """
+    rewards_agent2 = [] 
+    for i in range(num_simulations):
+        env = Environment(num_ghosts=num_ghosts) 
+        agent2 = Agent2()
+        rewards_agent2.append(agent2.run_agent2(env))
+    wins = sum(rewards_agent2)
+    losses = len(rewards_agent2) - wins 
+    survival = wins / (wins + losses)
+    print(f"Agent2: Wins: {wins}\tLosses: {losses}\tSurvival Rate: {round(survival*100,2)}%")  
+
+def simulation_statistics_verbose_agent1(num_simulations, num_ghosts):
     """
     run simulation n times and get statistics on survival, and more
     """
@@ -38,6 +52,19 @@ def simulation_statistics_verbose(num_simulations, num_ghosts):
     losses = len(rewards_agent1) - wins 
     survival = wins / (wins + losses)
     survival = round(survival, 2)
-    print(f"Wins: {wins}\tLosses: {losses}\tSurvival Rate: {round(survival*100,2)}%")  
+    print(f"Agent1: Wins: {wins}\tLosses: {losses}\tSurvival Rate: {round(survival*100,2)}%")  
 
 
+def simulation_statistics_verbose_agent2(num_simulations, num_ghosts):
+    """
+    run simulation n times and get statistics on survival, and more
+    """
+    rewards_agent2 = [] 
+    for i in range(num_simulations):
+        env = Environment(num_ghosts=num_ghosts) 
+        agent2 = Agent2()
+        rewards_agent2.append(agent2.run_agent2_verbose(env))
+    wins = sum(rewards_agent2)
+    losses = len(rewards_agent2) - wins 
+    survival = wins / (wins + losses)
+    print(f"Agent2: Wins: {wins}\tLosses: {losses}\tSurvival Rate: {round(survival*100,2)}%")  
