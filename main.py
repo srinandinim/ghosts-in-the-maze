@@ -1,7 +1,6 @@
 from venv import create
-from black import Set
 from environment import Environment
-from agent import Agent, Agent1 
+from agent import Agent, Agent1, Agent2 
 from ghost import Ghost 
 
 def run_agent1_verbose(env, ghosts):
@@ -9,12 +8,11 @@ def run_agent1_verbose(env, ghosts):
 
     agent1 = Agent1()
     plan = agent1.plan_path(env)
-    plan_idx = 1
 
     print(f"Agent 1's Planned Optimal Path is: {plan}")
             
     # return 1 if the agent reaches goal node, otherwise +0 
-    while agent1.isalive and plan_idx <= len(plan):
+    while agent1.isalive and len(plan) > 0:
 
         # if we successfully reached the goal node, return +1
         if agent1.location == (Environment.SIZE-1, Environment.SIZE-1):
@@ -22,8 +20,7 @@ def run_agent1_verbose(env, ghosts):
             return 1
 
         # based on the plan, determine what is the next best action
-        action = plan[plan_idx]
-        plan_idx += 1
+        action = plan.pop(0)
         agent1.location = action 
 
         # update ghosts location and make agent die if it touches ghost 
@@ -82,8 +79,30 @@ if __name__ == '__main__':
     agent1_survival_rate = simulation_agent1(num_simulations, num_ghosts)
     print(f" \n{num_ghosts} Ghosts\t5x5 Maze\t Agent1\nIn {num_simulations} simulations, Agent 1's survival_rate was {agent1_survival_rate * 100:.2f} %\n")
     """
+
+    rewards = []
+    for i in range (1000):
+        env = Environment(num_ghosts=15)
+
+        a1 = Agent1()
+        rewards.append(a1.run_agent1(env))
+    
+    print(sum(rewards)/len(rewards))
+
+
+
+
+    """
     env = Environment(num_ghosts=6)
     for ghost in env.ghosts:
         print(ghost)
     print(env)
+    """
+
+    """
+    env = Environment(num_ghosts=1)
+    run_agent1_verbose(env, [Ghost()])
+    
+    """
+
 
