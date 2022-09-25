@@ -17,6 +17,13 @@ class Environment:
         self.generate_maze()
         while not self.validate_maze():
             self.generate_maze()
+    
+    def is_valid_position(self, pos):
+        """
+        validates whether new position is in board
+        """
+        x, y = pos[0], pos[1]
+        return x >= 0 and y >= 0 and x < Environment.SIZE and y < Environment.SIZE
 
     def generate_maze(self):
         """
@@ -49,7 +56,7 @@ class Environment:
         for d in Environment.DIRECTIONS:
             x = curr[0] + d[0]
             y = curr[1] + d[1] 
-            if x >= 0 and y >= 0 and x < Environment.SIZE and y < Environment.SIZE and (x,y) not in visited:
+            if self.is_valid_position((x,y)) and (x,y) not in visited:
                 if self.maze[x][y].get_blocked() == False: 
                     if self.dfs((x,y), visited) == True:
                         return True 
@@ -69,7 +76,7 @@ class Environment:
             for d in Environment.DIRECTIONS:
                 x = curr[0] + d[0]
                 y = curr[1] + d[1] 
-                if x >= 0 and y >= 0 and x < Environment.SIZE and y < Environment.SIZE and (x,y) not in visited:
+                if self.is_valid_position((x,y)) and (x,y) not in visited:
                     if self.maze[x][y].get_blocked() == False: 
                         queue.append((x, y))
         return False 

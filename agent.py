@@ -17,6 +17,13 @@ class Agent:
         change the old location to new location
         """
         self.location = new_location 
+    
+    def is_valid_position(self, pos):
+        """
+        validates whether new position is in board
+        """
+        x, y = pos[0], pos[1]
+        return x >= 0 and y >= 0 and x < Environment.SIZE and y < Environment.SIZE
 
 class Agent1(Agent):
 
@@ -62,7 +69,7 @@ class Agent1(Agent):
             for d in Environment.DIRECTIONS:
                 x = parent[0] + d[0]
                 y = parent[1] + d[1] 
-                if x >= 0 and y >= 0 and x < Environment.SIZE and y < Environment.SIZE and (x,y) not in visited:
+                if self.is_valid_position(x,y) and (x,y) not in visited:
                     if env.maze[x][y].get_blocked() == False: 
                         queue.append((x,y))
                         prev[(x,y)] = parent
@@ -79,7 +86,14 @@ class Agent1(Agent):
             current = prev[current]
         return list(reversed(path))
 
-
+class Agent2(Agent):
+    def __init__(self):
+        """
+        intializes Agent2 with initialization method of Agent. 
+        """
+        super().__init__()
+    
+    
 
                 
 

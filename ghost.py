@@ -18,6 +18,13 @@ class Ghost:
         returns the location of ghost on board.
         """
         return self.location 
+    
+    def is_valid_position(self, pos):
+        """
+        validates whether new position is in board
+        """
+        x, y = pos[0], pos[1]
+        return x >= 0 and y >= 0 and x < Environment.SIZE and y < Environment.SIZE
 
     def update_location(self, env):
         """
@@ -28,7 +35,7 @@ class Ghost:
         y = Ghost.DIRECTIONS[choice][1] + self.location[1]
 
         # makes sure that the direction ghost is going is in a valid direciton 
-        while not(x >= 0 and x < Environment.SIZE and y >= 0 and y < Environment.SIZE):
+        while not (self.is_valid_position((x,y))):
             choice = random.randint(0,3)
             x = Ghost.DIRECTIONS[choice][0] + self.location[0]
             y = Ghost.DIRECTIONS[choice][1] + self.location[1]
