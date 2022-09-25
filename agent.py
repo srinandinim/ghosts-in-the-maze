@@ -11,6 +11,12 @@ class Agent:
         """
         self.location = (0,0)
         self.isalive = True 
+    
+    def update_location(self, new_location):
+        """        
+        change the old location to new location
+        """
+        self.location = new_location 
 
 class Agent1(Agent):
 
@@ -73,9 +79,7 @@ class Agent1(Agent):
             current = prev[current]
         return list(reversed(path))
 
-    def update_location(self, new_location):
-        # change the old location to new location
-        self.location = new_location 
+
 
                 
 

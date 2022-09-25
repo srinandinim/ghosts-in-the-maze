@@ -5,6 +5,8 @@ from agent import Agent, Agent1
 from ghost import Ghost 
 
 def run_agent1_verbose(env, ghosts):
+    print_environment(env)
+
     agent1 = Agent1()
     plan = agent1.plan_path(env)
     plan_idx = 1
@@ -57,23 +59,24 @@ def run_agent1(env, ghosts):
                 agent1.isalive = False 
                 return 0 
 
+def simulation_agent1(num_simulations, num_ghosts):
+    agent1_rewards = [] 
+    for _ in range(num_simulations):
+        env = Environment() 
+        ghosts = [Ghost() for _ in range(num_ghosts)]
+        agent1_rewards.append(run_agent1_verbose(env, ghosts))
+    agent1_survival_rate = sum(agent1_rewards) / len(agent1_rewards)
+    return agent1_survival_rate
 
 def print_environment(env):
-    print("The environment can be seen below:")
+    print("\nThe environment can be seen below:")
     print("----------------------------------")
     print(env)    
-    print("----------------------------------")
+    print("----------------------------------\n")
 
-if __name__ == '__main__':
-    survival_rates = [] 
-    num_simulations = 100000
-    for i in range(num_simulations):
-        num_ghosts = 5
-        env = Environment() 
-        ghosts = [Ghost() for i in range(num_ghosts)] 
-
-        # print_environment(env)
-        survival_rates.append(run_agent1(env, ghosts))
-    survival_rate = sum(survival_rates)/len(survival_rates)
-    print(f" \n5 Ghosts, 5x5 Maze, Agent1\nIn {num_simulations} simulations, Agent 1's survival_rate was {survival_rate}%")
+if __name__ == '__main__':  
+    num_simulations = 1000
+    num_ghosts = 3 
+    agent1_survival_rate = simulation_agent1(num_simulations, num_ghosts)
+    print(f" \n{num_ghosts} Ghosts\t5x5 Maze\t Agent1\nIn {num_simulations} simulations, Agent 1's survival_rate was {agent1_survival_rate * 100:.2f} %\n")
 
