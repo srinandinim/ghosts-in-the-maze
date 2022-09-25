@@ -88,9 +88,20 @@ class Environment:
         renders image of generated environment
         """
         array = [[1 if str(cell)=="T" else 0 for cell in row] for row in self.maze] 
-        array = np.array(array)
-        plt.imshow(array, cmap='Greys')
-        plt.show()
+        ghost_locations = [(ghost.location[0], ghost.location[1]) for ghost in self.ghosts]
+        array = self.render_ghosts(ghost_locations, array)
+        fig, ax = plt.subplots()
+        picture = plt.imshow(array, cmap='binary')
+        # plt.show()
+        return array
+    
+    def render_ghosts(self, locations, array):
+        """
+        adds ghosts to image of maze
+        """
+        for ghost in locations:
+            array[ghost[0]][ghost[1]] = 2
+        return array
 
     def __str__(self):
         return '\n'.join(['\t'.join([str(cell) for cell in row]) for row in self.maze])

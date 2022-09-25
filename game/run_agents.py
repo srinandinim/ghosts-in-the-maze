@@ -23,7 +23,7 @@ def simulation_statistics(num_simulations, num_ghosts):
     wins = sum(rewards_agent1)
     losses = len(rewards_agent1) - wins 
     survival = wins / (wins + losses)
-    print(f"Wins: {wins}\tLosses: {losses}\tSurvival Rate: {survival*100}%")  
+    print(f"Wins: {wins}\tLosses: {losses}\tSurvival Rate: {round(survival*100,2)}%")  
 
 def simulation_statistics_verbose(num_simulations, num_ghosts):
     """
@@ -37,7 +37,7 @@ def simulation_statistics_verbose(num_simulations, num_ghosts):
     wins = sum(rewards_agent1)
     losses = len(rewards_agent1) - wins 
     survival = wins / (wins + losses)
-    print(f"Wins: {wins}\tLosses: {losses}\tSurvival Rate: {survival*100}%")  
+    survival = round(survival, 2)
+    print(f"Wins: {wins}\tLosses: {losses}\tSurvival Rate: {round(survival*100,2)}%")  
 
 
-# simulation_statistics(num_simulations=num_simulations, num_ghosts=num_ghosts)
