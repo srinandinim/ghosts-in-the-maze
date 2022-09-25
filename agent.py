@@ -1,9 +1,10 @@
 from queue import Empty
 from environment import Environment 
+import final_variables
 
 
 class Agent:
-    DIRECTIONS = [[0,1], [1,0], [0,-1], [-1,0]]
+    DIRECTIONS = final_variables.DIRECTIONS
 
     def __init__(self):
         """

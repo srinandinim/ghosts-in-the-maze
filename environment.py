@@ -1,27 +1,25 @@
 from queue import Empty
 from block import Block
 from ghost import Ghost 
-import matplotlib.pyplot as plt
 import numpy as np 
+import matplotlib.pyplot as plt
+import final_variables
 
 class Environment:
 
-    SIZE = 5
-    BLOCKING_PROBABILITY = 0.28
-    DIRECTIONS = [[0,1], [1,0], [0,-1], [-1,0]]
+    SIZE = final_variables.SIZE
+    BLOCKING_PROBABILITY = final_variables.BLOCKING_PROBABILITY
+    DIRECTIONS = final_variables.DIRECTIONS
 
-    def __init__(self):
+    def __init__(self, num_ghosts=1):
         """
         generates mazes until valid maze retrieved
         """
         self.generate_maze()
         while not self.validate_maze():
             self.generate_maze()
+        self.ghosts = [Ghost() for _ in range(num_ghosts)]
     
-    def __init__(self, num_ghosts):
-        self.__init__()
-        self.ghosts = [Ghost() for _ in num_ghosts]
-
     def is_valid_position(self, pos):
         """
         validates whether new position is in board
