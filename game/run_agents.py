@@ -1,5 +1,5 @@
 from game.environment import Environment
-from game.agent import Agent, Agent1, Agent2
+from game.agent import Agent, Agent1, Agent2, Agent3
 import argparse 
 
 parser = argparse.ArgumentParser(description='runs agents and experiments')
@@ -36,6 +36,20 @@ def simulation_statistics_agent2(num_simulations, num_ghosts):
         rewards_agent2.append(agent2.run_agent2(env))
     wins = sum(rewards_agent2)
     losses = len(rewards_agent2) - wins 
+    survival = wins / (wins + losses)
+    print(f"Agent2: Wins: {wins}\tLosses: {losses}\tSurvival Rate: {round(survival*100,2)}%")  
+
+def simulation_statistics_agent3(num_simulations, num_ghosts):
+    """
+    run simulation n times and get statistics on survival, and more
+    """
+    rewards_agent3 = [] 
+    for i in range(num_simulations):
+        env = Environment(num_ghosts=num_ghosts) 
+        agent3 = Agent3()
+        rewards_agent3.append(agent3.run_agent3(env))
+    wins = sum(rewards_agent3)
+    losses = len(rewards_agent3) - wins 
     survival = wins / (wins + losses)
     print(f"Agent2: Wins: {wins}\tLosses: {losses}\tSurvival Rate: {round(survival*100,2)}%")  
 
