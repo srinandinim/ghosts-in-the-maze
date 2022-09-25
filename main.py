@@ -75,8 +75,13 @@ def print_environment(env):
     print("----------------------------------\n")
 
 if __name__ == '__main__':  
+
+    """
     num_simulations = 1000
     num_ghosts = 3 
     agent1_survival_rate = simulation_agent1(num_simulations, num_ghosts)
     print(f" \n{num_ghosts} Ghosts\t5x5 Maze\t Agent1\nIn {num_simulations} simulations, Agent 1's survival_rate was {agent1_survival_rate * 100:.2f} %\n")
+    """
+    env = Environment(num_ghosts=1)
+    print(env.ghosts)
 

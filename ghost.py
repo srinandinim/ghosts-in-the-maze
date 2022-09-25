@@ -35,7 +35,7 @@ class Ghost:
         y = Ghost.DIRECTIONS[choice][1] + self.location[1]
 
         # makes sure that the direction ghost is going is in a valid direciton 
-        while not (self.is_valid_position((x,y))):
+        while not (self.is_valid_position((x,y)):
             choice = random.randint(0,3)
             x = Ghost.DIRECTIONS[choice][0] + self.location[0]
             y = Ghost.DIRECTIONS[choice][1] + self.location[1]

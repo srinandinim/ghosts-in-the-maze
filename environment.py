@@ -1,6 +1,6 @@
 from queue import Empty
 from block import Block
-
+from ghost import Ghost 
 import matplotlib.pyplot as plt
 import numpy as np 
 
@@ -18,6 +18,10 @@ class Environment:
         while not self.validate_maze():
             self.generate_maze()
     
+    def __init__(self, num_ghosts):
+        self.__init__()
+        self.ghosts = [Ghost() for _ in num_ghosts]
+
     def is_valid_position(self, pos):
         """
         validates whether new position is in board
