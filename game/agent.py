@@ -137,7 +137,7 @@ class Agent1(Agent):
             color_array[self.location[0]][self.location[1]] = 3 
             picture = plt.imshow(color_array, cmap='Greys')
             plt.show()
-            return 0 
+        return 0 
 
     def run_agent1(self, env):
         """
