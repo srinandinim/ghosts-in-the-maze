@@ -160,11 +160,11 @@ class Agent2(Agent1):
     """
     Agent  2  re-plans.   At  every  timestep,  Agent  2  recalculates  a  new  path  to  the  goal  based  on  the  current information,  
     and  executes  the  next  step  in  this  new  path.   Agent  2  is  constantly  updating  and  readjusting based on new information 
-    about the ghosts.  Note, however, Agent 2 makes no projections about the future.  Ifall paths to the goal are currently blocked, Agent 2 
+    about the ghosts.  Note, however, Agent 2 makes no projections about the future.  If all paths to the goal are currently blocked, Agent 2 
     attempts to move away from the nearest visible ghost (notoccupying a blocked cell).
 
-    Agent 2 requires multiple searches - you’ll want to ensure that your searches are efficient as possible sothey don’t take much time.  
-    Do you always need to replan?  When will the new plan be the same as theold plan, and as such you won’t need to recalculate?
+    Agent 2 requires multiple searches - you’ll want to ensure that your searches are efficient as possible so they don’t take much time.  
+    Do you always need to replan?  When will the new plan be the same as the old plan, and as such you won’t need to recalculate?
     """
 
     def __init__(self):
@@ -229,7 +229,7 @@ class Agent2(Agent1):
         # agent starts at top left and tries to reach bottom right
         goal = (Environment.SIZE-1, Environment.SIZE-1)
 
-        # use queue/visited/prev for running BFS for path planning
+        # use visited/prev for running DFS for path planning
         visited = set(source)
         prev = ({source : None})
 
@@ -237,7 +237,7 @@ class Agent2(Agent1):
         path = super().path_from_pointers(source, goal, prev)
         return path 
     
-    def move_agent_away_from_nearest_ghost(self, env, nearest_ghost):
+    def move_agent_away_from_nearest_ghost(self, env):
         x = self.location[0]
         y = self.location[1]
 
