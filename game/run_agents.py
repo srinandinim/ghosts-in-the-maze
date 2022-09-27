@@ -1,5 +1,5 @@
 from game.environment import Environment
-from game.agent import Agent, Agent1, Agent2, Agent3
+from game.agent import Agent1, Agent2, Agent3
 import argparse 
 
 parser = argparse.ArgumentParser(description='runs agents and experiments')
@@ -67,7 +67,6 @@ def simulation_statistics_verbose_agent1(num_simulations, num_ghosts):
     survival = wins / (wins + losses)
     survival = round(survival, 2)
     print(f"Agent1: Wins: {wins}\tLosses: {losses}\tSurvival Rate: {round(survival*100,2)}%")  
-
 
 def simulation_statistics_verbose_agent2(num_simulations, num_ghosts):
     """
