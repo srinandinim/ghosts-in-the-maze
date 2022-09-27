@@ -1,5 +1,7 @@
 from game.environment import Environment
-from game.agent import Agent1, Agent2, Agent3
+from game.agent1 import Agent1
+from game.agent2 import Agent2
+from game.agent3 import Agent3
 import argparse 
 
 parser = argparse.ArgumentParser(description='runs agents and experiments')
