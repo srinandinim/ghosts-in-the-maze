@@ -1,5 +1,7 @@
 from game.environment import Environment 
 import game.final_variables as final_variables
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
 
 class Agent:
     DIRECTIONS = final_variables.DIRECTIONS
@@ -32,3 +34,15 @@ class Agent:
         print("----------------------------------")
         print(env)    
         print("----------------------------------\n")
+
+    def generate_video(self, video_name, images):
+        """
+        generates video of agent's moves
+        """
+        frames = []
+        fig = plt.figure()
+        for i in range(len(images)):
+            frames.append([plt.imshow(images[i], cmap='Greys',animated=True)])
+
+        ani = animation.ArtistAnimation(fig, frames, interval=1000, blit=True, repeat=False)
+        ani.save("replays/" + video_name + '.mp4')

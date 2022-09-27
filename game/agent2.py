@@ -2,6 +2,7 @@ from game.environment import Environment
 import game.final_variables as final_variables
 from game.agent1 import Agent1
 import matplotlib.pyplot as plt
+import time
 
 class Agent2(Agent1):
     """
@@ -139,9 +140,13 @@ class Agent2(Agent1):
         print(f"Agent 2's Planned Path is: {path}")
         print(self.location)
 
+        images = []
+        video_name = "agent2_" + str(time.time())
+
         while self.isalive:
             if self.location == (final_variables.SIZE-1, final_variables.SIZE-1):
                 print("\nSUCCESS (+1): THE AGENT REACHED THE GOAL!")
+                self.generate_video(video_name, images)
                 return 1 
             action = path.pop(0) 
             if action not in self.ghost_actionspace(env, self.nearest_visible_ghost(env)).keys():
@@ -160,17 +165,18 @@ class Agent2(Agent1):
                 if self.location == ghost.get_location():
                     print("\nFAILURE (+0): THE AGENT GOT KILLED BY A GHOST")
                     print(f"Agent 1 Location: {self.location}\t Ghost Location: {ghost.get_location()}")
-                    self.isalive = False 
+                    self.isalive = False
+                    self.generate_video(video_name, images) 
                     return 0 
             
             # for debugging, print out the agent location and ghost locations
             print(f"\nAgent 2 Location:\t {self.location}")
             for i in range(len(env.ghosts)):
                 print(f"Ghost {i} Location:\t {env.ghosts[i].location}")
+
             color_array = env.get_picture()
             color_array[self.location[0]][self.location[1]] = 3 
-            picture = plt.imshow(color_array, cmap='Greys')
-            plt.show()
+            images.append(color_array)
 
     def run_agent2(self, env):
         path = self.plan_path(env, self.location)
