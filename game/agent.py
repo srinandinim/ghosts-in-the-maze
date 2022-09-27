@@ -129,8 +129,7 @@ class Agent1(Agent):
                     self.isalive = False 
                     return 0 
             # for debugging, print out the agent location and ghost locations
-            # for debugging, print out the agent location and ghost locations
-            print(f"\nAgent 2 Location:\t {self.location}")
+            print(f"\nAgent 1 Location:\t {self.location}")
             for i in range(len(env.ghosts)):
                 print(f"Ghost {i} Location:\t {env.ghosts[i].location}")
             color_array = env.get_picture()
@@ -192,6 +191,25 @@ class Agent2(Agent1):
                         return True, prev 
         return False, prev
 
+    def dfs_ghosts(self, env, curr, visited, prev):
+        """
+        dfs to find a path from source to goal node when taking into account the ghosts.
+        """ 
+        visited.add(curr)
+        if curr[0] == curr[1] == final_variables.SIZE:
+            return True 
+        
+        for d in Environment.DIRECTIONS:
+            x = curr[0] + d[0]
+            y = curr[1] + d[1] 
+            if self.is_valid_position((x,y)) and (x,y) not in visited:
+                prev[(x,y)] = curr
+                if env.maze[x][y].get_blocked() == False and all(x != ghost.location[0] and y != ghost.location[1] for ghost in env.ghosts): 
+                    reached_goal, _ = self.dfs(env, (x,y), visited, prev)
+                    if reached_goal == True :
+                        return True, prev 
+        return False, prev
+
     def manhattan_distance(self, coord1, coord2):
         x = abs(coord2[0] - coord1[0])
         y = abs(coord2[1] - coord1[1])
@@ -237,7 +255,7 @@ class Agent2(Agent1):
         path = super().path_from_pointers(source, goal, prev)
         return path 
     
-    def move_agent_away_from_nearest_ghost(self, env):
+    def move_agent_away_from_nearest_ghost(self, env, nearest_ghost):
         x = self.location[0]
         y = self.location[1]
 
