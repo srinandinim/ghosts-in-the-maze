@@ -44,5 +44,7 @@ class Agent:
         for i in range(len(images)):
             frames.append([plt.imshow(images[i], cmap='Greys',animated=True)])
 
+        plt.close()
+
         ani = animation.ArtistAnimation(fig, frames, interval=500, blit=True, repeat=False)
         ani.save("replays/" + video_name + '.mp4')

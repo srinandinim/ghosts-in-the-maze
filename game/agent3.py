@@ -1,14 +1,16 @@
+from queue import Empty
 from game.environment import Environment 
 import game.final_variables as final_variables
 from game.agent2 import Agent2
 from copy import deepcopy
 import matplotlib.pyplot as plt
+import time
 
 class Agent3(Agent2):
     """
     Agent 3 forecasts.  At every timestep, Agent 3 considers each possible move it might take (including staying inplace), 
     and ‘simulates’ the future based on the rules of Agent 2 past that point.  For each possible move, this future is simulated 
-    some number of times, and then Agent 3 chooses among the moves with greatest successrates in these simulations.  Agent 3 can 
+    some number of times, and then Agent 3 chooses among the moves with greatest success rates in these simulations.  Agent 3 can 
     be thought of as Agent 2, plus the ability to imagine the future.
 
     Agent 3 requires multiple searches - you’ll want to ensure that your searches are efficient as possible so they don’t take much time.  
@@ -41,8 +43,62 @@ class Agent3(Agent2):
             return self.location 
         
         return possible_valid_moves 
-    
+
     def run_agent3(self, env):
+        images = []
+        video_name = "agent3_" + str(time.time())
+
+        goal = (final_variables.SIZE-1, final_variables.SIZE-1)
+
+        while self.isalive:
+            self.success_rates = {}
+            if self.location == goal:
+                # self.generate_video(video_name, images)
+                return 1
+
+            # compute action space at current location 
+            self.action_space = self.action_spaces(env)
+
+            for action in self.action_space:
+                new_env = deepcopy(env)
+                agent2 = Agent2()
+                agent2.location = action
+
+                success, location = agent2.run_agent2_limit(new_env, 4)
+                if success == 1:
+                    self.success_rates[action] = self.manhattan_distance(location, goal)
+
+            print(self.success_rates)
+            if len(self.success_rates) == 0:
+                print("no successful option")
+                success, location = agent2.run_agent2_limit(deepcopy(env), 1)
+                if success == 0:
+                    self.isalive = False 
+                    return 0
+                self.location = location
+            else:
+                lowest_distance_key = min(self.success_rates, key = self.success_rates.get)
+                self.location = lowest_distance_key
+
+            print(self.location)
+            print("--next--")
+
+            for ghost in env.ghosts:
+                ghost.update_location(env)
+                if self.location == ghost.get_location():
+                    self.isalive = False 
+                    # self.generate_video(video_name, images)
+                    return 0 
+
+            # color_array = env.get_picture()
+            # color_array[self.location[0]][self.location[1]] = 3 
+            # images.append(color_array)
+
+        # self.generate_video(video_name, images) 
+        return 0 
+            
+    
+    def run_agent3_tej(self, env):
 
         """
         @Nandini:
