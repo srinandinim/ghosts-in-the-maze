@@ -7,12 +7,12 @@ import matplotlib.pyplot as plt
 class Agent3(Agent2):
     """
     Agent 3 forecasts.  At every timestep, Agent 3 considers each possible move it might take (including staying inplace), 
-    and ‘simulates’ the future based on the rules of Agent 2 past that point.  For each possible move, thisfuture is simulated 
+    and ‘simulates’ the future based on the rules of Agent 2 past that point.  For each possible move, this future is simulated 
     some number of times, and then Agent 3 chooses among the moves with greatest successrates in these simulations.  Agent 3 can 
     be thought of as Agent 2, plus the ability to imagine the future.
 
-    Agent 3 requires multiple searches - you’ll want to ensure that your searches are efficient as possible sothey don’t take much time.  
-    Additionally, if Agent 3 decides there is no successful path in its projectedfuture, what should it do with that information?  
+    Agent 3 requires multiple searches - you’ll want to ensure that your searches are efficient as possible so they don’t take much time.  
+    Additionally, if Agent 3 decides there is no successful path in its projected future, what should it do with that information?  
     Does it guarantee that success is impossible?
     """
     def __init__(self):

@@ -1,8 +1,9 @@
+from pickle import FALSE, TRUE
 from game.environment import Environment 
 import game.final_variables as final_variables
 from game.agent1 import Agent1
-import matplotlib.pyplot as plt
 import time
+import matplotlib.pyplot as plt
 
 class Agent2(Agent1):
     """
@@ -35,25 +36,6 @@ class Agent2(Agent1):
             if self.is_valid_position((x,y)) and (x,y) not in visited:
                 prev[(x,y)] = curr
                 if env.maze[x][y].get_blocked() == False: 
-                    reached_goal, _ = self.dfs(env, (x,y), visited, prev)
-                    if reached_goal == True :
-                        return True, prev 
-        return False, prev
-
-    def dfs_ghosts(self, env, curr, visited, prev):
-        """
-        dfs to find a path from source to goal node when taking into account the ghosts.
-        """ 
-        visited.add(curr)
-        if curr[0] == curr[1] == final_variables.SIZE:
-            return True 
-        
-        for d in Environment.DIRECTIONS:
-            x = curr[0] + d[0]
-            y = curr[1] + d[1] 
-            if self.is_valid_position((x,y)) and (x,y) not in visited:
-                prev[(x,y)] = curr
-                if env.maze[x][y].get_blocked() == False and all(x != ghost.location[0] and y != ghost.location[1] for ghost in env.ghosts): 
                     reached_goal, _ = self.dfs(env, (x,y), visited, prev)
                     if reached_goal == True :
                         return True, prev 
@@ -100,9 +82,9 @@ class Agent2(Agent1):
         visited = set(source)
         prev = ({source : None})
 
-        _, prev = self.dfs(env, source, visited, prev)
+        path_exists, prev = self.dfs(env, source, visited, prev)
         path = super().path_from_pointers(source, goal, prev)
-        return path 
+        return path
     
     def move_agent_away_from_nearest_ghost(self, env, nearest_ghost):
         x = self.location[0]
@@ -130,6 +112,50 @@ class Agent2(Agent1):
         return max_move 
 
     def run_agent2_verbose(self, env):
+        """
+        @Nandini - can you add functionality "if all paths to the goal are currently blocked"
+        I think I am only checking one possible path with DFS and then moving away from nearest ghost. 
+        """
+        super().print_environment(env)
+        path = self.plan_path(env, self.location)
+
+        print(f"Agent 2's Planned Path is: {path}")
+        print(self.location)
+
+        while self.isalive:
+            if self.location == (final_variables.SIZE-1, final_variables.SIZE-1):
+                print("\nSUCCESS (+1): THE AGENT REACHED THE GOAL!")
+                return 1 
+            action = path.pop(0) 
+            if action not in self.ghost_actionspace(env, self.nearest_visible_ghost(env)).keys():
+                self.location = action 
+            else:
+                path = self.plan_path(env, self.location)
+                action = path.pop(0) 
+                print(f"REPLANNING: Agent 2's Planned Path is: {path}")
+                if action not in self.ghost_actionspace(env, self.nearest_visible_ghost(env)).keys():
+                    self.location = action 
+                else:
+                    print(f"MOVE AWAY FROM GHOST: New path is also in ghost danger zone!")
+                    self.location = self.move_agent_away_from_nearest_ghost(env, self.nearest_visible_ghost(env))
+            for ghost in env.ghosts:
+                ghost.update_location(env)
+                if self.location == ghost.get_location():
+                    print("\nFAILURE (+0): THE AGENT GOT KILLED BY A GHOST")
+                    print(f"Agent 1 Location: {self.location}\t Ghost Location: {ghost.get_location()}")
+                    self.isalive = False 
+                    return 0 
+
+            # for debugging, print out the agent location and ghost locations
+            print(f"\nAgent 2 Location:\t {self.location}")
+            for i in range(len(env.ghosts)):
+                print(f"Ghost {i} Location:\t {env.ghosts[i].location}")
+            color_array = env.get_picture()
+            color_array[self.location[0]][self.location[1]] = 3 
+            picture = plt.imshow(color_array, cmap='Greys')
+            plt.show()
+
+    def run_agent2_verbose_video(self, env):
         """
         @Nandini - can you add functionality "if all paths to the goal are currently blocked"
         I think I am only checking one possible path with DFS and then moving away from nearest ghost. 
