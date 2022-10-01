@@ -53,7 +53,7 @@ def simulation_statistics_agent3(num_simulations, num_ghosts):
     wins = sum(rewards_agent3)
     losses = len(rewards_agent3) - wins 
     survival = wins / (wins + losses)
-    print(f"Agent2: Wins: {wins}\tLosses: {losses}\tSurvival Rate: {round(survival*100,2)}%")  
+    print(f"Agent3: Wins: {wins}\tLosses: {losses}\tSurvival Rate: {round(survival*100,2)}%")  
 
 def simulation_statistics_verbose_agent1(num_simulations, num_ghosts):
     """

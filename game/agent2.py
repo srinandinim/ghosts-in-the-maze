@@ -242,10 +242,5 @@ class Agent2(Agent1):
                     self.location = action 
                 else:
                     self.location = self.move_agent_away_from_nearest_ghost(env, self.nearest_visible_ghost(env))
-            # for ghost in env.ghosts:
-            #     ghost.update_location(env)
-            #     if self.location == ghost.get_location():
-            #         self.isalive = False 
-            #         return 0, self.location
 
         return self.location
