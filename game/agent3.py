@@ -1,4 +1,5 @@
 from queue import Empty
+from game.agent import Agent
 from game.environment import Environment 
 import game.final_variables as final_variables
 from game.agent2 import Agent2
@@ -24,6 +25,7 @@ class Agent3(Agent2):
         super().__init__()
         self.action_space = []
         self.prev = {} 
+        self.success_distances = {}
         self.success_rates = {} 
     
     def action_spaces(self, env):
@@ -45,56 +47,67 @@ class Agent3(Agent2):
         return possible_valid_moves 
 
     def run_agent3(self, env):
-        images = []
-        video_name = "agent3_" + str(time.time())
+        """
+        TODO: deal with the situation if we are simulating and it reaches the goal and now we are still trying to stimulate
+        - fix might be 'and action is not goal' on the condiitonal after the first enumeration
+        """
 
         goal = (final_variables.SIZE-1, final_variables.SIZE-1)
 
         while self.isalive:
             self.success_rates = {}
             if self.location == goal:
-                # self.generate_video(video_name, images)
                 return 1
 
-            # compute action space at current location 
             self.action_space = self.action_spaces(env)
+            self.action_space_copy = deepcopy(self.action_space)
 
-            for action in self.action_space:
-                new_env = deepcopy(env)
-                agent2 = Agent2()
-                agent2.location = action
+            env_copy = deepcopy(env)
+            for i in range(4):
+                # print(self.action_space)
+                # print()
+                for index, action in enumerate(self.action_space):
+                    # print(index, action)
+                    if action is not None:
+                        agent2 = Agent2()
+                        agent2.location = action
 
-                success, location = agent2.run_agent2_limit(new_env, 4)
-                if success == 1:
-                    self.success_rates[action] = self.manhattan_distance(location, goal)
+                        location = agent2.run_agent2_once(env_copy)
+                        self.action_space[index] = location
+                        # print(self.action_space)
+                        # print(index, self.action_space[index])
 
-            print(self.success_rates)
-            if len(self.success_rates) == 0:
-                print("no successful option")
-                success, location = agent2.run_agent2_limit(deepcopy(env), 1)
-                if success == 0:
-                    self.isalive = False 
-                    return 0
-                self.location = location
+                for ghost in env_copy.ghosts:
+                    ghost.update_location(env_copy)
+                    for index, action in self.action_space:
+                        if action == ghost.get_location():
+                            self.action_space[index] = None
+                            # print("killed" + str(action))
+                            # (self.action_space).pop(index)
+
+            # print()
+            # print(self.action_space)
+
+            for index, action in enumerate(self.action_space):
+                # print(index, action)
+                if action is not None:
+                    self.success_distances[self.action_space_copy[index]] = self.manhattan_distance(action, goal)
+
+            # print(self.action_space)
+            # print(self.success_distances)
+
+            if len(self.success_distances) == 0:
+                self.location = self.run_agent2_once(env)
             else:
-                lowest_distance_key = min(self.success_rates, key = self.success_rates.get)
+                lowest_distance_key = min(self.success_distances, key = self.success_distances.get)
                 self.location = lowest_distance_key
-
-            print(self.location)
-            print("--next--")
 
             for ghost in env.ghosts:
                 ghost.update_location(env)
                 if self.location == ghost.get_location():
                     self.isalive = False 
-                    # self.generate_video(video_name, images)
                     return 0 
 
-            # color_array = env.get_picture()
-            # color_array[self.location[0]][self.location[1]] = 3 
-            # images.append(color_array)
-
-        # self.generate_video(video_name, images) 
         return 0 
             
     
