@@ -1,4 +1,5 @@
 from queue import Empty
+import random
 from game.agent import Agent
 from game.environment import Environment 
 import game.final_variables as final_variables
@@ -26,7 +27,6 @@ class Agent3(Agent2):
         self.action_space = []
         self.prev = {} 
         self.success_distances = {}
-        self.success_rates = {} 
     
     def action_spaces(self, env):
         """
@@ -45,6 +45,59 @@ class Agent3(Agent2):
             return self.location 
         
         return possible_valid_moves 
+
+    def run_agent3_ws(self, env):
+        """
+        TODO: deal with the situation if we are simulating and it reaches the goal and now we are still trying to stimulate
+        - fix might be 'and action is not goal' on the condiitonal after the first enumeration
+        """
+
+        goal = (final_variables.SIZE-1, final_variables.SIZE-1)
+
+        while self.isalive:
+            self.success_rates = {}
+            if self.location == goal:
+                return 1
+
+            self.action_space = self.action_spaces(env)
+            self.action_space_copy = deepcopy(self.action_space)
+
+            action_agents = []
+            for index, action in enumerate(self.action_space):
+                agent2 = Agent2()
+                agent2.location = action
+                action_agents.append(deepcopy(agent2))
+
+            env_copy = deepcopy(env)
+            done = 0
+            possible_moves = []
+            while done != len(self.action_space_copy):
+                for index, agent in enumerate(action_agents):
+                    location = agent2.run_agent2_once(env_copy)
+                    agent.location = location
+
+                    if (location == goal):
+                        possible_moves.append(self.action_space_copy[index])
+                        done = done + 1
+                for ghost in env_copy.ghosts:
+                    ghost.update_location(env_copy)
+                    for index, action in self.action_space:
+                        if action == ghost.get_location():
+                            done = done + 1
+                            self.action_space[index] = None
+
+            if len(possible_moves) == 0:
+                self.location = self.run_agent2_once(env)
+            else:
+                self.location = random.choice(possible_moves)
+
+            for ghost in env.ghosts:
+                ghost.update_location(env)
+                if self.location == ghost.get_location():
+                    self.isalive = False 
+                    return 0 
+
+        return 0
 
     def run_agent3(self, env):
         """

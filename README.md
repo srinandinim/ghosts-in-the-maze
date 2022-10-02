@@ -10,7 +10,8 @@
 ## September 26, 2022 Nandini
 - We should discuss the way we run the simulations. I was under the assumption that we run all the agents on the same board and the only factor that would not be the same is the agent's movement. 
 - Figure out the way Python objects work (is there a way to store the locations into a set and have those automatically update when the locations change)
-- Figure out agent2 with ghosts
+- For agent2, add that if the ghost is not in the immediate vicinity - keep it stay
+
 
 # ghosts-in-the-maze
 

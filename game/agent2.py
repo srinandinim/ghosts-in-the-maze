@@ -112,10 +112,6 @@ class Agent2(Agent1):
         return max_move 
 
     def run_agent2_verbose(self, env):
-        """
-        @Nandini - can you add functionality "if all paths to the goal are currently blocked"
-        I think I am only checking one possible path with DFS and then moving away from nearest ghost. 
-        """
         super().print_environment(env)
         path = self.plan_path(env, self.location)
 
@@ -156,10 +152,6 @@ class Agent2(Agent1):
             plt.show()
 
     def run_agent2_verbose_video(self, env):
-        """
-        @Nandini - can you add functionality "if all paths to the goal are currently blocked"
-        I think I am only checking one possible path with DFS and then moving away from nearest ghost. 
-        """
         super().print_environment(env)
         path = self.plan_path(env, self.location)
 
@@ -224,7 +216,7 @@ class Agent2(Agent1):
                 if self.location == ghost.get_location():
                     self.isalive = False 
                     return 0 
-        return 0 
+        return 0
 
     def run_agent2_once(self, env):
         path = self.plan_path(env, self.location)
