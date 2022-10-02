@@ -10,8 +10,6 @@ if __name__ == '__main__':
     # run_agents.simulation_statistics_verbose_agent2(num_simulations=1, num_ghosts=2)
 
     env = Environment(num_ghosts=1)
-    print(env)
-    print(env.sb_paths())
 
     """
     env = Environment(num_ghosts=1)
