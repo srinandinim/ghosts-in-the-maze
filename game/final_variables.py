@@ -1,3 +1,3 @@
-SIZE = 10
+SIZE = 5
 BLOCKING_PROBABILITY = 0.28
 DIRECTIONS = [[0,1], [1,0], [0,-1], [-1,0]]
