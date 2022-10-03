@@ -26,8 +26,6 @@ class Agent3(Agent2):
         """
         super().__init__()
         self.action_space = []
-        self.prev = {} 
-        self.success_distances = {}
     
     def action_spaces(self, env):
         """
@@ -101,28 +99,29 @@ class Agent3(Agent2):
 
         return 0
     
-    def run_agent3(self, env):
-        goal = (final_variables.SIZE - 1, final_variables.SIZE - 1)
-        print(env)
-        
+    def run_agent3(self, env):        
         while self.isalive:
-            if self.location == goal:
+            if self.location == (final_variables.SIZE - 1, final_variables.SIZE - 1):
                 return 1
 
-            action_space = self.action_spaces(env)
+            self.action_space = self.action_spaces(env)
+
             moves_success = {}
-            for i in range(4):
-                for action in action_space:
+            maximum_success = 0
+            for action in self.action_space:
+                for i in range(2):
                     agent2 = Agent2()
                     agent2.location = action
                     attempt_success = agent2.run_agent2(deepcopy(env))
                     moves_success[action] = moves_success.get(action, 0) + attempt_success
+                    maximum_success = max(maximum_success, moves_success[action])
+
+            highest_success_distances = {}
+            for action, num_success in moves_success.items():
+                if num_success == maximum_success:
+                    highest_success_distances[action] = len(env.shortest_paths[action[0]][action[1]])
             
-            print(moves_success)
-            highest_success_action = max(moves_success, key = moves_success.get)
-            self.location = highest_success_action
-            print(self.location)
-            print()
+            self.location = min(highest_success_distances, key=highest_success_distances.get)
 
             for ghost in env.ghosts:
                 ghost.update_location(env)
