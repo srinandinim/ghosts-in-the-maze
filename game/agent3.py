@@ -109,7 +109,7 @@ class Agent3(Agent2):
             moves_success = {}
             maximum_success = 0
             for action in self.action_space:
-                for i in range(2):
+                for i in range(5):
                     agent2 = Agent2()
                     agent2.location = action
                     attempt_success = agent2.run_agent2(deepcopy(env))
