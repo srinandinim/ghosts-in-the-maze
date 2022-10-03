@@ -1,9 +1,5 @@
-from collections import deque
-from pickle import NONE
-from queue import Empty
 from game.block import Block
 from game.ghost import Ghost 
-import numpy as np 
 import matplotlib.pyplot as plt
 import game.final_variables as final_variables
 
@@ -87,9 +83,13 @@ class Environment:
                     visited = set(source)
                     prev = ({source : None})
 
-                    previous = self.sb_bfs(goal, queue, visited, prev)
-                    self.shortest_paths[x][y] = self.sb_path_from_pointers(source, goal, previous)
-                    # print(str((x,y)) + " -- " + str(self.shortest_paths[x][y]))                    
+                    success, previous = self.sb_bfs(goal, queue, visited, prev)
+                    if success:
+                        self.shortest_paths[x][y] = self.sb_path_from_pointers(source, goal, previous)
+                        # print("SUCCESS: " + str((x,y)) + " -- " + str(self.shortest_paths[x][y]))
+                    else:
+                        self.shortest_paths[x][y] = []
+                        # print("FAILURE: " + str((x,y)) + " -- " + str(self.shortest_paths[x][y]))              
 
     def sb_bfs(self, goal, queue, visited, prev):
         """
@@ -99,7 +99,7 @@ class Environment:
             parent = queue.pop(0)
             visited.add(parent)
             if parent == goal: 
-                return prev
+                return True, prev
 
             for d in Environment.DIRECTIONS:
                 x = parent[0] + d[0]
@@ -109,7 +109,7 @@ class Environment:
                         queue.append((x,y))
                         prev[(x,y)] = parent
                             
-        return prev
+        return False, []
 
     def sb_path_from_pointers(self, source, goal, prev):
         """

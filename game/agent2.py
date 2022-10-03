@@ -1,4 +1,6 @@
+from copy import deepcopy
 from pickle import FALSE, TRUE
+from turtle import pos
 from game.environment import Environment 
 import game.final_variables as final_variables
 from game.agent1 import Agent1
@@ -74,17 +76,20 @@ class Agent2(Agent1):
                 else: ghost_actions[new_pos] = 1.0
         return ghost_actions 
 
-    def plan_path(self, env, source):
-        # agent starts at top left and tries to reach bottom right
-        goal = (Environment.SIZE-1, Environment.SIZE-1)
+    def plan_path(self, env):
+        possible_valid_moves = {}
 
-        # use visited/prev for running DFS for path planning
-        visited = set(source)
-        prev = ({source : None})
+        for d in Environment.DIRECTIONS:
+            x = self.location[0] + d[0]
+            y = self.location[1] + d[1] 
+            if self.is_valid_position((x,y)) and env.maze[x][y].get_blocked() == False:
+                possible_valid_moves[(x, y)] = len(env.shortest_paths[x][y])
+        
+        possible_valid_moves= {k: v for k, v in sorted(possible_valid_moves.items(), key=lambda item: item[1])}
+        possible_valid_moves_list = list(possible_valid_moves.items())
 
-        path_exists, prev = self.dfs(env, source, visited, prev)
-        path = super().path_from_pointers(source, goal, prev)
-        return path
+        (x, y) = possible_valid_moves_list[0][0]
+        return deepcopy(env.shortest_paths[x][y])
     
     def move_agent_away_from_nearest_ghost(self, env, nearest_ghost):
         x = self.location[0]
@@ -112,8 +117,11 @@ class Agent2(Agent1):
         return max_move 
 
     def run_agent2_verbose(self, env):
+        """
+        TODO: fix to deal with precalculated paths
+        """
         super().print_environment(env)
-        path = self.plan_path(env, self.location)
+        path = self.plan_path(env)
 
         print(f"Agent 2's Planned Path is: {path}")
         print(self.location)
@@ -126,7 +134,7 @@ class Agent2(Agent1):
             if action not in self.ghost_actionspace(env, self.nearest_visible_ghost(env)).keys():
                 self.location = action 
             else:
-                path = self.plan_path(env, self.location)
+                path = self.plan_path(env)
                 action = path.pop(0) 
                 print(f"REPLANNING: Agent 2's Planned Path is: {path}")
                 if action not in self.ghost_actionspace(env, self.nearest_visible_ghost(env)).keys():
@@ -152,8 +160,11 @@ class Agent2(Agent1):
             plt.show()
 
     def run_agent2_verbose_video(self, env):
+        """
+        TODO: fix to deal with precalculated paths
+        """
         super().print_environment(env)
-        path = self.plan_path(env, self.location)
+        path = self.plan_path(env)
 
         print(f"Agent 2's Planned Path is: {path}")
         print(self.location)
@@ -170,7 +181,7 @@ class Agent2(Agent1):
             if action not in self.ghost_actionspace(env, self.nearest_visible_ghost(env)).keys():
                 self.location = action 
             else:
-                path = self.plan_path(env, self.location)
+                path = self.plan_path(env)
                 action = path.pop(0) 
                 print(f"REPLANNING: Agent 2's Planned Path is: {path}")
                 if action not in self.ghost_actionspace(env, self.nearest_visible_ghost(env)).keys():
@@ -197,20 +208,28 @@ class Agent2(Agent1):
             images.append(color_array)
 
     def run_agent2(self, env):
-        path = self.plan_path(env, self.location)
+        path = self.plan_path(env)
         while self.isalive:
             if self.location == (final_variables.SIZE-1, final_variables.SIZE-1):
                 return 1 
-            action = path.pop(0) 
-            if action not in self.ghost_actionspace(env, self.nearest_visible_ghost(env)).keys():
-                self.location = action 
-            else:
-                path = self.plan_path(env, self.location)
+
+            if path:
                 action = path.pop(0) 
                 if action not in self.ghost_actionspace(env, self.nearest_visible_ghost(env)).keys():
                     self.location = action 
                 else:
-                    self.location = self.move_agent_away_from_nearest_ghost(env, self.nearest_visible_ghost(env))
+                    path = self.plan_path(env)
+                    if path:
+                        action = path.pop(0)
+                        if action not in self.ghost_actionspace(env, self.nearest_visible_ghost(env)).keys():
+                            self.location = action 
+                        else:
+                            self.location = self.move_agent_away_from_nearest_ghost(env, self.nearest_visible_ghost(env))
+                    else:
+                        self.location = self.move_agent_away_from_nearest_ghost(env, self.nearest_visible_ghost(env))
+            else:
+                self.location = self.move_agent_away_from_nearest_ghost(env, self.nearest_visible_ghost(env))
+
             for ghost in env.ghosts:
                 ghost.update_location(env)
                 if self.location == ghost.get_location():
@@ -219,20 +238,26 @@ class Agent2(Agent1):
         return 0
 
     def run_agent2_once(self, env):
-        path = self.plan_path(env, self.location)
-        goal = (final_variables.SIZE-1, final_variables.SIZE-1)
+        path = self.plan_path(env)
         if self.isalive:
-            if self.location == goal:
+            if self.location == (final_variables.SIZE-1, final_variables.SIZE-1):
                 return self.location
-            action = path.pop(0) 
-            if action not in self.ghost_actionspace(env, self.nearest_visible_ghost(env)).keys():
-                self.location = action 
-            else:
-                path = self.plan_path(env, self.location)
+
+            if path:
                 action = path.pop(0) 
                 if action not in self.ghost_actionspace(env, self.nearest_visible_ghost(env)).keys():
                     self.location = action 
                 else:
-                    self.location = self.move_agent_away_from_nearest_ghost(env, self.nearest_visible_ghost(env))
+                    path = self.plan_path(env)
+                    if path:
+                        action = path.pop(0)
+                        if action not in self.ghost_actionspace(env, self.nearest_visible_ghost(env)).keys():
+                            self.location = action 
+                        else:
+                            self.location = self.move_agent_away_from_nearest_ghost(env, self.nearest_visible_ghost(env))
+                    else:
+                        self.location = self.move_agent_away_from_nearest_ghost(env, self.nearest_visible_ghost(env))
+            else:
+                self.location = self.move_agent_away_from_nearest_ghost(env, self.nearest_visible_ghost(env))
 
         return self.location
