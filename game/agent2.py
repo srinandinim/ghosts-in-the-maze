@@ -241,7 +241,7 @@ class Agent2(Agent1):
         path = self.plan_path(env)
         if self.isalive:
             if self.location == (final_variables.SIZE-1, final_variables.SIZE-1):
-                return self.location
+                return 1, self.location
 
             if path:
                 action = path.pop(0) 
@@ -260,4 +260,4 @@ class Agent2(Agent1):
             else:
                 self.location = self.move_agent_away_from_nearest_ghost(env, self.nearest_visible_ghost(env))
 
-        return self.location
+        return 0, self.location
