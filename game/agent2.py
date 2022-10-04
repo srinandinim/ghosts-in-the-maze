@@ -57,19 +57,38 @@ class Agent2(Agent1):
                 else: ghost_actions[new_pos] = 1.0
         return ghost_actions 
 
+    def nearest_visible_ghost_to_point(self, env, current):
+        """
+        finds nearest ghost position from current position
+        will be used if all paths are blocked, then make sure to walk towards opposite direction
+        """
+        min_distance = final_variables.SIZE * final_variables.SIZE + 1 
+
+        for ghost in env.ghosts:
+            if not env.maze[ghost.location[0]][ghost.location[1]].get_blocked():
+                dist = self.manhattan_distance(current, ghost.get_location())
+                if dist < min_distance:
+                    min_distance = dist 
+
+        return min_distance  
+
     def plan_path(self, env):
         possible_valid_moves = {}
+        shortest_path_length = 51 * 51
 
         for d in Environment.DIRECTIONS:
             x = self.location[0] + d[0]
             y = self.location[1] + d[1] 
             if self.is_valid_position((x,y)) and env.maze[x][y].get_blocked() == False:
                 possible_valid_moves[(x, y)] = len(env.shortest_paths[x][y])
-        
-        possible_valid_moves = {k: v for k, v in sorted(possible_valid_moves.items(), key=lambda item: item[1])}
-        possible_valid_moves_list = list(possible_valid_moves.items())
+                shortest_path_length = min(shortest_path_length, possible_valid_moves[(x, y)])
 
-        (x, y) = possible_valid_moves_list[0][0]
+        shortest_path_ghost_distance = {}
+        for action, length in possible_valid_moves.items():
+            if length == shortest_path_length:
+                shortest_path_ghost_distance[action] = self.nearest_visible_ghost_to_point(env, action)
+        
+        (x, y) = min(shortest_path_ghost_distance, key = shortest_path_ghost_distance.get)
         return deepcopy(env.shortest_paths[x][y])
     
     def move_agent_away_from_nearest_ghost(self, env, nearest_ghost):
