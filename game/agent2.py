@@ -88,7 +88,7 @@ class Agent2(Agent1):
             if length == shortest_path_length:
                 shortest_path_ghost_distance[action] = self.nearest_visible_ghost_to_point(env, action)
         
-        (x, y) = min(shortest_path_ghost_distance, key = shortest_path_ghost_distance.get)
+        (x, y) = max(shortest_path_ghost_distance, key = shortest_path_ghost_distance.get)
         return deepcopy(env.shortest_paths[x][y])
     
     def move_agent_away_from_nearest_ghost(self, env, nearest_ghost):
