@@ -45,60 +45,6 @@ class Agent3(Agent2):
         
         return possible_valid_moves 
 
-    def run_agent3_t(self, env):
-        goal = (final_variables.SIZE - 1, final_variables.SIZE - 1)
-        print(env)
-        
-        while self.isalive:
-            if self.location == goal:
-                return 1
-
-            action_space = self.action_spaces(env)
-            og_action_space = deepcopy(action_space)
-
-            env_copy = deepcopy(env)
-            agents = {}
-
-            done = 0
-            moves_success = {}
-            
-            while done is not len(action_space):
-                for index, action in enumerate(action_space):
-                    og_action = og_action_space[index]
-                    agent2 = agents.get(og_action, Agent2())
-                    if agent2.isalive:
-                        agent2.location = action
-                        success, location = agent2.run_agent2_once(env_copy)
-
-                        agents[og_action] = agent2
-
-                        if success:
-                            done = done + 1
-                            moves_success[og_action] = moves_success.get(og_action, 0) + 1
-                        else:
-                            action_space[index] = location
-                
-                for ghost in env_copy.ghosts:
-                    ghost.update_location(env_copy)
-                    for _, agent2 in agents.items():
-                        if agent2.location == ghost.get_location():
-                            agent2.isalive = False 
-                            done = done + 1
-            
-            if moves_success: 
-                highest_success_action = max(moves_success, key = moves_success.get)
-                self.location = highest_success_action
-            else:
-                self.run_agent2_once(env)
-
-            for ghost in env.ghosts:
-                ghost.update_location(env)
-                if self.location == ghost.get_location():
-                    self.isalive = False 
-                    return 0 
-
-        return 0
-    
     def run_agent3(self, env):        
         while self.isalive:
             if self.location == (final_variables.SIZE - 1, final_variables.SIZE - 1):
