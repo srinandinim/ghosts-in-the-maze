@@ -23,25 +23,6 @@ class Agent2(Agent1):
         intializes Agent2 with initialization method of Agent1. 
         """
         super().__init__()
-    
-    def dfs(self, env, curr, visited, prev):
-        """
-        dfs to find a path from source to goal node.
-        """ 
-        visited.add(curr)
-        if curr[0] == curr[1] == final_variables.SIZE:
-            return True 
-        
-        for d in Environment.DIRECTIONS:
-            x = curr[0] + d[0]
-            y = curr[1] + d[1] 
-            if self.is_valid_position((x,y)) and (x,y) not in visited:
-                prev[(x,y)] = curr
-                if env.maze[x][y].get_blocked() == False: 
-                    reached_goal, _ = self.dfs(env, (x,y), visited, prev)
-                    if reached_goal == True :
-                        return True, prev 
-        return False, prev
 
     def manhattan_distance(self, coord1, coord2):
         x = abs(coord2[0] - coord1[0])
@@ -115,6 +96,36 @@ class Agent2(Agent1):
                 max_dist = dist 
                 max_move = move 
         return max_move 
+
+    def run_agent2(self, env):
+        path = self.plan_path(env)
+        while self.isalive:
+            if self.location == final_variables.GOAL:
+                return 1 
+
+            if path:
+                action = path.pop(0) 
+                if not any(action == ghost.get_location() for ghost in env.ghosts):
+                    self.location = action 
+                else:
+                    path = self.plan_path(env)
+                    if path:
+                        action = path.pop(0)
+                        if not any(action == ghost.get_location() for ghost in env.ghosts):
+                            self.location = action 
+                        else:
+                            self.location = self.move_agent_away_from_nearest_ghost(env, self.nearest_visible_ghost(env))
+                    else:
+                        self.location = self.move_agent_away_from_nearest_ghost(env, self.nearest_visible_ghost(env))
+            else:
+                self.location = self.move_agent_away_from_nearest_ghost(env, self.nearest_visible_ghost(env))
+
+            for ghost in env.ghosts:
+                ghost.update_location(env)
+                if self.location == ghost.get_location():
+                    self.isalive = False 
+                    return 0 
+        return 0
 
     def run_agent2_verbose(self, env):
         super().print_environment(env)
@@ -224,10 +235,10 @@ class Agent2(Agent1):
             color_array[self.location[0]][self.location[1]] = 3 
             images.append(color_array)
 
-    def run_agent2(self, env):
+    def run_agent2_old(self, env):
         path = self.plan_path(env)
         while self.isalive:
-            if self.location == (final_variables.SIZE-1, final_variables.SIZE-1):
+            if self.location == final_variables.GOAL:
                 return 1 
 
             if path:
@@ -253,28 +264,3 @@ class Agent2(Agent1):
                     self.isalive = False 
                     return 0 
         return 0
-
-    def run_agent2_once(self, env):
-        path = self.plan_path(env)
-        if self.isalive:
-            if self.location == (final_variables.SIZE-1, final_variables.SIZE-1):
-                return 1, self.location
-
-            if path:
-                action = path.pop(0) 
-                if action not in self.ghost_actionspace(env, self.nearest_visible_ghost(env)).keys():
-                    self.location = action 
-                else:
-                    path = self.plan_path(env)
-                    if path:
-                        action = path.pop(0)
-                        if action not in self.ghost_actionspace(env, self.nearest_visible_ghost(env)).keys():
-                            self.location = action 
-                        else:
-                            self.location = self.move_agent_away_from_nearest_ghost(env, self.nearest_visible_ghost(env))
-                    else:
-                        self.location = self.move_agent_away_from_nearest_ghost(env, self.nearest_visible_ghost(env))
-            else:
-                self.location = self.move_agent_away_from_nearest_ghost(env, self.nearest_visible_ghost(env))
-
-        return 0, self.location
