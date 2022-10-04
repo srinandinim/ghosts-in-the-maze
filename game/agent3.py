@@ -44,7 +44,7 @@ class Agent3(Agent2):
             return self.location 
         
         return possible_valid_moves 
-
+    
     def run_agent3(self, env):        
         while self.isalive:
             if self.location == (final_variables.SIZE - 1, final_variables.SIZE - 1):
@@ -76,6 +76,3 @@ class Agent3(Agent2):
                     return 0 
 
         return 0
-
-
-            

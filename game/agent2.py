@@ -85,7 +85,7 @@ class Agent2(Agent1):
             if self.is_valid_position((x,y)) and env.maze[x][y].get_blocked() == False:
                 possible_valid_moves[(x, y)] = len(env.shortest_paths[x][y])
         
-        possible_valid_moves= {k: v for k, v in sorted(possible_valid_moves.items(), key=lambda item: item[1])}
+        possible_valid_moves = {k: v for k, v in sorted(possible_valid_moves.items(), key=lambda item: item[1])}
         possible_valid_moves_list = list(possible_valid_moves.items())
 
         (x, y) = possible_valid_moves_list[0][0]
