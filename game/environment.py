@@ -21,6 +21,11 @@ class Environment:
 
         self.shortest_paths = [[[] for x in range(Environment.SIZE)] for y in range(Environment.SIZE)]
         self.sb_get_shortest_paths()
+        print(self.shortest_paths)
+        print("\n")
+        self.shortest_paths = [[[] for x in range(Environment.SIZE)] for y in range(Environment.SIZE)]
+        self.sb_get_shortest_paths_dp()
+        print(self.shortest_paths)
     
     def is_valid_position(self, pos):
         """
@@ -85,7 +90,36 @@ class Environment:
                     if success:
                         self.shortest_paths[x][y] = self.sb_path_from_pointers(source, goal, previous)
                 # print(str((x,y)) + " -- " + str(self.shortest_paths[x][y])) 
-                # print()           
+                # print()      
+
+    def sb_get_shortest_paths_dp(self):
+        """
+        pre-computing the shortest path or minimal distance from every square in the ghost-free maze to the goal right at the start
+        """
+        source = (Environment.SIZE-1, Environment.SIZE-1)
+
+        for x in range(Environment.SIZE - 1, -1, -1):
+            for y in range(Environment.SIZE - 1, -1, -1):
+                if self.maze[x][y].get_blocked():
+                    self.shortest_paths[x][y] = []
+                else:
+                    # look north and west 
+                    north_dist = len(self.shortest_paths[x][y+1]) if y < Environment.SIZE - 1 else 0 
+                    west_dist = len(self.shortest_paths[x+1][y]) if x < Environment.SIZE - 1 else 0 
+
+                    self.shortest_paths[x][y] = [] 
+                    if north_dist > 0 and (north_dist <= west_dist or west_dist == 0):
+                        for p in self.shortest_paths[x][y+1]:
+                            self.shortest_paths[x][y].append(p)
+                    if west_dist > 0 and (west_dist <= north_dist or north_dist == 0):
+                        for p in self.shortest_paths[x+1][y]: 
+                            self.shortest_paths[x][y].append(p)
+
+                    self.shortest_paths[x][y].append((x,y))
+
+                    if north_dist > 0 and west_dist > 0:
+                        if (x + 1, y) in self.shortest_paths[x][y+1]:
+                            self.shortest_paths[x][y] = []     
 
     def sb_bfs(self, goal, queue, visited, prev):
         """
@@ -103,8 +137,7 @@ class Environment:
                 if self.is_valid_position( (x,y) ) and (x,y) not in visited:
                     if self.maze[x][y].get_blocked() == False:
                         queue.append((x,y))
-                        prev[(x,y)] = parent
-                            
+                        prev[(x,y)] = parent             
         return False, []
 
     def sb_path_from_pointers(self, source, goal, prev):

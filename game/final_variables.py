@@ -1,4 +1,4 @@
-SIZE = 5
+SIZE = 3
 BLOCKING_PROBABILITY = 0.28
 DIRECTIONS = [[0,1], [1,0], [0,-1], [-1,0]]
 GOAL = (SIZE - 1, SIZE - 1)
