@@ -235,7 +235,7 @@ class Agent2(Agent1):
             color_array[self.location[0]][self.location[1]] = 3 
             images.append(color_array)
 
-    def run_agent2_old(self, env):
+    def run_agent2_with_forecasting(self, env):
         path = self.plan_path(env)
         while self.isalive:
             if self.location == final_variables.GOAL:

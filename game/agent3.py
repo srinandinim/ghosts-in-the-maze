@@ -58,7 +58,7 @@ class Agent3(Agent2):
                 for i in range(5):
                     agent2 = Agent2()
                     agent2.location = action
-                    attempt_success = agent2.run_agent2(deepcopy(env))
+                    attempt_success = agent2.run_agent2_with_forecasting(deepcopy(env))
                     moves_success[action] = moves_success.get(action, 0) + attempt_success
                     maximum_success = max(maximum_success, moves_success[action])
 

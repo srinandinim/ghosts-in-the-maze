@@ -21,19 +21,16 @@
 We create a `Block` class
 
 # Monday October 3rd Tasks
-<<<<<<< HEAD
-0. In agent 1, just take the value from the lookup table. -- DONE
-=======
-0.0. In agent 1, just take the value from the lookup table. 
-0.1. Write up core logic for each of the agents and answer lab report questions.
->>>>>>> 376b75e... lab report
+0. Write up core logic for each of the agents and answer lab report questions.
 1. In the environment, implement shortests paths computed with DP memoization. 
 2. Remove lists from Agent 2 and use a Heap to sort with Heapify.
 3. Potentially implement tie breaker for Agent 2 heuristic. 
-4. Update Agent 2 so that it only looks at the next step, not 1 step in the future. -- DONE, though not satisfied
-5. Add information from Agent 2 currently to support Agent 3. 
-6. Move move_successes to accomodate for repeated locations in Agent 3. 
-7. Any time that we are using a list, make it a priority Queue. 
+4. Any time that we are using a list, make it a priority Queue. 
+## Done 
+0. In agent 1, just take the value from the lookup table.
+1. Update Agent 2 so that it only looks at the next step, not 1 step in the future. -- need to analyze further
+2. Add information from Agent 2 currently to support Agent 3.
+3. Move move_successes to accomodate for repeated locations in Agent 3. -- VETOED, ghosts are not based similar locations
 
 ## Agent 4 / Agent 5: 
 1. For agent 3, tie-break equal reward equal lengths with distance away from nearest ghost farther away. 
