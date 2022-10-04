@@ -21,12 +21,8 @@
 We create a `Block` class
 
 # Monday October 3rd Tasks
-<<<<<<< HEAD
-0. In agent 1, just take the value from the lookup table. -- DONE
-=======
-0.0. In agent 1, just take the value from the lookup table. 
+0.0. In agent 1, just take the value from the lookup table. -- DONE
 0.1. Write up core logic for each of the agents and answer lab report questions.
->>>>>>> 376b75e... lab report
 1. In the environment, implement shortests paths computed with DP memoization. 
 2. Remove lists from Agent 2 and use a Heap to sort with Heapify.
 3. Potentially implement tie breaker for Agent 2 heuristic. 
