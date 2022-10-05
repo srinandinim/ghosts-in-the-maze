@@ -46,5 +46,5 @@ class Agent:
 
         plt.close()
 
-        ani = animation.ArtistAnimation(fig, frames, interval=500, blit=True, repeat=False)
+        ani = animation.ArtistAnimation(fig, frames, interval=250, blit=True, repeat=False)
         ani.save("replays/" + video_name + '.mp4')

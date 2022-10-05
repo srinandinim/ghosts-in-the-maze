@@ -1,4 +1,3 @@
-from copy import deepcopy
 from game.block import Block
 from game.ghost import Ghost 
 import matplotlib.pyplot as plt
@@ -15,12 +14,11 @@ class Environment:
         generates mazes until valid maze retrieved
         """
         self.generate_maze()
-        while not self.validate_maze():
+        while self.validate_maze() == False:
             self.generate_maze()
         self.ghosts = [Ghost() for _ in range(num_ghosts)]
-
-        self.shortest_paths = [[[] for x in range(Environment.SIZE)] for y in range(Environment.SIZE)]
-        self.sb_get_shortest_paths()
+        # self.shortest_paths = [[[] for x in range(Environment.SIZE)] for y in range(Environment.SIZE)]
+        # self.sb_get_shortest_paths()
     
     def is_valid_position(self, pos):
         """
@@ -55,7 +53,7 @@ class Environment:
         """
         visited.add(curr)
         if curr[0] == curr[1] == Environment.SIZE - 1:
-            return True 
+            return True
         
         for d in Environment.DIRECTIONS:
             x = curr[0] + d[0]
@@ -64,7 +62,7 @@ class Environment:
                 if self.maze[x][y].get_blocked() == False: 
                     if self.dfs((x,y), visited) == True:
                         return True 
-        return False 
+        return False
 
     def sb_get_shortest_paths(self):
         """
