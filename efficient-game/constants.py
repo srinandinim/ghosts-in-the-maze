@@ -1,2 +1,2 @@
-SIZE = (5,5)
-GHOSTS = 1
+SIZE = (4,4)
+GHOSTS = 4

@@ -1,13 +1,35 @@
 import constants as constants
+from copy import deepcopy
 import numpy as np 
 import random 
 
 class Environment:
 
     def __init__(self, num_ghosts=1):
+
+        # sets up maze_grid 
         self.maze_grid = self.make_valid_maze()
-        self.generate_ghosts(num_ghosts=1)
-        self.update_ghost_locations(self.ghost_locations)
+
+        # sets up ghost_grid, ghost_locations
+        self.generate_ghosts(num_ghosts)
+
+        # sets up visible_ghost_locations 
+        self.update_visible_ghosts(self.ghost_locations)
+
+        # sets up visible_ghosts_grid 
+        self.visible_ghosts_grid = self.update_visible_ghost_grid(self.visible_ghosts)
+
+        # sets up the effective grid (maze and ghost overlay)
+        self.effective_blocked_maze(self.maze_grid, self.ghost_grid)
+
+    def step(self):
+        """
+        updates environment for 1 step:
+        updates all_ghosts, all_ghosts_grid, visible_ghosts, visible_ghosts_grid
+        updates the effective maze 
+        """
+        self.update_ghosts() 
+        self.effective_blocked_maze(self.maze_grid, self.ghost_grid) 
 
     def make_maze(self, shape):
         """
@@ -102,11 +124,27 @@ class Environment:
             choice = np.random.randint(0, len(possible_inbound_actions))
             action = possible_inbound_actions[choice]
 
-            if self.maze[action[0]][action[1]] == 1: 
+            if self.maze_grid[action[0]][action[1]] == 1: 
                 if random.random() <= 0.5:
                     self.ghost_locations[ghost] = action 
                 else: self.ghost_locations[ghost] = location 
             else: self.ghost_locations[ghost] = action 
+
+    def update_visible_ghosts(self, ghost_locations):
+        """
+        stores all visible ghosts in visible ghosts dict
+        """
+        self.visible_ghosts = {}
+        for ghost in ghost_locations.keys():
+            location = ghost_locations[ghost]
+            if self.maze_grid[location[0]][location[1]] == 0:
+                self.visible_ghosts[deepcopy(ghost)]= deepcopy(location)
+
+    def update_visible_ghost_grid(self, ghost_locations):
+        ghost_grid = np.zeros_like(self.maze_grid)
+        for value in ghost_locations.values():
+            ghost_grid[value[0]][value[1]] = 1
+        return ghost_grid 
 
     def update_ghost_grid(self, ghost_locations):
         """
@@ -119,10 +157,69 @@ class Environment:
             ghost_grid[value[0]][value[1]] = 1
         return ghost_grid 
 
-env = Environment() 
-print(env.maze_grid)
-print(env.ghost_grid)
-print(env.ghost_locations)
+    def update_ghosts(self):
+        """
+        updates the ghost location and effective ghost grid
+        updates the visible ghost, visible ghost grid
+        """
+        self.update_ghost_locations(self.ghost_locations)
+        self.update_visible_ghosts(self.ghost_locations)
+        self.ghost_grid = self.update_ghost_grid(self.ghost_locations)
+        self.visible_ghosts_grid = self.update_visible_ghost_grid(self.visible_ghosts)
+
+    def effective_blocked_maze(self, maze_grid, ghost_grid):
+        """
+        takes ghost grid and maze grid and overlaps
+        them each other to return the effective blocked maze
+        """
+        self.effective_maze = np.zeros_like(maze_grid)
+        self.effective_maze[maze_grid==1] = 1 
+        self.effective_maze[ghost_grid==1] = 1
+
+    def debugging_print_maze_grid(self):
+        print(f"THIS IS THE CURRENT MAZE GRID (0: Unblocked, 1: Blocked)\n")
+        print(self.maze_grid)
+        print("\n")
+    
+    def debugging_print_ghost_grid(self):
+        print(f"THIS IS THE CURRENT GHOST GRID (0: No Ghost, 1: Ghost Present)") 
+        print(self.ghost_grid)
+        print("\n")
+    
+    def debugging_print_all_ghost_locations(self):
+        print(f"THESE ARE ALL THE CURRENT GHOST LOCATIONS (number:location)") 
+        print(self.ghost_locations)
+        print("\n")
+    
+    def debugging_print_visible_ghost_grid(self):
+        print(f"THIS IS THE CURRENT VISIBLE GHOST GRID (0: No Ghost, 1: Ghost Present)") 
+        print(self.visible_ghosts_grid)
+        print("\n")
+    
+    def debugging_print_visible_ghost_locations(self):
+        print(f"THESE ARE ALL THE VISIBLE GHOST LOCATIONS (number:location)") 
+        print(self.visible_ghosts)
+        print("\n")
+    
+    def debugging_effective_maze(self):
+        print(f"THE EFFECTIVE MAZE (GHOST/BLOCKS OVERLAY) (0:Unblocked,1:Blocked)")
+        print(self.effective_maze)
+        print("\n")
+
+    def debugging_all(self):
+        self.debugging_print_maze_grid()
+        self.debugging_print_ghost_grid()
+        self.debugging_print_all_ghost_locations()
+        self.debugging_print_visible_ghost_grid()
+        self.debugging_print_visible_ghost_locations()
+        self.debugging_effective_maze()
+
+
+env = Environment(num_ghosts=constants.GHOSTS) 
+env.debugging_all()
+env.step()
+env.debugging_all()
+
 
 
 
