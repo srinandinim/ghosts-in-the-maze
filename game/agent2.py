@@ -3,8 +3,6 @@ NOTE: AGENT2 is complete - no changes necessary for project.
 """
 
 from copy import deepcopy
-from pickle import FALSE, TRUE
-from turtle import pos
 from game.environment import Environment 
 import game.final_variables as final_variables
 from game.agent1 import Agent1
@@ -22,9 +20,6 @@ class Agent2(Agent1):
     Agent 2 requires multiple searches - you’ll want to ensure that your searches are efficient as possible so they don’t take much time.  
     Do you always need to replan?  When will the new plan be the same as the old plan, and as such you won’t need to recalculate?
     """
-
-
-
 
     def __init__(self):
         """
@@ -93,10 +88,12 @@ class Agent2(Agent1):
     def plan_path(self, source, env):
         # agent starts at top left and tries to reach bottom right
         goal = (Environment.SIZE-1, Environment.SIZE-1)
-        # use queue/visited/prev for running BFS for path planning
+
+        # use visited/prev for running BFS for path planning
         visited = set(source)
         prev = ({source : None})
         _, prev = self.dfs(env, source, visited, prev)
+
         path = super().path_from_pointers(source, goal, prev)
         return path 
     
@@ -124,10 +121,6 @@ class Agent2(Agent1):
         return max_move 
 
     def run_agent2_verbose(self, env):
-        """
-        @Nandini - can you add functionality "if all paths to the goal are currently blocked"
-        I think I am only checking one possible path with DFS and then moving away from nearest ghost. 
-        """
         super().print_environment(env)
         path = self.plan_path(self.location, env)
         paths = {self.location : deepcopy(path)}

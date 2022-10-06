@@ -1,13 +1,6 @@
-import enum
-from queue import Empty
-import random
-from game.agent import Agent
-from game.environment import Environment 
 import game.final_variables as final_variables
 from game.agent2 import Agent2
 from copy import deepcopy
-import matplotlib.pyplot as plt
-import time
 
 class Agent3(Agent2):
     """
@@ -51,14 +44,13 @@ class Agent3(Agent2):
             visited[self.location] = visited.get(self.location,0) + 1
             # if reached goal, then we're done
             if self.location == (final_variables.SIZE - 1, final_variables.SIZE - 1):
-                #print("WON!")
                 return 1
 
             # determine the agent's action spaces
             self.action_space = self.action_spaces(env)
 
             # add the DFS paths to the current action space
-            a3paths = {}
+            # a3paths = {}
 
             # run k simulation and store success rate for 
             moves_success = {}
@@ -92,14 +84,6 @@ class Agent3(Agent2):
                 self.location = self.move_agent_away_from_nearest_ghost(env, self.nearest_visible_ghost(env)) 
             #print(self.location)
             #print("\n")
-
-            
-
-            
-            
-            
-
-            
 
             """
 
