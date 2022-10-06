@@ -87,6 +87,78 @@ class Agent2(Agent):
                 max_move = move 
         return max_move 
 
+    def run_agent2(self, env):
+        path = self.modified_plan_path(env, self.location)
+        while self.is_alive == True:
+            if self.location == (constants.SIZE[0]-1, constants.SIZE[1]-1): 
+                return 1 
+            if self.has_path == False:
+                path = self.modified_plan_path(env, self.location)
+            self.has_path = False 
+            if len(path) > 0:
+                action = path.pop(0)
+                if action not in env.ghost_locations.values():
+                    self.location = action 
+                    self.has_path = True 
+                else:
+                    path = self.modified_plan_path(env, self.location)
+                    if len(path) > 0:
+                        action = path.pop(0)
+                        if action not in env.ghost_locations.values():
+                            self.location = action 
+                            self.has_path = True 
+                        else:
+                            self.location = self.move_agent_away_from_nearest_ghost(env)
+                    else: 
+                        self.location = self.move_agent_away_from_nearest_ghost(env)
+            else: 
+                self.location = self.move_agent_away_from_nearest_ghost(env)
+
+            if self.location in env.ghost_locations.values():
+                self.is_alive = False 
+                return 0 
+        
+            env.step() 
+
+    def run_agent2_video(self, env):
+        video_frames = []
+        video_name = "agent2_" + str(time.time())
+        path = self.modified_plan_path(env, self.location)
+        while self.is_alive == True:
+            video_frames.append(self.get_image_array(env))
+            if self.location == (constants.SIZE[0]-1, constants.SIZE[1]-1): 
+                self.generate_video(video_name, video_frames)
+                return 1 
+            if self.has_path == False:
+                path = self.modified_plan_path(env, self.location)
+            self.has_path = False 
+            if len(path) > 0:
+                action = path.pop(0)
+                if action not in env.ghost_locations.values():
+                    self.location = action 
+                    self.has_path = True 
+                else:
+                    path = self.modified_plan_path(env, self.location)
+                    if len(path) > 0:
+                        action = path.pop(0)
+                        if action not in env.ghost_locations.values():
+                            self.location = action 
+                            self.has_path = True 
+                        else:
+                            self.location = self.move_agent_away_from_nearest_ghost(env)
+                    else: 
+                        self.location = self.move_agent_away_from_nearest_ghost(env)
+            else: 
+                self.location = self.move_agent_away_from_nearest_ghost(env)
+
+            if self.location in env.ghost_locations.values():
+                self.is_alive = False 
+                self.generate_video(video_name, video_frames)
+                return 0 
+        
+            env.step() 
+
+
     def run_agent2_debug(self, env):
         path = self.modified_plan_path(env, self.location)
         print(f"This is the Agent's plan: {path}")
