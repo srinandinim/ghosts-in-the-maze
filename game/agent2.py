@@ -222,34 +222,34 @@ class Agent2(Agent1):
         return ghost_actions 
 
     def run_agent2_forecast(self, env):
-        path = super().plan_path((0,0), env)
-        self.paths = {self.location : deepcopy(path)}
+        path = self.plan_path(env, self.location)
         while self.isalive:
-            #print(self.location)
-            if self.location == (final_variables.SIZE-1, final_variables.SIZE-1):
+            if self.location == final_variables.GOAL:
                 return 1 
-            action = path.pop(0) 
-            if action not in self.ghost_actionspace(env, self.nearest_visible_ghost(env)).keys():
 
-            #if action not in self.ghost_current_locations(env):
-                self.location = action 
-            else:
-                if self.location in self.paths: 
-                    path = deepcopy(self.paths[self.location])
-                    #print(path)
-                else: 
-                    path = self.plan_path(self.location, env)
-                    self.paths[self.location] = deepcopy(path) 
-                    #print(path)
-                #print(paths.keys())
-                #print(paths.values())
-  
-                action = path.pop(0) 
+            if self.has_path == False:
+                path = self.plan_path(env, self.location)
+
+            self.has_path = False
+            if path:
+                action = path.pop(0)
                 if action not in self.ghost_actionspace(env, self.nearest_visible_ghost(env)).keys():
-                #if action not in self.ghost_current_locations(env):
-                    self.location = action 
+                    self.location = action
+                    self.has_path = True
                 else:
-                    self.location = self.move_agent_away_from_nearest_ghost(env, self.nearest_visible_ghost(env))
+                    path = self.plan_path(env, self.location)
+                    if path:
+                        action = path.pop(0)
+                        if action not in self.ghost_actionspace(env, self.nearest_visible_ghost(env)).keys():
+                            self.location = action 
+                            self.has_path = True
+                        else:
+                            self.location = self.move_agent_away_from_nearest_ghost(env)
+                    else:
+                        self.location = self.move_agent_away_from_nearest_ghost(env)
+            else:
+                self.location = self.move_agent_away_from_nearest_ghost(env)
+
             for ghost in env.ghosts:
                 ghost.update_location(env)
                 if self.location == ghost.get_location():
