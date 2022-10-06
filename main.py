@@ -4,6 +4,8 @@ from game.environment import Environment
 
 if __name__ == '__main__':  
 
+    """
+
     agent1_statistics = {}
     agent2_statistics = {}
     agent3_statistics = {}
@@ -28,9 +30,9 @@ if __name__ == '__main__':
     print(f"Agent 1:\t{agent1_statistics}")
     print(f"Agent 2:\t{agent2_statistics}")
     print(f"Agent 3:\t{agent3_statistics}")
+    """
     
-    
-    #run_agents.simulation_statistics_agent3(num_simulations=100, num_ghosts=2)
+    run_agents.simulation_statistics_agent3(num_simulations=1, num_ghosts=3)
     #run_agents.simulation_statistics_agent1(num_simulations=100, num_ghosts=2)
     #run_agents.simulation_statistics_agent2(num_simulations=100, num_ghosts=2)
     

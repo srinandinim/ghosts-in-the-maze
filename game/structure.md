@@ -12,7 +12,7 @@
 --------- get_location(self)                 : returns ghost's current location 
 --------- update_location(self)              : moves location of ghost per specification
 --------- str(self)                          : prints out f"Ghost Location: {self.location}"
- 
+
 ----- Environment Class
 --------- init(self, num_ghosts=1)           : generates a a valid maze with num_ghosts
 --------- is_valid_position(self,pos)        : is a location in bounds of the board

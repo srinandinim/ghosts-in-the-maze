@@ -1,6 +1,8 @@
 import game.final_variables as final_variables
 from game.agent2 import Agent2
 from copy import deepcopy
+import matplotlib.pyplot as plt
+from game.environment import Environment
 
 class Agent3(Agent2):
     """
@@ -64,17 +66,21 @@ class Agent3(Agent2):
                     moves_success[action] = moves_success.get(action, 0) + attempt_success
                     maximum_success = max(maximum_success, moves_success[action])
             
-            #print(moves_success)
-            #print(self.location)
-            #print(visited)
+            print(moves_success)
+            print(self.location)
+            print(visited)
 
             # penalize states already visited, encouraging exploration, avoid local minima
+
+            
             for key in moves_success.keys():
                 if key in visited.keys(): 
-                    #print(f"Visited {key}, so cut in hafl!")
+                    print(f"Visited {key}, so cut reward in half!")
                     moves_success[key] = moves_success[key] * 0.6 **(visited[key])
                 moves_success[key] = ((moves_success[key] + 1) / (self.manhattan_distance(key, final_variables.GOAL) + 1)**(2))
-            #print(moves_success)
+            print(moves_success)
+
+            
 
             action = max(moves_success, key=moves_success.get)
             if action not in self.ghost_actionspace(env, self.nearest_visible_ghost(env)).keys():
@@ -85,7 +91,7 @@ class Agent3(Agent2):
             #print(self.location)
             #print("\n")
 
-            """
+            
 
             # for debugging, print out the agent location and ghost locations
             print(f"\nAgent 3 Location:\t {self.location}")
@@ -95,14 +101,6 @@ class Agent3(Agent2):
             color_array[self.location[0]][self.location[1]] = 3 
             picture = plt.imshow(color_array, cmap='Greys')
             plt.show()
-            highest_success_distances = {}
-            for action, num_success in moves_success.items():
-                if num_success == maximum_success:
-                    highest_success_distances[action] = len(env.shortest_paths[action[0]][action[1]])
-            
-            self.location = min(highest_success_distances, key=highest_success_distances.get)
-            """
-
 
             for ghost in env.ghosts:
                 ghost.update_location(env)
@@ -170,7 +168,7 @@ class Agent3(Agent2):
                     path = [action]
                     self.location = path.pop() 
             
-            """
+            
             print(f"\nAgent 3 Location:\t {self.location}")
             for i in range(len(env.ghosts)):
                 print(f"Ghost {i} Location:\t {env.ghosts[i].location}")
@@ -178,7 +176,6 @@ class Agent3(Agent2):
             color_array[self.location[0]][self.location[1]] = 3 
             picture = plt.imshow(color_array, cmap='Greys')
             plt.show()
-            """
             
             for ghost in env.ghosts:
                 ghost.update_location(env)
@@ -188,3 +185,4 @@ class Agent3(Agent2):
                     return 0 
 
         return 0
+
