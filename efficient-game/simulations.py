@@ -87,6 +87,6 @@ if __name__ == "__main__":
 
     env = Environment(num_ghosts=5)
     a2 = Agent2()
-    a2.run_agent2_debug(5)
+    a2.run_agent2_debug(env)
 
 

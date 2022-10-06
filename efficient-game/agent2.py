@@ -88,7 +88,7 @@ class Agent2(Agent):
         return max_move 
 
     def run_agent2_debug(self, env):
-        path = super().plan_path(env, self.location)
+        path = self.modified_plan_path(env, self.location)
         print(f"This is the Agent's plan: {path}")
 
         while self.is_alive == True:
