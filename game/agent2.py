@@ -185,7 +185,7 @@ class Agent2(Agent1):
             plt.show()
 
     def run_agent2(self, env):
-        path = super().plan_path((0,0), env)
+        path = self.plan_path((0,0), env)
         self.paths = {self.location : deepcopy(path)}
         while self.isalive:
             #print(self.location)
