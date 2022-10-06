@@ -1,1 +1,2 @@
 SIZE = (5,5)
+GHOSTS = 1
