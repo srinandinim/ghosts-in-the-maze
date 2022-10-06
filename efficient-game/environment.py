@@ -143,7 +143,7 @@ class Environment:
         for ghost in ghost_locations.keys():
             location = ghost_locations[ghost]
             if self.maze_grid[location[0]][location[1]] == 0:
-                self.visible_ghosts[deepcopy(ghost)]= deepcopy(location)
+                self.visible_ghosts[deepcopy(ghost)] = deepcopy(location)
 
     def update_visible_ghost_grid(self, ghost_locations):
         """
@@ -154,7 +154,7 @@ class Environment:
         ghost_grid = np.zeros_like(self.maze_grid)
         for value in ghost_locations.values():
             ghost_grid[value[0]][value[1]] = 1
-        return ghost_grid 
+        return ghost_grid
 
     def update_ghost_grid(self, ghost_locations):
         """

@@ -1,15 +1,15 @@
-import time
-import constants 
-from copy import deepcopy 
-import matplotlib.pyplot as plt
+from copy import deepcopy
 import matplotlib.animation as animation
+import matplotlib.pyplot as plt
+import constants
+
 
 class Agent:
 
     def __init__(self):
-        self.location = (0,0)
-        self.is_alive = True 
-    
+        self.location = (0, 0)
+        self.is_alive = True
+
     def get_valid_neighbors(self, pos, grid):
         """
         gets all valid neighbors in-bound
@@ -19,11 +19,11 @@ class Agent:
         - self.effective_maze 
         """
         x, y = pos[0], pos[1]
-        
-        left = (x-1, y) if x > 0 else None 
-        right = (x+1, y) if x < constants.SIZE[0]-1 else None 
-        up = (x, y-1) if y > 0 else None 
-        down = (x, y+1) if y < constants.SIZE[1]-1 else None 
+
+        left = (x-1, y) if x > 0 else None
+        right = (x+1, y) if x < constants.SIZE[0]-1 else None
+        up = (x, y-1) if y > 0 else None
+        down = (x, y+1) if y < constants.SIZE[1]-1 else None
 
         return list(filter(lambda x: x != None and grid[x[0]][x[1]] == 0, [left, right, up, down]))
 
@@ -32,18 +32,18 @@ class Agent:
         runs BFS on grid and stores prev pointers to restore path.
         """
         while len(queue) > 0:
-            #print(queue)
+            # print(queue)
             parent = queue.pop(0)
             visited.add(parent)
-            if parent == goal: 
+            if parent == goal:
                 return prev
             neighbors = self.get_valid_neighbors(parent, env.maze_grid)
             for neighbor in neighbors:
                 if neighbor not in visited:
                     visited.add(neighbor)
                     queue.append(neighbor)
-                    prev[neighbor] = parent 
-        return prev 
+                    prev[neighbor] = parent
+        return prev
 
     def path_from_pointers(self, source, goal, prev):
         """
@@ -56,23 +56,25 @@ class Agent:
             current = prev[current]
         return list(reversed(path))
 
-    def plan_path(self, env, source=(0,0)):
+    def plan_path(self, env, source=(0, 0)):
         """
         plans path agent will to get to end from source.
         """
         # use queue/visited/prev for running BFS for path planning
         queue = [source]
         visited = set(source)
-        prev = ({source : None})
+        prev = ({source: None})
 
         # run BFS to find optimal path from start to end without ghosts
-        previous = self.bfs(env, (constants.SIZE[0]-1, constants.SIZE[1]-1), queue, visited, prev)
+        previous = self.bfs(
+            env, (constants.SIZE[0]-1, constants.SIZE[1]-1), queue, visited, prev)
 
-        # finds optimal path from the BFS having stored prev pointers 
-        path = self.path_from_pointers(source, (constants.SIZE[0]-1, constants.SIZE[1]-1), previous)
+        # finds optimal path from the BFS having stored prev pointers
+        path = self.path_from_pointers(
+            source, (constants.SIZE[0]-1, constants.SIZE[1]-1), previous)
 
-        # returns the optimal path from source to destination 
-        return path 
+        # returns the optimal path from source to destination
+        return path
 
     def manhattan_distance(self, coord1, coord2):
         """
@@ -83,7 +85,6 @@ class Agent:
         return x + y
 
     def get_image_array(self, env):
-
         """
         0: unblocked cell
         1: blocked cell
@@ -91,9 +92,9 @@ class Agent:
         3: agent location 
         """
         color_array = deepcopy(env.maze_grid)
-        color_array[env.ghost_grid==1] = 2 
-        color_array[self.location[0]][self.location[1]] = 3 
-        return color_array 
+        color_array[env.ghost_grid == 1] = 2
+        color_array[self.location[0]][self.location[1]] = 3
+        return color_array
 
     def generate_video(self, video_name, images):
         """
@@ -102,11 +103,10 @@ class Agent:
         frames = []
         fig = plt.figure()
         for i in range(len(images)):
-            frames.append([plt.imshow(images[i], cmap='Greys',animated=True)])
+            frames.append([plt.imshow(images[i], cmap='Greys', animated=True)])
 
         plt.close()
 
-        ani = animation.ArtistAnimation(fig, frames, interval=120, blit=True, repeat=False)
+        ani = animation.ArtistAnimation(
+            fig, frames, interval=120, blit=True, repeat=False)
         ani.save("replays/" + video_name + '.mp4')
-
-
