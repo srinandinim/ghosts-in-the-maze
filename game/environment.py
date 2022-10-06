@@ -1,7 +1,8 @@
-from game.block import Block
-from game.ghost import Ghost 
 import matplotlib.pyplot as plt
+
 import game.final_variables as final_variables
+from game.block import Block
+from game.ghost import Ghost
 
 class Environment:
 
@@ -17,8 +18,6 @@ class Environment:
         while self.validate_maze() == False:
             self.generate_maze()
         self.ghosts = [Ghost() for _ in range(num_ghosts)]
-        # self.shortest_paths = [[[] for x in range(Environment.SIZE)] for y in range(Environment.SIZE)]
-        # self.sb_get_shortest_paths()
     
     def is_valid_position(self, pos):
         """
@@ -64,56 +63,14 @@ class Environment:
                         return True 
         return False
 
-    def sb_get_shortest_paths(self):
+    def get_ghosts_locations(self):
         """
-        pre-computing the shortest path or minimal distance from every square in the ghost-free maze to the goal right at the start
+        returns set of all the ghosts' current locations
         """
-        goal = (Environment.SIZE-1, Environment.SIZE-1)
-
-        for x in range(Environment.SIZE - 1, -1, -1):
-            for y in range(Environment.SIZE - 1, -1, -1):
-                if not self.maze[x][y].get_blocked():
-                    source = (x,y)
-                    
-                    queue = [source]
-                    visited = set(source)
-                    prev = ({source : None})
-
-                    success, previous = self.sb_bfs(goal, queue, visited, prev)
-                    if success:
-                        self.shortest_paths[x][y] = self.sb_path_from_pointers(source, goal, previous)
-                # print(str((x,y)) + " -- " + str(self.shortest_paths[x][y])) 
-                # print()         
-
-    def sb_bfs(self, goal, queue, visited, prev):
-        """
-        runs BFS and stores the prev pointers along path. 
-        """
-        while len(queue) > 0:
-            parent = queue.pop(0)
-            visited.add(parent)
-            if parent == goal: 
-                return True, prev
-
-            for d in Environment.DIRECTIONS:
-                x = parent[0] + d[0]
-                y = parent[1] + d[1] 
-                if self.is_valid_position( (x,y) ) and (x,y) not in visited:
-                    if self.maze[x][y].get_blocked() == False:
-                        queue.append((x,y))
-                        prev[(x,y)] = parent             
-        return False, []
-
-    def sb_path_from_pointers(self, source, goal, prev):
-        """
-        returns solution path from start to end node
-        """
-        path = [goal]
-        current = goal
-        while current != source:
-            path.append(prev[current])
-            current = prev[current]
-        return list(reversed(path))
+        ghost_locations = set()
+        for ghost in self.ghosts:
+            ghost_locations.add(ghost.location)
+        return ghost_locations 
         
     def get_picture(self):
         """
