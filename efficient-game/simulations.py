@@ -1,6 +1,7 @@
 import random
 import constants 
-from agent import Agent1, Agent2
+from agent1 import Agent1 
+from agent2 import Agent2 
 from environment import Environment 
 
 def simulation_statistics_agent1(num_simulations, num_ghosts):
