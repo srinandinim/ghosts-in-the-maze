@@ -32,30 +32,10 @@ if __name__ == '__main__':
     print(f"Agent 3:\t{agent3_statistics}")
     """
     
-    run_agents.simulation_statistics_agent3(num_simulations=1, num_ghosts=3)
-    #run_agents.simulation_statistics_agent1(num_simulations=100, num_ghosts=2)
-    #run_agents.simulation_statistics_agent2(num_simulations=100, num_ghosts=2)
     
-    #run_agents.simulation_statistics_verbose_agent2(num_simulations=1, num_ghosts=5)
-
-
-    #run_agents.simulation_statistics_agent2(num_simulations=100, num_ghosts=5)
-    # run_agents.simulation_statistics_agent1(num_simulations=100, num_ghosts=5)
+    
+    # run_agents.simulation_statistics_agent1(num_simulations=100, num_ghosts=2)
+    # run_agents.simulation_statistics_agent2(num_simulations=100, num_ghosts=2)
+    # run_agents.simulation_statistics_agent3(num_simulations=30, num_ghosts=2)
+    
     # run_agents.simulation_statistics_verbose_agent2(num_simulations=1, num_ghosts=5)
-
-    #run_agents.simulation_statistics_agent1(num_simulations=1, num_ghosts=5)
-
-    # run_agents.simulation_statistics_agent3(num_simulations=100, num_ghosts=2)
-
-    """
-        for i in range(1, final_variables.SIZE*final_variables.SIZE):
-        print(f"The number of ghosts are: {i}")
-        run_agents.simulation_statistics_agent1(num_simulations=100, num_ghosts=i)
-        print("\n")
-    """
-
-    # run_agents.simulation_statistics_verbose_agent2(num_simulations=1, num_ghosts=2)
-
-    #env = Environment(num_ghosts=3)
-    #print(env.SIZE)
-    #env.get_picture()
