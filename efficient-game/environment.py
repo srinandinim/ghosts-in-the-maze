@@ -141,6 +141,11 @@ class Environment:
                 self.visible_ghosts[deepcopy(ghost)]= deepcopy(location)
 
     def update_visible_ghost_grid(self, ghost_locations):
+        """
+        creates a grid with same size of maze
+        1 for every location where VISIBLE ghost exists
+        0 everywhere VISIBLE ghost doesn't exist
+        """
         ghost_grid = np.zeros_like(self.maze_grid)
         for value in ghost_locations.values():
             ghost_grid[value[0]][value[1]] = 1
@@ -214,11 +219,6 @@ class Environment:
         self.debugging_print_visible_ghost_locations()
         self.debugging_effective_maze()
 
-
-env = Environment(num_ghosts=constants.GHOSTS) 
-env.debugging_all()
-env.step()
-env.debugging_all()
 
 
 
