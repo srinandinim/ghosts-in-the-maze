@@ -30,23 +30,22 @@ class Agent1(Agent):
 
     def run_agent1_video(self, env):
         video_frames = []
-        video_name = "agent1_" + str(time.time())
+        video_name = "agent1_ghosts{}_".format(len(env.ghost_locations))
 
         plan = super().plan_path(env, (0, 0))
         while self.is_alive:
             video_frames.append(self.get_image_array(env))
             if self.location == (constants.SIZE[0]-1, constants.SIZE[1]-1):
-                self.generate_video(video_name, video_frames)
+                self.generate_video(video_name + "success", video_frames)
                 return 1
             self.location = plan.pop(0)
             if self.location in env.ghost_locations.values():
                 self.is_alive = False
-                self.generate_video(video_name, video_frames)
+                self.generate_video(video_name + "failure", video_frames)
                 return 0
             env.step()
 
     def run_agent1_debug(self, env):
-
         plan = super().plan_path(env, (0, 0))
         print(f"This is the Agent's plan: {plan}")
 

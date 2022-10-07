@@ -2,6 +2,10 @@
 
 ## Synopsis
 -- TBD -- 
+- fix dfs issue with the simulations
+- implemenent videos for the success/failure for each one
+- a nice to have if you can is to export the lab simulation statistics with number of ghosts and survival rates into a bunch of JSONs and then create another scrip that parses those JSONs and use Matplotlib to make a graph of all the survival rates and agents on top of each other
+- update this document
 
 ## Class Structure
 ### Environment
