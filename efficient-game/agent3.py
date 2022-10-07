@@ -32,7 +32,8 @@ class Agent3(Agent2):
             moves_success = {}
             maximum_success = 0
             for action in self.actionspace:
-                for _ in range(2):
+                # updates
+                for _ in range(3):
                     agent2 = Agent2()
                     agent2.location = action
                     attempt_success = agent2.run_agent2_forecast(deepcopy(env))
