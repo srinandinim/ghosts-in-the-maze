@@ -121,6 +121,7 @@ def simulation_statistics_agent3_video(num_simulations, num_ghosts, environments
         f"Agent3: Wins: {wins}\tLosses: {losses}\tSurvival Rate: {round(survival*100,2)}%")
     return round(survival*100, 2)
 
+
 def simulation_statistics_agent4(num_simulations, num_ghosts, environments=[]):
     """
     run simulation n times and get statistics on survival, and more
@@ -162,11 +163,13 @@ def visualize_simulation_statistics(timestamp):
 
 def lab_report_simulations(a1=False, a2=False, a3=False, a4=False, a5=False):
     a1_stats, a2_stats, a3_stats, a4_stats, a5_stats = {}, {}, {}, {}, {}
-    last_survival_rate, num_ghosts, max_ghosts = 100, 5, constants.SIZE[0] * constants.SIZE[1]
-    num_simulations = 30
+    last_survival_rate, num_ghosts, max_ghosts = 100, 1, constants.SIZE[0] * \
+        constants.SIZE[1]
+    num_simulations = 10
     a1_s = a2_s = a3_s = a4_s = a5_s = 0
 
-    while last_survival_rate > 5 and num_ghosts < 12:
+    start_time = time.time()
+    while last_survival_rate > 0 and num_ghosts < 2:
         print(f"\nTHE NUMBER OF CURRENT GHOSTS ARE: {num_ghosts}")
 
         environments = []
@@ -187,13 +190,12 @@ def lab_report_simulations(a1=False, a2=False, a3=False, a4=False, a5=False):
             a3_s = simulation_statistics_agent3(
                 num_simulations=num_simulations, num_ghosts=num_ghosts, environments=environments)
             a3_stats[num_ghosts] = a3_s
-        
+
         if a4 == True:
             a4_s = simulation_statistics_agent4(
                 num_simulations=num_simulations, num_ghosts=num_ghosts, environments=environments)
             a4_stats[num_ghosts] = a4_s
 
-        start_time = time.time() 
         save_simulation_statistics(timestamp=start_time, a1_stats=a1_stats,
                                    a2_stats=a2_stats, a3_stats=a3_stats, a4_stats=a4_stats, a5_stats=a5_stats)
 
@@ -207,13 +209,14 @@ def lab_report_simulations(a1=False, a2=False, a3=False, a4=False, a5=False):
 
 
 if __name__ == "__main__":
+    # start = time.time()
+
     a1_stats, a2_stats, a3_stats, a4_stats, a5_stats = lab_report_simulations(
-    a1=True, a2=True, a3=True, a4=True)
+        a1=False, a2=False, a3=False, a4=False)
     print(f"Agent 1 Stats: {a1_stats}")
     print(f"Agent 2 Stats: {a2_stats}")
     print(f"Agent 3 Stats: {a3_stats}")
-    print(f"Agent 3 Stats: {a4_stats}")
+    print(f"Agent 4 Stats: {a4_stats}")
 
-    # env = Environment(num_ghosts=10)
-    # a3 = Agent3()
-    # a3.run_agent3_debug(env)
+    # end = time.time()
+    # print(end - start)
