@@ -167,11 +167,12 @@ def save_dict_to_json(dict, file_name):
 def lab_report_visualizations(a1_stats=None, a2_stats=None, a3_stats=None, a4_stats=None, a5_stats=None):
     file_content = {'a1_stats': a1_stats, 'a2_stats': a2_stats, 'a3_stats': a3_stats, 'a4_stats': a4_stats, 'a5_stats': a5_stats}
 
-    filename = "visualizations/simulation_statistics{}.json".format(time.time())
+    timestamp = time.time()
+    filename = "experiments/simulation_statistics{}.json".format(timestamp)
     with open(filename, 'w') as fp:
         json.dump(file_content, fp)
 
-    visualizations.get_graph(filename, save=True, graph_name="sample")
+    visualizations.get_graph(filename, save=True, graph_name="result_statistics{}".format(timestamp))
 
 if __name__ == "__main__":
     a1_stats, a2_stats, a3_stats, a4_stats, a5_stats = lab_report_simulations(a1=True, a2=True, a3=False)
