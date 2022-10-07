@@ -2,9 +2,8 @@
 
 ## Synopsis
 -- TBD -- 
-- also see if you can get the agents to run on the same environment. My scripting is not set up that way but if you can
+- iterative DFS rather than recurisve DFS
 - also when saving the results for the experiment for ghosts, maybe Dave it to the jsons periodically so that we don’t lose progress if the run ends
-- can you add a BFS checker to environment
 - just add comments and see if we can checkpoint the json at each ghost so in case it terminates we can just restart at the last position in the json
 - implemenent videos for the success/failure for each one
 - update this document
