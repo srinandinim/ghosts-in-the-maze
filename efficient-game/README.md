@@ -2,7 +2,7 @@
 
 ## Synopsis
 -- TBD -- 
-- iterative DFS rather than recurisve DFS
+- can you make it so that a ghost can’t spawn at (0,0)
 - also when saving the results for the experiment for ghosts, maybe Dave it to the jsons periodically so that we don’t lose progress if the run ends
 - just add comments and see if we can checkpoint the json at each ghost so in case it terminates we can just restart at the last position in the json
 - implemenent videos for the success/failure for each one

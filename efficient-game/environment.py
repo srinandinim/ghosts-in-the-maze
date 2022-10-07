@@ -3,6 +3,7 @@ from copy import deepcopy
 import numpy as np
 import constants as constants
 
+
 class Environment:
 
     def __init__(self, num_ghosts=1):
@@ -16,7 +17,8 @@ class Environment:
         self.update_visible_ghosts(self.ghost_locations)
 
         # sets up visible_ghosts_grid
-        self.visible_ghosts_grid = self.update_visible_ghost_grid(self.visible_ghosts)
+        self.visible_ghosts_grid = self.update_visible_ghost_grid(
+            self.visible_ghosts)
 
         # sets up the effective grid (maze and ghost overlay)
         self.effective_blocked_maze(self.maze_grid, self.ghost_grid)
@@ -64,28 +66,26 @@ class Environment:
             filter(lambda x: grid[x[0]][x[1]] == 0, inbounds_actionspace))
         return neighbors
 
-    def dfs(self, maze, current, visited):
+    def dfs(self, maze):
         """
-        runs dfs to see if a path exists from current location
+        runs dfs to see if a path exists from top left corner
         to the bottom right corner of the maze. 
         """
-        if current == (constants.SIZE[0]-1, constants.SIZE[1]-1):
-            return True
-        visited.add(current)
-        neighbors = self.get_valid_neighbors(current, maze)
-        for neighbor in neighbors:
-            if neighbor not in visited and self.dfs(maze, neighbor, visited) == True:
-                return True
-        return False
-
-    def is_valid_maze(self, maze):
-        """
-        The maze is valid if a path exists from top left to bottom right of maze. 
-        You can only pass through locations where matrix is 0, since 1 is blocked. 
-        Return true if a path exists from top left to bottom right. Use DFS. 
-        """
+        stack = [(0, 0)]
         visited = set()
-        return self.dfs(maze, (0, 0), visited)
+
+        while stack:
+            current = stack.pop()
+            if current == (constants.SIZE[0]-1, constants.SIZE[1]-1):
+                return True
+
+            visited.add(current)
+            neighbors = self.get_valid_neighbors(current, maze)
+            for neighbor in neighbors:
+                if neighbor not in visited:
+                    stack.append(neighbor)
+
+        return False
 
     def make_valid_maze(self):
         """
@@ -93,7 +93,7 @@ class Environment:
         from the top left to the bottom right with DFS.
         """
         maze = self.make_maze(constants.SIZE)
-        while self.is_valid_maze(maze) == False:
+        while self.dfs(maze) == False:
             maze = self.make_maze(constants.SIZE)
         return maze
 
@@ -104,7 +104,8 @@ class Environment:
         """
         self.ghost_locations = {}
         for i in range(num_ghosts):
-            self.ghost_locations[i] = (np.random.randint(0, constants.SIZE[0]-1), np.random.randint(0, constants.SIZE[1]-1))
+            self.ghost_locations[i] = (np.random.randint(
+                0, constants.SIZE[0]-1), np.random.randint(0, constants.SIZE[1]-1))
         self.ghost_grid = self.update_ghost_grid(self.ghost_locations)
 
     def update_ghost_locations(self, ghost_locations):
@@ -177,7 +178,8 @@ class Environment:
         self.update_ghost_locations(self.ghost_locations)
         self.update_visible_ghosts(self.ghost_locations)
         self.ghost_grid = self.update_ghost_grid(self.ghost_locations)
-        self.visible_ghosts_grid = self.update_visible_ghost_grid(self.visible_ghosts)
+        self.visible_ghosts_grid = self.update_visible_ghost_grid(
+            self.visible_ghosts)
 
     def effective_blocked_maze(self, maze_grid, ghost_grid):
         """
