@@ -1,4 +1,5 @@
 import json
+import os
 import matplotlib.pyplot as plt
 
 
@@ -29,7 +30,11 @@ def get_graph(filename, save=False, graph_name=""):
     plt.legend()
 
     if save:
-        figure_name = "visualizations/{}.png".format(graph_name)
-        plt.savefig(figure_name, bbox_inches='tight')
+        dirname = "visualizations/"
+        if not os.path.exists(os.path.dirname(dirname)):
+            os.makedirs(os.path.dirname(dirname))
+
+        graph_name = "{}{}.png".format(dirname, graph_name)
+        plt.savefig(graph_name, bbox_inches='tight')
 
     plt.show()

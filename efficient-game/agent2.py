@@ -227,16 +227,16 @@ class Agent2(Agent):
         TODO: @Nandini, clean up the method
         """
         ghost_actions = {}
-        for d in [[0,1], [1,0], [0,-1], [-1,0]]:
+        for d in [[0, 1], [1, 0], [0, -1], [-1, 0]]:
             dx = d[0] + ghost_location[0]
             dy = d[1] + ghost_location[1]
             new_pos = (dx, dy)
             if dx >= 0 and dx < constants.SIZE[0] and dy >= 0 and dy < constants.SIZE[1]:
                 if env.maze_grid[dx][dy] == 1:
-                    ghost_actions[new_pos] = 0.5 
-                else: 
+                    ghost_actions[new_pos] = 0.5
+                else:
                     ghost_actions[new_pos] = 1.0
-        return ghost_actions 
+        return ghost_actions
 
     def run_agent2_forecast(self, env):
         path = self.modified_plan_path(env, self.location)
@@ -248,7 +248,8 @@ class Agent2(Agent):
             self.has_path = False
             if len(path) > 0:
                 action = path.pop(0)
-                ghost_actionspace = self.ghost_actionspace(env, self.nearest_visible_ghost(env)).keys()
+                ghost_actionspace = self.ghost_actionspace(
+                    env, self.nearest_visible_ghost(env)).keys()
                 if ghost_actionspace == {} or action not in ghost_actionspace:
                     self.location = action
                     self.has_path = True
@@ -256,7 +257,8 @@ class Agent2(Agent):
                     path = self.modified_plan_path(env, self.location)
                     if len(path) > 0:
                         action = path.pop(0)
-                        ghost_actionspace = self.ghost_actionspace(env, self.nearest_visible_ghost(env)).keys()
+                        ghost_actionspace = self.ghost_actionspace(
+                            env, self.nearest_visible_ghost(env)).keys()
                         if ghost_actionspace == {} or action not in ghost_actionspace:
                             self.location = action
                             self.has_path = True
