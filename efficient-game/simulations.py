@@ -5,7 +5,6 @@ from agent3 import Agent3
 from environment import Environment
 
 import os
-import datetime 
 import json 
 import codecs
 
@@ -114,6 +113,17 @@ def lab_report_simulations(a1=False, a2=False, a3=False, a4=False, a5=False):
     Not worrying about this right now because its not top priority, but 
     important for us to complete overall before lab report submission. 
     """
+
+    survival_rates = {}
+    for i in range(1, 5):
+        path = '/experiments/a' + str(i) + '_stats.json'
+        if os.path.exists(os.path.dirname(path)):
+            with codecs.open(path, 'r', encoding='utf-8') as f:
+                survival_rates[i] = json.load(f)
+    print("these are the survival rates:")
+    print(survival_rates)
+
+
     a1_stats, a2_stats, a3_stats, a4_stats, a5_stats = {}, {}, {}, {}, {}
     last_survival_rate, num_ghosts, max_ghosts = 100, 1, constants.SIZE[0] * constants.SIZE[1]
     num_simulations = 30
@@ -143,15 +153,14 @@ def lab_report_simulations(a1=False, a2=False, a3=False, a4=False, a5=False):
     return a1_stats, a2_stats, a3_stats, a4_stats, a5_stats
 
 def save_dict_to_json(dict, file_name):
-    path = './experiments/' + str(file_name) + '_' + str(datetime.datetime.now()).replace(':', '_').replace(' ', '_') + '.json'
+    path = './experiments/' + str(file_name) + '_' + '.json'
     if not os.path.exists(os.path.dirname(path)):
         os.makedirs(os.path.dirname(path))
     with codecs.open(path, 'w', encoding='utf-8') as f:
         f.write(str(json.dumps(dict, ensure_ascii=False)))    
 
 if __name__ == "__main__":
-    a1_stats, a2_stats, a3_stats, a4_stats, a5_stats = lab_report_simulations(
-        a1=True, a2=True, a3=False)
+    a1_stats, a2_stats, a3_stats, a4_stats, a5_stats = lab_report_simulations(a1=True, a2=True, a3=False)
     print(f"Agent 1 Stats: {a1_stats}")
     print(f"Agent 2 Stats: {a2_stats}")
     print(f"Agent 3 Stats: {a3_stats}")
