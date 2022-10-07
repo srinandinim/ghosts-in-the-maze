@@ -1,3 +1,4 @@
+import time
 import matplotlib.pyplot as plt
 import constants
 from agent import Agent
@@ -61,12 +62,13 @@ class Agent2(Agent):
 
         # for every ghost, compute manhattan distance to agent and
         # retrieve the coordinates of the ghost with min distance to agent
-        for ghost in env.visible_ghosts.keys():
+        for ghost in env.ghost_locations:
             dist = self.manhattan_distance(
-                env.visible_ghosts[ghost], self.location)
+                env.ghost_locations[ghost], self.location)
             if dist < min_distance:
                 min_distance = dist
-                min_coordinates = env.visible_ghosts[ghost]
+                min_coordinates = env.ghost_locations[ghost]
+
         return min_coordinates
 
     def move_agent_away_from_nearest_ghost(self, env):
@@ -218,5 +220,55 @@ class Agent2(Agent):
             color_array = self.get_image_array(env)
             plt.imshow(color_array, cmap='Greys')
             plt.show()
+
+            env.step()
+
+    def ghost_actionspace(self, env, ghost_location):
+        possible_inbound_actions = env.get_inbounds_actionspace(ghost_location)
+        ghost_actions = {}
+        for action in possible_inbound_actions:
+            if env.maze_grid[action[0]][action[1]] == 1:
+                ghost_actions[action] = 0.5
+            else:
+                ghost_actions[action] = 1.0
+
+        return ghost_actions
+
+    def run_agent2_forecast(self, env):
+        path = self.modified_plan_path(env, self.location)
+        while self.is_alive == True:
+            if self.location == (constants.SIZE[0]-1, constants.SIZE[1]-1):
+                return 1
+            if self.has_path == False:
+                path = self.modified_plan_path(env, self.location)
+            self.has_path = False
+            if len(path) > 0:
+                action = path.pop(0)
+                ghost_actionspace = self.ghost_actionspace(
+                    env, self.nearest_visible_ghost(env)).keys()
+                if ghost_actionspace == {} or action not in ghost_actionspace:
+                    self.location = action
+                    self.has_path = True
+                else:
+                    path = self.modified_plan_path(env, self.location)
+                    if len(path) > 0:
+                        action = path.pop(0)
+                        ghost_actionspace = self.ghost_actionspace(
+                            env, self.nearest_visible_ghost(env)).keys()
+                        if ghost_actionspace == {} or action not in ghost_actionspace:
+                            self.location = action
+                            self.has_path = True
+                        else:
+                            self.location = self.move_agent_away_from_nearest_ghost(
+                                env)
+                    else:
+                        self.location = self.move_agent_away_from_nearest_ghost(
+                            env)
+            else:
+                self.location = self.move_agent_away_from_nearest_ghost(env)
+
+            if self.location in env.ghost_locations.values():
+                self.is_alive = False
+                return 0
 
             env.step()

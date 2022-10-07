@@ -61,7 +61,6 @@ class Environment:
         for position (x,y) finds all valid neighbors
         for an agent that are in-bounds and do not hit wall.
         """
-        x, y = position[0], position[1]
         inbounds_actionspace = self.get_inbounds_actionspace(position)
         neighbors = list(
             filter(lambda x: grid[x[0]][x[1]] == 0, inbounds_actionspace))
