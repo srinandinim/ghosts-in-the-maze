@@ -52,7 +52,7 @@ class Agent1(Agent):
         while self.is_alive:
 
             print(f"The Agent's current location is: {self.location}")
-            env.debugging_all()
+            #env.debugging_all()
 
             if self.location == (constants.SIZE[0]-1, constants.SIZE[1]-1):
                 print("WIN!")

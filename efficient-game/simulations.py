@@ -186,6 +186,11 @@ if __name__ == "__main__":
     lab_report_visualizations(
         a1_stats=a1_stats, a2_stats=a2_stats, a3_stats=a3_stats)
     """
+
     env = Environment(num_ghosts=10)
+    a1 = Agent1()
+    a1.run_agent1_debug(env)
+    a2 = Agent2()
+    a2.run_agent2_debug(env)
     a3 = Agent3()
     a3.run_agent3_debug(env)

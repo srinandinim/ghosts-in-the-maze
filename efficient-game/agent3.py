@@ -46,8 +46,8 @@ class Agent3(Agent2):
                 if key in visited.keys():
                     moves_success[key] = moves_success[key] * \
                         0.6 ** (visited[key])
-                moves_success[key] = ((moves_success[key] + 1) / (self.manhattan_distance(
-                    key, (constants.SIZE[0]-1, constants.SIZE[1]-1)) + 1)**(2))
+                distance_heuristic = ((moves_success[key] + 1) / (self.manhattan_distance(key, (constants.SIZE[0]-1, constants.SIZE[1]-1)) + 1)**(2))
+                moves_success[key] = round(distance_heuristic, 5)
 
             action = max(moves_success, key=moves_success.get)
             # if action not in self.ghost_actionspace(env, self.nearest_visible_ghost(env)).keys():
@@ -116,7 +116,7 @@ class Agent3(Agent2):
         visited = {}
         while self.is_alive:
             print(f"The Agent's current location is: {self.location}")
-            env.debugging_all()
+            #env.debugging_all()
             visited[self.location] = visited.get(self.location, 0) + 1
 
             if self.location == (constants.SIZE[0]-1, constants.SIZE[1]-1):
@@ -143,8 +143,8 @@ class Agent3(Agent2):
                 if key in visited.keys():
                     moves_success[key] = moves_success[key] * \
                         0.6 ** (visited[key])
-                moves_success[key] = ((moves_success[key] + 1) / (self.manhattan_distance(
-                    key, (constants.SIZE[0]-1, constants.SIZE[1]-1)) + 1)**(2))
+                distance_heuristic = ((moves_success[key] + 1) / (self.manhattan_distance(key, (constants.SIZE[0]-1, constants.SIZE[1]-1)) + 1)**(2))
+                moves_success[key] = round(distance_heuristic, 5)
 
             print(f"Simulation Results With Heuristics: {moves_success}")
 
