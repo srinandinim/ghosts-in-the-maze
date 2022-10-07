@@ -113,4 +113,4 @@ class Agent:
         if not os.path.exists(os.path.dirname(path)):
             os.makedirs(os.path.dirname(path))
         
-        ani.save("replays/" + video_name + '.mp4')
+        ani.save("./replays/" + video_name + '.mp4')
