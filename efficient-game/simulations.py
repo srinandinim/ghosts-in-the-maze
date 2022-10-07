@@ -175,6 +175,8 @@ def lab_report_visualizations(a1_stats=None, a2_stats=None, a3_stats=None, a4_st
 
 
 if __name__ == "__main__":
+
+    """
     a1_stats, a2_stats, a3_stats, a4_stats, a5_stats = lab_report_simulations(
         a1=True, a2=True, a3=False)
     print(f"Agent 1 Stats: {a1_stats}")
@@ -183,3 +185,7 @@ if __name__ == "__main__":
 
     lab_report_visualizations(
         a1_stats=a1_stats, a2_stats=a2_stats, a3_stats=a3_stats)
+    """
+    env = Environment(num_ghosts=10)
+    a3 = Agent3()
+    a3.run_agent3_debug(env)
