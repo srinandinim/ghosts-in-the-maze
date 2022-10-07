@@ -3,7 +3,6 @@ from copy import deepcopy
 import numpy as np
 import constants as constants
 
-
 class Environment:
 
     def __init__(self, num_ghosts=1):
