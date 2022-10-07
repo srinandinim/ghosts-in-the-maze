@@ -32,7 +32,7 @@ class Agent3(Agent2):
             moves_success = {}
             maximum_success = 0
             for action in self.actionspace:
-                for _ in range(10):
+                for _ in range(2):
                     agent2 = Agent2()
                     agent2.location = action
                     attempt_success = agent2.run_agent2_forecast(deepcopy(env))
@@ -59,7 +59,6 @@ class Agent3(Agent2):
             if self.location in env.ghost_locations.values():
                 self.is_alive = False
                 return 0
-
             env.step()
 
     def run_agent3_video(self, env):
@@ -81,7 +80,7 @@ class Agent3(Agent2):
             moves_success = {}
             maximum_success = 0
             for action in self.actionspace:
-                for _ in range(10):
+                for _ in range(2):
                     agent2 = Agent2()
                     agent2.location = action
                     attempt_success = agent2.run_agent2_forecast(deepcopy(env))
@@ -128,7 +127,7 @@ class Agent3(Agent2):
             moves_success = {}
             maximum_success = 0
             for action in self.actionspace:
-                for _ in range(10):
+                for _ in range(2):
                     agent2 = Agent2()
                     agent2.location = action
                     attempt_success = agent2.run_agent2_forecast(deepcopy(env))
