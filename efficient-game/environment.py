@@ -104,8 +104,10 @@ class Environment:
         """
         self.ghost_locations = {}
         for i in range(num_ghosts):
-            self.ghost_locations[i] = (np.random.randint(
-                0, constants.SIZE[0]-1), np.random.randint(0, constants.SIZE[1]-1))
+            while self.ghost_locations.get(i, (0, 0)) == (0, 0):
+                self.ghost_locations[i] = (np.random.randint(
+                    0, constants.SIZE[0]-1), np.random.randint(0, constants.SIZE[1]-1))
+
         self.ghost_grid = self.update_ghost_grid(self.ghost_locations)
 
     def update_ghost_locations(self, ghost_locations):
