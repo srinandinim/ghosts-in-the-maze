@@ -115,8 +115,7 @@ def lab_report_simulations(a1=False, a2=False, a3=False, a4=False, a5=False):
     important for us to complete overall before lab report submission. 
     """
     a1_stats, a2_stats, a3_stats, a4_stats, a5_stats = {}, {}, {}, {}, {}
-    last_survival_rate, num_ghosts, max_ghosts = 100, 1, constants.SIZE[0] * \
-        constants.SIZE[1]
+    last_survival_rate, num_ghosts, max_ghosts = 100, 1, constants.SIZE[0] * constants.SIZE[1]
     num_simulations = 30
     a1_s = a2_s = a3_s = a4_s = a5_s = 0
 
@@ -138,8 +137,7 @@ def lab_report_simulations(a1=False, a2=False, a3=False, a4=False, a5=False):
                 num_simulations=num_simulations, num_ghosts=num_ghosts)
             a3_stats[num_ghosts] = a3_s
 
-        last_survival_rate = min(
-            last_survival_rate, max(a1_s, a2_s, a3_s, a4_s, a5_s))
+        last_survival_rate = min(last_survival_rate, max(a1_s, a2_s, a3_s, a4_s, a5_s))
         num_ghosts += 1
 
     return a1_stats, a2_stats, a3_stats, a4_stats, a5_stats

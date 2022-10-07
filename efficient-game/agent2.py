@@ -248,8 +248,7 @@ class Agent2(Agent):
             self.has_path = False
             if len(path) > 0:
                 action = path.pop(0)
-                ghost_actionspace = self.ghost_actionspace(
-                    env, self.nearest_visible_ghost(env)).keys()
+                ghost_actionspace = self.ghost_actionspace(env, self.nearest_visible_ghost(env)).keys()
                 if ghost_actionspace == {} or action not in ghost_actionspace:
                     self.location = action
                     self.has_path = True
@@ -257,8 +256,7 @@ class Agent2(Agent):
                     path = self.modified_plan_path(env, self.location)
                     if len(path) > 0:
                         action = path.pop(0)
-                        ghost_actionspace = self.ghost_actionspace(
-                            env, self.nearest_visible_ghost(env)).keys()
+                        ghost_actionspace = self.ghost_actionspace(env, self.nearest_visible_ghost(env)).keys()
                         if ghost_actionspace == {} or action not in ghost_actionspace:
                             self.location = action
                             self.has_path = True

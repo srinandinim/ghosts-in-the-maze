@@ -2,6 +2,7 @@ from copy import deepcopy
 import matplotlib.animation as animation
 import matplotlib.pyplot as plt
 import constants
+import os 
 
 
 class Agent:
@@ -66,12 +67,10 @@ class Agent:
         prev = ({source: None})
 
         # run BFS to find optimal path from start to end without ghosts
-        previous = self.bfs(
-            env, (constants.SIZE[0]-1, constants.SIZE[1]-1), queue, visited, prev)
+        previous = self.bfs(env, (constants.SIZE[0]-1, constants.SIZE[1]-1), queue, visited, prev)
 
         # finds optimal path from the BFS having stored prev pointers
-        path = self.path_from_pointers(
-            source, (constants.SIZE[0]-1, constants.SIZE[1]-1), previous)
+        path = self.path_from_pointers(source, (constants.SIZE[0]-1, constants.SIZE[1]-1), previous)
 
         # returns the optimal path from source to destination
         return path
@@ -109,4 +108,9 @@ class Agent:
 
         ani = animation.ArtistAnimation(
             fig, frames, interval=120, blit=True, repeat=False)
+
+        path="replays/"
+        if not os.path.exists(os.path.dirname(path)):
+            os.makedirs(os.path.dirname(path))
+        
         ani.save("replays/" + video_name + '.mp4')

@@ -17,8 +17,7 @@ class Environment:
         self.update_visible_ghosts(self.ghost_locations)
 
         # sets up visible_ghosts_grid
-        self.visible_ghosts_grid = self.update_visible_ghost_grid(
-            self.visible_ghosts)
+        self.visible_ghosts_grid = self.update_visible_ghost_grid(self.visible_ghosts)
 
         # sets up the effective grid (maze and ghost overlay)
         self.effective_blocked_maze(self.maze_grid, self.ghost_grid)
@@ -106,8 +105,7 @@ class Environment:
         """
         self.ghost_locations = {}
         for i in range(num_ghosts):
-            self.ghost_locations[i] = (np.random.randint(
-                0, constants.SIZE[0]-1), np.random.randint(0, constants.SIZE[1]-1))
+            self.ghost_locations[i] = (np.random.randint(0, constants.SIZE[0]-1), np.random.randint(0, constants.SIZE[1]-1))
         self.ghost_grid = self.update_ghost_grid(self.ghost_locations)
 
     def update_ghost_locations(self, ghost_locations):
@@ -180,8 +178,7 @@ class Environment:
         self.update_ghost_locations(self.ghost_locations)
         self.update_visible_ghosts(self.ghost_locations)
         self.ghost_grid = self.update_ghost_grid(self.ghost_locations)
-        self.visible_ghosts_grid = self.update_visible_ghost_grid(
-            self.visible_ghosts)
+        self.visible_ghosts_grid = self.update_visible_ghost_grid(self.visible_ghosts)
 
     def effective_blocked_maze(self, maze_grid, ghost_grid):
         """
