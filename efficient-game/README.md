@@ -2,7 +2,9 @@
 
 ## Synopsis
 -- TBD -- 
-- just add comments and see if we can checkpoint the json at each ghost so in case it terminates we can just restart at the last position in the json
+- just add comments
+- see if we can checkpoint the json at each ghost so in case it terminates we can just restart at the last position in the json
+    - can just pull last set of statistics - I’ll prob add a method just so we input in the last file and it does the rest from there
 - implemenent videos for the success/failure for each one
 - update this document
 
@@ -13,8 +15,7 @@
 - `make_maze(self, shape)` →  
 - `get_inbounds_actionspace(self, position)` →
 - `get_valid_neighbors(self, position, grid)` →
-- `dfs(self, maze, current, visited)` →
-- `is_valid_maze(self, maze)` →
+- `dfs(self, maze)` →
 - `make_valid_maze(self)` →
 - `generate_ghosts(self, num_ghosts=1)` →
 - `update_ghost_locations(self, ghost_locations)` →
