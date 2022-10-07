@@ -121,6 +121,27 @@ def simulation_statistics_agent3_video(num_simulations, num_ghosts, environments
     return round(survival*100, 2)
 
 
+def save_simulation_statistics(timestamp, a1_stats=None, a2_stats=None, a3_stats=None, a4_stats=None, a5_stats=None):
+    file_content = {'a1_stats': a1_stats, 'a2_stats': a2_stats,
+                    'a3_stats': a3_stats, 'a4_stats': a4_stats, 'a5_stats': a5_stats}
+
+    dirname = "experiments/"
+    if not os.path.exists(os.path.dirname(dirname)):
+        os.makedirs(os.path.dirname(dirname))
+
+    filename = "{}simulation_statistics{}.json".format(dirname, timestamp)
+    with open(filename, 'w') as fp:
+        json.dump(file_content, fp)
+
+
+def visualize_simulation_statistics(timestamp):
+    dirname = "experiments/"
+    filename = "{}simulation_statistics{}.json".format(dirname, timestamp)
+
+    visualizations.get_graph(
+        filename, save=True, graph_name="result_statistics{}".format(timestamp))
+
+
 def lab_report_simulations(a1=False, a2=False, a3=False, a4=False, a5=False):
     a1_stats, a2_stats, a3_stats, a4_stats, a5_stats = {}, {}, {}, {}, {}
     last_survival_rate, num_ghosts, max_ghosts = 100, 1, constants.SIZE[0] * \
@@ -128,7 +149,8 @@ def lab_report_simulations(a1=False, a2=False, a3=False, a4=False, a5=False):
     num_simulations = 30
     a1_s = a2_s = a3_s = a4_s = a5_s = 0
 
-    while last_survival_rate > 0 and num_ghosts < max_ghosts:
+    start_time = time.time()
+    while last_survival_rate > 0 and num_ghosts < 5:
         print(f"\nTHE NUMBER OF CURRENT GHOSTS ARE: {num_ghosts}")
 
         environments = []
@@ -150,47 +172,25 @@ def lab_report_simulations(a1=False, a2=False, a3=False, a4=False, a5=False):
                 num_simulations=num_simulations, num_ghosts=num_ghosts)
             a3_stats[num_ghosts] = a3_s
 
+        save_simulation_statistics(timestamp=start_time, a1_stats=a1_stats,
+                                   a2_stats=a2_stats, a3_stats=a3_stats, a4_stats=a4_stats, a5_stats=a5_stats)
+
         last_survival_rate = min(
             last_survival_rate, max(a1_s, a2_s, a3_s, a4_s, a5_s))
         num_ghosts += 1
 
+    visualize_simulation_statistics(timestamp=start_time)
+
     return a1_stats, a2_stats, a3_stats, a4_stats, a5_stats
 
 
-def lab_report_visualizations(a1_stats=None, a2_stats=None, a3_stats=None, a4_stats=None, a5_stats=None):
-    file_content = {'a1_stats': a1_stats, 'a2_stats': a2_stats,
-                    'a3_stats': a3_stats, 'a4_stats': a4_stats, 'a5_stats': a5_stats}
-
-    dirname = "experiments/"
-    if not os.path.exists(os.path.dirname(dirname)):
-        os.makedirs(os.path.dirname(dirname))
-
-    timestamp = time.time()
-    filename = "{}simulation_statistics{}.json".format(dirname, timestamp)
-    with open(filename, 'w') as fp:
-        json.dump(file_content, fp)
-
-    visualizations.get_graph(
-        filename, save=True, graph_name="result_statistics{}".format(timestamp))
-
-
 if __name__ == "__main__":
-
-    """
     a1_stats, a2_stats, a3_stats, a4_stats, a5_stats = lab_report_simulations(
         a1=True, a2=True, a3=False)
     print(f"Agent 1 Stats: {a1_stats}")
     print(f"Agent 2 Stats: {a2_stats}")
     print(f"Agent 3 Stats: {a3_stats}")
 
-    lab_report_visualizations(
-        a1_stats=a1_stats, a2_stats=a2_stats, a3_stats=a3_stats)
-    """
-
-    env = Environment(num_ghosts=10)
-    a1 = Agent1()
-    a1.run_agent1_debug(env)
-    a2 = Agent2()
-    a2.run_agent2_debug(env)
-    a3 = Agent3()
-    a3.run_agent3_debug(env)
+    # env = Environment(num_ghosts=10)
+    # a3 = Agent3()
+    # a3.run_agent3_debug(env)
