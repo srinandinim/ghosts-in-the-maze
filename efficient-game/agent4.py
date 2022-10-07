@@ -70,6 +70,7 @@ class Agent4(Agent2):
             best_action = self.location 
 
             # forecast evaluation values for future states in neighors
+            env.debugging_print_maze_grid()
             valid_moves = self.get_valid_neighbors(self.location, env.maze_grid)
 
             print(f"THE NEIGHBORS EVALUATED ARE {valid_moves}")
@@ -91,6 +92,8 @@ class Agent4(Agent2):
             # if the location conflicts with a temp ghosts location, then agent dies
             if self.location in env.temp_ghosts.values():
 
+                print("THE AGENT DIED!")
+
                 # the agent died in the simulation of where the ghost is!
                 self.is_alive = False 
 
@@ -104,7 +107,7 @@ class Agent4(Agent2):
             print("MIN: THIS IS THE ENSEMBLE OF GHOST'S TURN!")
 
             # store current min_eval 
-            min_eval = -float("inf")
+            min_eval = float("inf")
 
             print(f"THE TEMP GHOST LOCATIONS ARE {env.temp_ghosts}")
 
