@@ -26,6 +26,7 @@ def simulation_statistics_agent1(num_simulations, num_ghosts):
 def simulation_statistics_agent1_video(num_simulations, num_ghosts):
     """
     run simulation n times and get statistics on survival, and more
+    captures a video of the game
     """
     rewards_agent1 = []
     for _ in range(num_simulations):
@@ -56,6 +57,23 @@ def simulation_statistics_agent2(num_simulations, num_ghosts):
         f"Agent2: Wins: {wins}\tLosses: {losses}\tSurvival Rate: {round(survival*100,2)}%")
     return round(survival*100, 2)
 
+def simulation_statistics_agent2_video(num_simulations, num_ghosts):
+    """
+    run simulation n times and get statistics on survival, and more
+    captures a video of the game
+    """
+    rewards_agent1 = []
+    for _ in range(num_simulations):
+        env = Environment(num_ghosts=num_ghosts)
+        agent2 = Agent2()
+        rewards_agent1.append(agent2.run_agent2_video(env))
+    wins = sum(rewards_agent1)
+    losses = len(rewards_agent1) - wins
+    survival = wins / (wins + losses)
+    print(
+        f"Agent2: Wins: {wins}\tLosses: {losses}\tSurvival Rate: {round(survival*100,2)}%")
+    return round(survival*100, 2)
+
 
 def simulation_statistics_agent3(num_simulations, num_ghosts):
     """
@@ -66,6 +84,23 @@ def simulation_statistics_agent3(num_simulations, num_ghosts):
         env = Environment(num_ghosts=num_ghosts)
         agent3 = Agent3()
         rewards_agent1.append(agent3.run_agent3(env))
+    wins = sum(rewards_agent1)
+    losses = len(rewards_agent1) - wins
+    survival = wins / (wins + losses)
+    print(
+        f"Agent3: Wins: {wins}\tLosses: {losses}\tSurvival Rate: {round(survival*100,2)}%")
+    return round(survival*100, 2)
+
+def simulation_statistics_agent3_video(num_simulations, num_ghosts):
+    """
+    run simulation n times and get statistics on survival, and more
+    captures a video of the game
+    """
+    rewards_agent1 = []
+    for _ in range(num_simulations):
+        env = Environment(num_ghosts=num_ghosts)
+        agent3 = Agent3()
+        rewards_agent1.append(agent3.run_agent3_video(env))
     wins = sum(rewards_agent1)
     losses = len(rewards_agent1) - wins
     survival = wins / (wins + losses)
@@ -120,4 +155,6 @@ if __name__ == "__main__":
     print(f"Agent 3 Stats: {a3_stats}")
     """
 
-    simulation_statistics_agent1_video(num_simulations=10, num_ghosts=1)
+    # simulation_statistics_agent1_video(num_simulations=10, num_ghosts=1)
+    # simulation_statistics_agent2_video(num_simulations=10, num_ghosts=1)
+    # simulation_statistics_agent3_video(num_simulations=10, num_ghosts=1)

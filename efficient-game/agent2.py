@@ -131,12 +131,12 @@ class Agent2(Agent):
 
     def run_agent2_video(self, env):
         video_frames = []
-        video_name = "agent2_" + str(time.time())
+        video_name = "agent2_ghosts{}_".format(len(env.ghost_locations))
         path = self.modified_plan_path(env, self.location)
         while self.is_alive == True:
             video_frames.append(self.get_image_array(env))
             if self.location == (constants.SIZE[0]-1, constants.SIZE[1]-1):
-                self.generate_video(video_name, video_frames)
+                self.generate_video(video_name + "success", video_frames)
                 return 1
             if self.has_path == False:
                 path = self.modified_plan_path(env, self.location)
@@ -164,7 +164,7 @@ class Agent2(Agent):
 
             if self.location in env.ghost_locations.values():
                 self.is_alive = False
-                self.generate_video(video_name, video_frames)
+                self.generate_video(video_name + "failure", video_frames)
                 return 0
 
             env.step()
