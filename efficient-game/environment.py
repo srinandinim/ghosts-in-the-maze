@@ -23,6 +23,9 @@ class Environment:
         # sets up the effective grid (maze and ghost overlay)
         self.effective_blocked_maze(self.maze_grid, self.ghost_grid)
 
+        # sets up temp ghosts
+        self.initialize_temp_ghosts()
+
     def step(self):
         """
         updates environment for 1 step:
@@ -97,6 +100,27 @@ class Environment:
             maze = self.make_maze(constants.SIZE)
         return maze
 
+    def initialize_temp_ghosts(self):
+        self.temp_ghosts = deepcopy(self.ghost_locations)
+
+    def update_temp_ghosts(self):
+        temp_ghosts = self.temp_ghosts
+        for ghost in temp_ghosts.keys():
+            location = temp_ghosts[ghost]
+            possible_inbound_actions = self.get_inbounds_actionspace(location)
+            
+            choice = np.random.randint(0, len(possible_inbound_actions))
+            action = possible_inbound_actions[choice]
+
+            if self.maze_grid[action[0]][action[1]] == 1:
+                if random.random() <= 0.5:
+                    self.temp_ghosts[ghost] = action
+                else:
+                    self.temp_ghosts[ghost] = location
+            else:
+                self.temp_ghosts[ghost] = action
+
+
     def generate_ghosts(self, num_ghosts=1):
         """
         generates num_ghosts randomly on the board 
@@ -109,6 +133,7 @@ class Environment:
                     0, constants.SIZE[0]-1), np.random.randint(0, constants.SIZE[1]-1))
 
         self.ghost_grid = self.update_ghost_grid(self.ghost_locations)
+
 
     def update_ghost_locations(self, ghost_locations):
         """

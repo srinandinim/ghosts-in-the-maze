@@ -1,3 +1,7 @@
+from agent import Agent
+import constants 
+import numpy as np 
+
 class Agent4(Agent):
     """
     Develop an Agent4 that plays a min-max game where Agent maximizes some reward and an ensemble of ghost minimizes some reward (think of all the ghosts as one adversary). 
@@ -82,7 +86,7 @@ class Agent4(Agent):
             return min_eval
 
     def move_agent_alpha_beta_pruning(self, env):
-        self.location = self.alpha_beta_pruning(env, 5, "max", -10000, 10000)
+        self.location = self.alpha_beta_pruning(env, 3, "max", -10000, 10000)
         return self.location
     
     def expectimax(self, env, depth, min_or_max):
@@ -124,3 +128,16 @@ class Agent4(Agent):
     def move_agent_expectimax(self, env):
         self.location = self.expectimax(env, 5, "max")
         return self.location
+
+    def reward_matrix(self, env):
+        reward_matrix = np.zeros_like(env.maze_grid)
+        for i in range(constants.SIZE[0]):
+            for j in range(constants.SIZE[0]):
+                reward_matrix[i][j] = int(self.manhattan_distance(self.location, constants.SIZE) / (constants.SIZE[0]*constants.SIZE[1]))
+        print(reward_matrix)
+
+if __name__ == "__main__":
+    env = Environment()
+    a4 = Agent4()
+    a4.reward_matrix(env)
+        

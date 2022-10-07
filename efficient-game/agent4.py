@@ -1,116 +1,147 @@
 from copy import deepcopy
+from email import message
 import constants
 from agent import Agent
 from agent2 import Agent2
+from environment import Environment
+import numpy as np 
 
 
 class Agent4(Agent2):
 
-    def __init__(self):
+    def __init__(self, env):
         super().__init__()
-        self.actionspace = []
+        self.distance_rewards = self.distance_rewards(env)
 
-    def actionspaces(self, env):
-        possible_valid_moves = self.get_valid_neighbors(
-            self.location, env.effective_maze)
-        possible_valid_moves.append(self.location)
+    def knn_mdsum(self, knn_ghosts):
+        """
+        given {ghost:location_tuple}, sums all distance from agent location.
+        """
+        distance = 0 
+        for md_knn_g in knn_ghosts.values():
+            distance += md_knn_g
+        return distance 
 
-        return possible_valid_moves
+    def get_knearestghosts(self, env, k):
+        """
+        given {ghost1:location_tuple, ..., ghostn:location_tuple}
+        return {ghosti:location_tuple, ..., ghostk:location_tuple} 
+        closest k ghosts to self.location per manhattan distance
+        """
+        k = min(k, len(env.temp_ghosts))
+        distances = {}
+        for ghost in env.temp_ghosts.keys():
+            distances[ghost] = self.manhattan_distance(self.location, env.ghost_locations[ghost])
+        
+        # sort descending by value, then select k-lowest values
+        distances = sorted(distances.items(), key=lambda kv: kv[1])[:k]
+        
+        nearestkghosts = {}
+        for ghost,dist in distances:
+            nearestkghosts[ghost] = dist
+        
+        return nearestkghosts
 
-    def sum_manhattan_distances_to_all_ghosts(self, env):
-        distances = 0 
-        for ghost_location in env.ghost_locations.values():
-            distances += self.manhattan_distance(self.location, ghost_location)
-        return distances 
+    def distance_rewards(self, env):
+        end_dist = constants.SIZE[0] * constants.SIZE[1] + 1
+        array = np.array([[round( (end_dist / self.manhattan_distance(constants.SIZE, (i, j)))**(1/3), 2) for j in range(constants.SIZE[1])] for i in range(constants.SIZE[0])])
+        array[constants.SIZE[0]-1][constants.SIZE[1]-1] = 1000.000
+        return array
 
-    def run_agent4(self, env):
-        visited = {}
-        while self.is_alive:
-            visited[self.location] = visited.get(self.location, 0) + 1
+    def expectimax(self, env, depth, min_or_max):
+        
+        print(f"\nThe depth is {depth} and it is {min_or_max}'s turn!")
+        
+        if depth == 0 or self.is_alive == False: 
+            x, y = self.location[0], self.location[1]
+            knn_ghosts = self.get_knearestghosts(env, k=5)
+            knn_mdsum = self.knn_mdsum(knn_ghosts)
+            evaluation = self.distance_rewards[x][y] - knn_mdsum 
+            if self.is_alive == False: 
+                evaluation *= 3
+            return evaluation 
+        
+        if min_or_max == "max":
 
-            if self.location == (constants.SIZE[0]-1, constants.SIZE[1]-1):
-                return 1
+            print("MAX: THIS IS THE AGENT'S TURN!")
+            
+            # store current max_eval, current best action
+            max_eval = -float("inf")
+            best_action = self.location 
 
-            self.actionspace = self.actionspaces(env)
+            # forecast evaluation values for future states in neighors
+            valid_moves = self.get_valid_neighbors(self.location, env.maze_grid)
 
-            # run k simulation and store success rate for each one
-            moves_success = {}
-            maximum_success = 0
-            for action in self.actionspace:
-                for _ in range(2):
-                    agent2 = Agent2()
-                    agent2.location = action
-                    attempt_success = agent2.run_agent2_forecast(deepcopy(env))
-                    moves_success[action] = moves_success.get(action, 0) + attempt_success
-                    maximum_success = max(maximum_success, moves_success[action])
+            print(f"THE NEIGHBORS EVALUATED ARE {valid_moves}")
+            for move in valid_moves:
+
+                # move to neighbor and evaluate that value 
+                self.location = move 
+                val = self.expectimax(deepcopy(env), depth-1, "min")
+
+                print(f"THE VALUE OF {move} is {val}")
+
+                # if neighbor has better value, update max_eval, best_action
+                if val > max_eval: 
+                    max_eval, best_action = val, move 
+            
+            # change the location of agent to the best action 
+            self.location = best_action 
+
+            # if the location conflicts with a temp ghosts location, then agent dies
+            if self.location in env.temp_ghosts.values():
+
+                # the agent died in the simulation of where the ghost is!
+                self.is_alive = False 
+
+            print(f"Based on that, the agent's new location is {self.location}")
+
+            # return the highest value of the evaluation 
+            return max_eval 
+        
+        if min_or_max == "min":
+
+            print("MIN: THIS IS THE ENSEMBLE OF GHOST'S TURN!")
+
+            # store current min_eval 
+            min_eval = -float("inf")
+
+            print(f"THE TEMP GHOST LOCATIONS ARE {env.temp_ghosts}")
+
+            # update the temporary ghosts locations
+            env.update_temp_ghosts()
+
+            print(f"THE UPDATE TEMP GHOST LOCATIONS ARE {env.temp_ghosts}")
+
+            # evaluate current enviornment 
+            val = self.expectimax(deepcopy(env), depth-1, "max")
+
+            print(f"The value of the current environment is as follows: {val}")
+
+            # update min_eval
+            if val < min_eval:
+                min_eval = val 
+            
+            print(f"The minimum evaluatoin of all the environments is {min_eval}")
+            
+            # return the minimum value of the evaluation
+            return min_eval 
 
 
-            sum_manhattan_distances = self.sum_manhattan_distances_to_all_ghosts(env)
 
-            # penalize states already visited, encouraging exploration, avoid local minima
-            for key in moves_success.keys():
-                if key in visited.keys():
-                    moves_success[key] = moves_success[key] * 0.6 ** (visited[key]) - sum_manhattan_distances**(1/8)
-                moves_success[key] = ((moves_success[key] + 1) / (self.manhattan_distance(key, (constants.SIZE[0]-1, constants.SIZE[1]-1)) + 1)**(2))
 
-            action = max(moves_success, key=moves_success.get)
-            # if action not in self.ghost_actionspace(env, self.nearest_visible_ghost(env)).keys():
-            if action not in env.ghost_locations.values():
-                self.location = action
-            else:
-                self.location = self.move_agent_away_from_nearest_ghost(env)
 
-            if self.location in env.ghost_locations.values():
-                self.is_alive = False
-                return 0
 
-            env.step()
 
-    def run_agent3_video(self, env):
-        video_frames = []
-        video_name = "agent3_ghosts{}_".format(len(env.ghost_locations))
-
-        visited = {}
-        while self.is_alive:
-            video_frames.append(self.get_image_array(env))
-            visited[self.location] = visited.get(self.location, 0) + 1
-
-            if self.location == (constants.SIZE[0]-1, constants.SIZE[1]-1):
-                self.generate_video(video_name + "success", video_frames)
-                return 1
-
-            self.actionspace = self.actionspaces(env)
-
-            # run k simulation and store success rate for each one
-            moves_success = {}
-            maximum_success = 0
-            for action in self.actionspace:
-                for _ in range(10):
-                    agent2 = Agent2()
-                    agent2.location = action
-                    attempt_success = agent2.run_agent2_forecast(deepcopy(env))
-                    moves_success[action] = moves_success.get(
-                        action, 0) + attempt_success
-                    maximum_success = max(
-                        maximum_success, moves_success[action])
-
-            # penalize states already visited, encouraging exploration, avoid local minima
-            for key in moves_success.keys():
-                if key in visited.keys():
-                    moves_success[key] = moves_success[key] * \
-                        0.6 ** (visited[key])
-                moves_success[key] = ((moves_success[key] + 1) / (self.manhattan_distance(
-                    key, (constants.SIZE[0]-1, constants.SIZE[1]-1)) + 1)**(2))
-
-            action = max(moves_success, key=moves_success.get)
-            if action not in self.ghost_actionspace(env, self.nearest_visible_ghost(env)).keys():
-                self.location = action
-            else:
-                self.location = self.move_agent_away_from_nearest_ghost(env)
-
-            if self.location in env.ghost_locations.values():
-                self.is_alive = False
-                self.generate_video(video_name + "failure", video_frames)
-                return 0
-
-            env.step()
+env = Environment(num_ghosts=10) 
+a4 = Agent4(env)
+a4.expectimax(env, 3, "max")
+#rewards_distance = a4.distance_rewards(env)
+#print(rewards_distance)3
+#print(a4.distance_rewards)
+#print(a4.location)
+#env.debugging_print_all_ghost_grid()
+#env.debugging_print_all_ghost_locations()
+##knn = a4.get_knearestghosts(env, k=4)
+#print(knn)
+#print(a4.knn_mdsum(knn))
