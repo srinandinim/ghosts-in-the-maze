@@ -2,10 +2,13 @@
 
 ## Synopsis
 -- TBD -- 
-- fix dfs issue with the simulations
 - implemenent videos for the success/failure for each one
 - a nice to have if you can is to export the lab simulation statistics with number of ghosts and survival rates into a bunch of JSONs and then create another scrip that parses those JSONs and use Matplotlib to make a graph of all the survival rates and agents on top of each other
+- also when saving the results for the experiment for ghosts, maybe Dave it to the jsons periodically so that we don’t lose progress if the run ends
+- also see if you can get the agents to run on the same environment. My scripting is not set up that way but if you can
+- can you add a BFS checker to environment
 - update this document
+- DFS - build your own stack
 
 ## Class Structure
 ### Environment

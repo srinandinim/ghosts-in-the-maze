@@ -62,17 +62,16 @@ class Agent2(Agent):
 
         # for every ghost, compute manhattan distance to agent and
         # retrieve the coordinates of the ghost with min distance to agent
-        for ghost in env.ghost_locations:
+        for ghost in env.visible_ghosts.keys():
             dist = self.manhattan_distance(
-                env.ghost_locations[ghost], self.location)
+                env.visible_ghosts[ghost], self.location)
             if dist < min_distance:
                 min_distance = dist
-                min_coordinates = env.ghost_locations[ghost]
+                min_coordinates = env.visible_ghosts[ghost]
 
         return min_coordinates
 
     def move_agent_away_from_nearest_ghost(self, env):
-
         # retrieves possible valid moves from current location
         possible_valid_moves = self.get_valid_neighbors(
             self.location, env.effective_maze)
@@ -224,15 +223,20 @@ class Agent2(Agent):
             env.step()
 
     def ghost_actionspace(self, env, ghost_location):
-        possible_inbound_actions = env.get_inbounds_actionspace(ghost_location)
+        """
+        TODO: @Nandini, clean up the method
+        """
         ghost_actions = {}
-        for action in possible_inbound_actions:
-            if env.maze_grid[action[0]][action[1]] == 1:
-                ghost_actions[action] = 0.5
-            else:
-                ghost_actions[action] = 1.0
-
-        return ghost_actions
+        for d in [[0,1], [1,0], [0,-1], [-1,0]]:
+            dx = d[0] + ghost_location[0]
+            dy = d[1] + ghost_location[1]
+            new_pos = (dx, dy)
+            if dx >= 0 and dx < constants.SIZE[0] and dy >= 0 and dy < constants.SIZE[1]:
+                if env.maze_grid[dx][dy] == 1:
+                    ghost_actions[new_pos] = 0.5 
+                else: 
+                    ghost_actions[new_pos] = 1.0
+        return ghost_actions 
 
     def run_agent2_forecast(self, env):
         path = self.modified_plan_path(env, self.location)
