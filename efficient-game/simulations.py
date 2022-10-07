@@ -1,4 +1,5 @@
 import json
+import os
 import time
 import constants
 import visualizations
@@ -6,10 +7,6 @@ from agent1 import Agent1
 from agent2 import Agent2
 from agent3 import Agent3
 from environment import Environment
-
-import os
-import json
-import codecs
 
 
 def simulation_statistics_agent1(num_simulations, num_ghosts):
@@ -180,5 +177,3 @@ if __name__ == "__main__":
 
     lab_report_visualizations(
         a1_stats=a1_stats, a2_stats=a2_stats, a3_stats=a3_stats)
-
-    # visualizations.get_graph("visualizations/overall_statistics.json" , save=True, graph_name="sample")
