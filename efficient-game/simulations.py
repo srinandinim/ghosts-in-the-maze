@@ -168,7 +168,7 @@ def lab_report_simulations(a1=False, a2=False, a3=False, a4=False, a5=False):
     a1_s = a2_s = a3_s = a4_s = a5_s = 0
 
     start_time = time.time()
-    while last_survival_rate > 5 and num_ghosts < 20:
+    while last_survival_rate > 3 and num_ghosts < max_ghosts:
         print(f"\nTHE NUMBER OF CURRENT GHOSTS ARE: {num_ghosts}")
 
         environments = []

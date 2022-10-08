@@ -55,7 +55,7 @@ class Agent4(Agent2):
         #print(f"The Current Location is {self.location}")
 
         if depth == 1 or self.is_alive == False: 
-            knn_mdsum = self.knn_mdsum(self.get_knearestghosts(env, k=5))
+            knn_mdsum = self.knn_mdsum(self.get_knearestghosts(env, k=10))
             evaluation = -knn_mdsum 
             if self.is_alive == False: 
                 evaluation = 0.00100
@@ -71,7 +71,12 @@ class Agent4(Agent2):
                 val = self.tree_search(deepcopy(env), depth-1, "min")
                 if val > max_eval: 
                     max_eval, best_action = val, move 
-            self.location = best_action 
+
+            if best_action not in env.ghost_locations.values():
+                self.location = best_action
+            else:
+                self.location = self.move_agent_away_from_nearest_ghost(env)
+            
             if self.location in env.temp_ghosts.values():
                 self.is_alive = False 
             #print("\nMIN GHOSTS TURN:")
@@ -166,14 +171,16 @@ class Agent4(Agent2):
 
             for neighbor in neighbors:
                 self.location = neighbor 
-                evaluation = max(0.00100, self.tree_search(env, 7, 'max'))
+                knn_kdd = self.tree_search(env, 9, 'max')
+                evaluation = max(0.00100, knn_kdd)
                 # print(evaluation)
-                neighbor_score = abs(1 / (evaluation + 1)**2)
+                neighbor_score = abs(1 / (evaluation + 1)**(5))
                 
                 if neighbor in visited: 
                     neighbor_score = neighbor_score * 0.6 ** (visited[neighbor])   
                 md = self.manhattan_distance(self.location, constants.SIZE)
-                neighbor_score = ((neighbor_score + 1) / (md + 1)**(2))
+                neighbor_score = ((neighbor_score + 1) / (md + 1)**(1))
+                neighbor_score += abs(1 / (evaluation+1)) * 15
                 evaluation_scores[neighbor] = round(neighbor_score, 6)
 
             self.location = original_location 
@@ -181,10 +188,14 @@ class Agent4(Agent2):
             
             maxKey, maxValue = self.location, -float("inf")
             for key, value in evaluation_scores.items():
-                if visited.get(key, 0) <= 10 and evaluation_scores[key] > maxValue: 
+                if visited.get(key, 0) <= 15 and evaluation_scores[key] > maxValue: 
                     maxKey = key 
                     maxValue = value
-            self.location = maxKey 
+
+            if maxKey not in env.ghost_locations.values():
+                self.location = maxKey
+            else:
+                self.location = self.move_agent_away_from_nearest_ghost(env)
             visited[maxKey] = visited.get(maxKey, 0) + 1
             if self.is_failure_state(env):
                 return 0 
