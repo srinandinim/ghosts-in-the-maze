@@ -208,8 +208,9 @@ def lab_report_simulations(a1=False, a2=False, a3=False, a4=False, a5=False):
 
 
 if __name__ == "__main__":
-    start = time.time()
 
+    """
+    start = time.time()
     a1_stats, a2_stats, a3_stats, a4_stats, a5_stats = lab_report_simulations(
         a1=True, a2=True, a3=True, a4=False)
     print(f"Agent 1 Stats: {a1_stats}")
@@ -219,3 +220,7 @@ if __name__ == "__main__":
 
     end = time.time()
     print(end - start)
+    """
+    env = Environment(num_ghosts=10)
+    a2 = Agent2() 
+    a2.run_agent2_debug(env)

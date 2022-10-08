@@ -25,6 +25,7 @@ class Agent1(Agent):
             if self.is_failure_state(env): return 0
             env.step()
 
+
     def run_agent1_video(self, env):
         video_frames = []
         video_name = "agent1_ghosts{}_".format(len(env.ghost_locations))
@@ -54,6 +55,8 @@ class Agent1(Agent):
                 print("WIN!")
                 return 1
 
+            print(f"OLD LOCATION: {old_location}\t potential ghosts that swap: {potential_ghosts_that_swap}")
+
             action = plan.pop(0)
             print(f"This is the Agent's next action: {action}")
             self.location = action
@@ -70,3 +73,4 @@ class Agent1(Agent):
                 return 0
 
             env.step()
+

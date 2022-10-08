@@ -21,6 +21,24 @@ class Agent:
             return True  
         return False 
 
+    """
+    def did_ghost_swap(self, env, old_location, potential_ghosts_that_swap):
+        for ghost_num in potential_ghosts_that_swap:
+            if env.ghost_locations[ghost_num] == old_location: 
+                return True 
+        return False 
+
+    def get_potential_ghosts_that_swap(self, env):
+        potential_ghosts_that_swap = []
+        potential_neighbors_with_ghosts = self.get_valid_neighbors(self.location, env.maze_grid)
+        for ghost_num in env.ghost_locations.keys():
+            if env.ghost_locations[ghost_num] in potential_neighbors_with_ghosts:
+                potential_ghosts_that_swap.append(ghost_num)
+        return potential_ghosts_that_swap
+
+    
+    """
+
     def get_valid_neighbors(self, pos, grid):
         """
         gets all valid neighbors in-bound

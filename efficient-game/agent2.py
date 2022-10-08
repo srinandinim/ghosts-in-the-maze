@@ -177,6 +177,7 @@ class Agent2(Agent):
             if self.is_success_state():
                 return 1
 
+
             if self.has_path == False:
                 print("NO PATH EXISTS, REPLANNING!")
                 path = self.modified_plan_path(env, self.location)
@@ -187,7 +188,7 @@ class Agent2(Agent):
                 action = path.pop(0)
                 if action not in env.ghost_locations.values():
                     self.location = action
-                    self.has_path = True
+                    self.has_path = True  
                 else:
                     print("GHOST IS IN THE LOCATION OF ACTION! REPLANNING:")
                     path = self.modified_plan_path(env, self.location)
@@ -219,6 +220,7 @@ class Agent2(Agent):
             plt.show()
 
             env.step()
+
 
 
 
