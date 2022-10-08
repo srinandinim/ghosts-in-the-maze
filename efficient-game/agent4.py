@@ -135,10 +135,13 @@ class Agent4(Agent2):
 
 
 
-
+"""
 env = Environment(num_ghosts=10) 
 a4 = Agent4(env)
 a4.expectimax(env, 3, "max")
+
+"""
+
 #rewards_distance = a4.distance_rewards(env)
 #print(rewards_distance)3
 #print(a4.distance_rewards)

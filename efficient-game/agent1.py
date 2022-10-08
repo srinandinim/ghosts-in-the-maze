@@ -27,9 +27,6 @@ class Agent1(Agent):
                 self.is_alive = False
                 return 0
             env.step()
-            if self.location in env.ghost_locations.values():
-                self.is_alive = False
-                return 0
 
     def run_agent1_video(self, env):
         video_frames = []
@@ -47,10 +44,6 @@ class Agent1(Agent):
                 self.generate_video(video_name + "failure", video_frames)
                 return 0
             env.step()
-            if self.location in env.ghost_locations.values():
-                self.is_alive = False
-                self.generate_video(video_name + "failure", video_frames)
-                return 0
 
     def run_agent1_debug(self, env):
         plan = super().plan_path(env, (0, 0))
@@ -81,7 +74,3 @@ class Agent1(Agent):
                 return 0
 
             env.step()
-            if self.location in env.ghost_locations.values():
-                print("LOSS!")
-                self.is_alive = False
-                return 0

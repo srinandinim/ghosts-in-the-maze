@@ -127,9 +127,7 @@ class Agent2(Agent):
                 return 0
 
             env.step()
-            if self.location in env.ghost_locations.values():
-                self.is_alive = False
-                return 0
+
 
     def run_agent2_video(self, env):
         video_frames = []
@@ -170,11 +168,6 @@ class Agent2(Agent):
                 return 0
 
             env.step()
-
-            if self.location in env.ghost_locations.values():
-                self.is_alive = False
-                self.generate_video(video_name + "failure", video_frames)
-                return 0
 
     def run_agent2_debug(self, env):
         path = self.modified_plan_path(env, self.location)
@@ -230,9 +223,7 @@ class Agent2(Agent):
 
             env.step()
 
-            if self.location in env.ghost_locations.values():
-                self.is_alive = False
-                return 0
+
 
     def ghost_actionspace(self, env, ghost_location):
         """
@@ -288,7 +279,3 @@ class Agent2(Agent):
                 return 0
 
             env.step()
-        
-            if self.location in env.ghost_locations.values():
-                self.is_alive = False
-                return 0

@@ -7,7 +7,7 @@ import visualizations
 from agent1 import Agent1
 from agent2 import Agent2
 from agent3 import Agent3
-from agent4 import Agent4
+#from agent4 import Agent4
 from environment import Environment
 
 
@@ -169,7 +169,7 @@ def lab_report_simulations(a1=False, a2=False, a3=False, a4=False, a5=False):
     a1_s = a2_s = a3_s = a4_s = a5_s = 0
 
     start_time = time.time()
-    while last_survival_rate > 0 and num_ghosts < 2:
+    while last_survival_rate > 5 and num_ghosts < 20:
         print(f"\nTHE NUMBER OF CURRENT GHOSTS ARE: {num_ghosts}")
 
         environments = []
@@ -209,14 +209,14 @@ def lab_report_simulations(a1=False, a2=False, a3=False, a4=False, a5=False):
 
 
 if __name__ == "__main__":
-    # start = time.time()
+    start = time.time()
 
     a1_stats, a2_stats, a3_stats, a4_stats, a5_stats = lab_report_simulations(
-        a1=False, a2=False, a3=False, a4=False)
+        a1=True, a2=True, a3=True, a4=False)
     print(f"Agent 1 Stats: {a1_stats}")
     print(f"Agent 2 Stats: {a2_stats}")
     print(f"Agent 3 Stats: {a3_stats}")
     print(f"Agent 4 Stats: {a4_stats}")
 
-    # end = time.time()
-    # print(end - start)
+    end = time.time()
+    print(end - start)
