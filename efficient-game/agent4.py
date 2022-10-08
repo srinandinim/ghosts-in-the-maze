@@ -6,12 +6,14 @@ from agent2 import Agent2
 from environment import Environment
 import numpy as np 
 import matplotlib.pyplot as plt 
+import math 
 
 class Agent4(Agent2):
 
     def __init__(self, env):
         super().__init__()
-        self.distance_rewards = self.distance_rewards(env)
+        #self.score = 1 
+        #self.distance_rewards = self.distance_rewards(env)
 
     def knn_mdsum(self, knn_ghosts):
         """
@@ -48,136 +50,156 @@ class Agent4(Agent2):
         array[constants.SIZE[0]-1][constants.SIZE[1]-1] = 1000.000
         return array
 
-    def expectimax(self, env, depth, min_or_max):
-        
-        #print(f"\nThe depth is {depth} and it is {min_or_max}'s turn! Current agent location is {self.location}")
-        
-        if depth == 0 or self.is_alive == False: 
-            x, y = self.location[0], self.location[1]
-            knn_ghosts = self.get_knearestghosts(env, k=5)
-            knn_mdsum = self.knn_mdsum(knn_ghosts)
-            #print(f"REWARD DISTANCE: {self.distance_rewards[x][y]}, GHOST PENALTY: {knn_mdsum}, (x,y) = {(x,y)}")
-            evaluation = self.distance_rewards[x][y] - knn_mdsum 
+    def tree_search(self, env, depth, min_or_max):
+
+        #print(f"The Current Location is {self.location}")
+
+        if depth == 1 or self.is_alive == False: 
+            knn_mdsum = self.knn_mdsum(self.get_knearestghosts(env, k=5))
+            evaluation = -knn_mdsum 
             if self.is_alive == False: 
-                evaluation *= 3
-            evaluation = round(evaluation, 3)
+                evaluation = 0.00100
+            #print("\nAGENT's TURN:")
+            #print(f"THE VALUE OF {self.location} at d={depth} is {evaluation}")
             return evaluation 
         
         if min_or_max == "max":
-
-            #print("MAX: THIS IS THE AGENT'S TURN!")
-            
-            # store current max_eval, current best action
-            max_eval = -float("inf")
-            best_action = self.location 
-
-            # forecast evaluation values for future states in neighors
-            #env.debugging_print_maze_grid()
+            max_eval, best_action = -float("inf"), self.location 
             valid_moves = self.get_valid_neighbors(self.location, env.maze_grid) + [self.location]
-
-            #print(f"THE NEIGHBORS EVALUATED ARE {valid_moves}")
             for move in valid_moves:
-
-                # move to neighbor and evaluate that value 
                 self.location = move 
-                val = self.expectimax(deepcopy(env), depth-1, "min")
-
-                #print(f"THE VALUE OF {move} is {val}")
-
-                # if neighbor has better value, update max_eval, best_action
+                val = self.tree_search(deepcopy(env), depth-1, "min")
                 if val > max_eval: 
                     max_eval, best_action = val, move 
-            
-            # change the location of agent to the best action 
             self.location = best_action 
-
-            #print(f"Based on that, the agent's new location is {self.location}")
-
-            # if the location conflicts with a temp ghosts location, then agent dies
             if self.location in env.temp_ghosts.values():
-
-                #print("THE AGENT DIED!")
-
-                # the agent died in the simulation of where the ghost is!
                 self.is_alive = False 
-
-
-            # return the highest value of the evaluation 
+            #print("\nMIN GHOSTS TURN:")
+            #print(f"THE VALUE OF {self.location} at d={depth}is {max_eval}")
             return max_eval 
-        
+
         if min_or_max == "min":
-
-            #print("MIN: THIS IS THE ENSEMBLE OF GHOST'S TURN!")
-
-            # store current min_eval 
             min_eval = float("inf")
-
-            #print(f"THE TEMP GHOST LOCATIONS ARE {env.temp_ghosts}")
-
-            # update the temporary ghosts locations
             env.update_temp_ghosts()
-
-            #print(f"THE UPDATE TEMP GHOST LOCATIONS ARE {env.temp_ghosts}")
-
-            # evaluate current enviornment 
-            val = self.expectimax(deepcopy(env), depth-1, "max")
-
-            #print(f"The value of the current environment is as follows: {val}")
-
-            # update min_eval
-            if val < min_eval:
+            val = self.tree_search(deepcopy(env), depth-1, "max")
+            if val < min_eval: 
                 min_eval = val 
-            
-            #print(f"The minimum evaluatoin of all the environments is {min_eval}")
-            
-            # return the minimum value of the evaluation
             return min_eval 
 
-    def run_agent4(self, env):
-        visited = {}
+    def run_agent4_debug(self, env):
+
+        # have a visited set to account for curiosity 
+        visited = {(0,0):1}
         while self.is_alive:
-            if self.is_success_state(): 
-                return 1 
-            neighbors = self.get_valid_neighbors(self.location, env.effective_maze)
-            #print(f"The neighbors are: {neighbors}")
+
+            # if we have reached the end, assume we're done.
+            if self.is_success_state(): return 1 
+            
+            # get the neighbors and current location of the maze to get evaluation scores 
+            neighbors = self.get_valid_neighbors(self.location, env.effective_maze) + [self.location]
+            
+            print(f"The neighbors are: {neighbors}")
+
+            # keeps track of evaluation score and original location 
             original_location = self.location 
             evaluation_scores = {}
+
+            # gets an evaluation for all the states in the board 
             for neighbor in neighbors:
                 self.location = neighbor 
-                evaluation_scores[neighbor] = self.expectimax(env, 9, 'max')
-                if neighbor in visited: 
-                    evaluation_scores[neighbor] = round(self.expectimax(env, 9, 'max') - 1.5 * visited[neighbor], 3)
+                
+                # knn distance to ghost heuristic: 
+                # evaluates locations based on max distance to knn ghosts
+                # higher values is a better position for the score 
+                neighbor_score = 1 / self.tree_search(env, 7, 'max')
 
-            #print(f"The evaluation scores are: {evaluation_scores}")
+                print(f"The initial evaluation of {neighbor} is {neighbor_score}")
+
+                # curisoity heuristic: penalize revisiting states that are already visited 
+                if neighbor in visited: 
+                    neighbor_score = neighbor_score * 0.6 ** (visited[neighbor])
+                    print(f"The number of visits for {neighbor} is {visited[neighbor]} so normalized score is {neighbor_score}")
+                    
+                md = self.manhattan_distance(self.location, constants.SIZE)
+                neighbor_score = ((neighbor_score + 1) / (md + 1)**(2))
+                # distance heuristic: increase evaluation of scores that get you closer to the goal 
+                print(f"The manhattan distance to end is {md} so new neighbor_score is {neighbor_score}")
+
+                # stores the evaluation of the neighbor in evaluation scores 
+                evaluation_scores[neighbor] = round(neighbor_score, 4)
+
+            print(f"The evaluation scores are: {evaluation_scores}")
             self.location = original_location 
             self.is_alive = True 
 
+            # find the maxAction that maximizes the evaluation 
             maxKey, maxValue = self.location, -float("inf")
             for key, value in evaluation_scores.items():
+
+                # cannot revisit a state that is already visited 10 times!
                 if visited.get(key, 0) <= 10 and evaluation_scores[key] > maxValue: 
                     maxKey = key 
                     maxValue = value
             
+            # Take the maxAction that maximizes evaluation and add to visited set
             self.location = maxKey 
+            
             visited[maxKey] = visited.get(maxKey, 0) + 1
 
             if self.is_failure_state(env):
                 return 0 
             
-            #color_array = self.get_image_array(env)
-            #plt.imshow(color_array, cmap='Greys')
-            #plt.show()
+            color_array = self.get_image_array(env)
+            plt.imshow(color_array, cmap='Greys')
+            plt.show()
 
             env.step()
 
+    def run_agent4(self, env):
+        visited = {(0,0):1}
+        while self.is_alive:
+            if self.is_success_state(): return 1 
+            neighbors = self.get_valid_neighbors(self.location, env.effective_maze) + [self.location]
+    
+            original_location = self.location 
+            evaluation_scores = {}
+
+            for neighbor in neighbors:
+                self.location = neighbor 
+                evaluation = max(0.00100, self.tree_search(env, 7, 'max'))
+                # print(evaluation)
+                neighbor_score = abs(1 / (evaluation + 1)**2)
+                
+                if neighbor in visited: 
+                    neighbor_score = neighbor_score * 0.6 ** (visited[neighbor])   
+                md = self.manhattan_distance(self.location, constants.SIZE)
+                neighbor_score = ((neighbor_score + 1) / (md + 1)**(2))
+                evaluation_scores[neighbor] = round(neighbor_score, 6)
+
+            self.location = original_location 
+            self.is_alive = True 
+            
+            maxKey, maxValue = self.location, -float("inf")
+            for key, value in evaluation_scores.items():
+                if visited.get(key, 0) <= 10 and evaluation_scores[key] > maxValue: 
+                    maxKey = key 
+                    maxValue = value
+            self.location = maxKey 
+            visited[maxKey] = visited.get(maxKey, 0) + 1
+            if self.is_failure_state(env):
+                return 0 
+            env.step()
 
 """
-env = Environment(num_ghosts=3) 
+
+env = Environment(num_ghosts=5) 
 env.debugging_print_maze_grid()
 a4 = Agent4(env)
-a4.run_agent4(env)
-"""
+a4.run_agent4_debug(env)
+a4.tree_search(env, 5, 'max')
 
+
+"""
 
 
 

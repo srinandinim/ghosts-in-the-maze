@@ -242,7 +242,9 @@ class Agent2(Agent):
 
     def run_agent2_forecast(self, env):
         path = self.modified_plan_path(env, self.location)
-        while self.is_alive == True:
+        num_steps = 0 
+        
+        while self.is_alive == True and num_steps <= 3:
             if self.location == (constants.SIZE[0]-1, constants.SIZE[1]-1):
                 return 1
             if self.has_path == False:
@@ -278,3 +280,5 @@ class Agent2(Agent):
                 return 0
 
             env.step()
+            num_steps += 1
+        return 1

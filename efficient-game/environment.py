@@ -205,8 +205,7 @@ class Environment:
         self.update_ghost_locations(self.ghost_locations)
         self.update_visible_ghosts(self.ghost_locations)
         self.ghost_grid = self.update_ghost_grid(self.ghost_locations)
-        self.visible_ghosts_grid = self.update_visible_ghost_grid(
-            self.visible_ghosts)
+        self.visible_ghosts_grid = self.update_visible_ghost_grid(self.visible_ghosts)
 
     def effective_blocked_maze(self, maze_grid, ghost_grid):
         """
