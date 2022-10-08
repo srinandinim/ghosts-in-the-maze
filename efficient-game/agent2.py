@@ -96,9 +96,9 @@ class Agent2(Agent):
     def run_agent2(self, env):
         path = self.modified_plan_path(env, self.location)
         while self.is_alive == True:
-            if self.is_success_state(): 
+            if self.is_success_state():
                 return 1
-            if self.has_path == False: 
+            if self.has_path == False:
                 path = self.modified_plan_path(env, self.location)
             self.has_path = False
             if len(path) > 0:
@@ -114,9 +114,11 @@ class Agent2(Agent):
                             self.location = action
                             self.has_path = True
                         else:
-                            self.location = self.move_agent_away_from_nearest_ghost(env)
+                            self.location = self.move_agent_away_from_nearest_ghost(
+                                env)
                     else:
-                        self.location = self.move_agent_away_from_nearest_ghost(env)
+                        self.location = self.move_agent_away_from_nearest_ghost(
+                            env)
             else:
                 self.location = self.move_agent_away_from_nearest_ghost(env)
 
@@ -125,7 +127,6 @@ class Agent2(Agent):
                 return 0
 
             env.step()
-
 
     def run_agent2_video(self, env):
         video_frames = []
@@ -172,11 +173,10 @@ class Agent2(Agent):
 
         while self.is_alive == True:
             print(f"The Agent's current location is: {self.location}")
-            #env.debugging_all()
+            # env.debugging_all()
 
             if self.is_success_state():
                 return 1
-
 
             if self.has_path == False:
                 print("NO PATH EXISTS, REPLANNING!")
@@ -188,7 +188,7 @@ class Agent2(Agent):
                 action = path.pop(0)
                 if action not in env.ghost_locations.values():
                     self.location = action
-                    self.has_path = True  
+                    self.has_path = True
                 else:
                     print("GHOST IS IN THE LOCATION OF ACTION! REPLANNING:")
                     path = self.modified_plan_path(env, self.location)
@@ -221,9 +221,6 @@ class Agent2(Agent):
 
             env.step()
 
-
-
-
     def ghost_actionspace(self, env, ghost_location):
         """
         TODO: @Nandini, clean up the method
@@ -242,8 +239,8 @@ class Agent2(Agent):
 
     def run_agent2_forecast(self, env):
         path = self.modified_plan_path(env, self.location)
-        num_steps = 0 
-        
+        num_steps = 0
+
         while self.is_alive == True and num_steps <= 3:
             if self.location == (constants.SIZE[0]-1, constants.SIZE[1]-1):
                 return 1

@@ -1,8 +1,7 @@
 from copy import deepcopy
 import constants
-from agent import Agent
 from agent2 import Agent2
-import matplotlib.pyplot as plt 
+import matplotlib.pyplot as plt
 
 
 class Agent3(Agent2):
@@ -37,14 +36,18 @@ class Agent3(Agent2):
                     agent2 = Agent2()
                     agent2.location = action
                     attempt_success = agent2.run_agent2_forecast(deepcopy(env))
-                    moves_success[action] = moves_success.get(action, 0) + attempt_success
-                    maximum_success = max(maximum_success, moves_success[action])
+                    moves_success[action] = moves_success.get(
+                        action, 0) + attempt_success
+                    maximum_success = max(
+                        maximum_success, moves_success[action])
 
             # penalize states already visited, encouraging exploration, avoid local minima
             for key in moves_success.keys():
                 if key in visited.keys():
-                    moves_success[key] = moves_success[key] * 0.6 ** (visited[key])
-                distance_heuristic = ((moves_success[key] + 1) / (self.manhattan_distance(key, (constants.SIZE[0]-1, constants.SIZE[1]-1)) + 1)**(2))
+                    moves_success[key] = moves_success[key] * \
+                        0.6 ** (visited[key])
+                distance_heuristic = ((moves_success[key] + 1) / (self.manhattan_distance(
+                    key, (constants.SIZE[0]-1, constants.SIZE[1]-1)) + 1)**(2))
                 moves_success[key] = round(distance_heuristic, 3)
 
             action = max(moves_success, key=moves_success.get)
@@ -83,17 +86,20 @@ class Agent3(Agent2):
                     attempt_success = agent2.run_agent2_forecast(deepcopy(env))
                     moves_success[action] = moves_success.get(
                         action, 0) + attempt_success
-                    maximum_success = max(maximum_success, moves_success[action])
+                    maximum_success = max(
+                        maximum_success, moves_success[action])
 
             # penalize states already visited, encouraging exploration, avoid local minima
             for key in moves_success.keys():
                 if key in visited.keys():
-                    moves_success[key] = moves_success[key] * 0.6 ** (visited[key])
-                distance_heuristic = ((moves_success[key] + 1) / (self.manhattan_distance(key, (constants.SIZE[0]-1, constants.SIZE[1]-1)) + 1)**(2))
+                    moves_success[key] = moves_success[key] * \
+                        0.6 ** (visited[key])
+                distance_heuristic = ((moves_success[key] + 1) / (self.manhattan_distance(
+                    key, (constants.SIZE[0]-1, constants.SIZE[1]-1)) + 1)**(2))
                 moves_success[key] = round(distance_heuristic, 3)
-                
+
             action = max(moves_success, key=moves_success.get)
-            #if action not in self.ghost_actionspace(env, self.nearest_visible_ghost(env)).keys():
+            # if action not in self.ghost_actionspace(env, self.nearest_visible_ghost(env)).keys():
             if action not in env.ghost_locations.values():
                 self.location = action
             else:
@@ -105,12 +111,12 @@ class Agent3(Agent2):
                 return 0
 
             env.step()
-    
+
     def run_agent3_debug(self, env):
         visited = {}
         while self.is_alive:
             print(f"The Agent's current location is: {self.location}")
-            #env.debugging_all()
+            # env.debugging_all()
             visited[self.location] = visited.get(self.location, 0) + 1
 
             if self.is_success_state():
@@ -130,14 +136,15 @@ class Agent3(Agent2):
                         action, 0) + attempt_success
                     maximum_success = max(
                         maximum_success, moves_success[action])
-            
+
             print(f"Simulation Results: {moves_success}")
             # penalize states already visited, encouraging exploration, avoid local minima
             for key in moves_success.keys():
                 if key in visited.keys():
                     moves_success[key] = moves_success[key] * \
                         0.6 ** (visited[key])
-                distance_heuristic = ((moves_success[key] + 1) / (self.manhattan_distance(key, (constants.SIZE[0]-1, constants.SIZE[1]-1)) + 1)**(2))
+                distance_heuristic = ((moves_success[key] + 1) / (self.manhattan_distance(
+                    key, (constants.SIZE[0]-1, constants.SIZE[1]-1)) + 1)**(2))
                 moves_success[key] = round(distance_heuristic, 3)
 
             print(f"Simulation Results With Heuristics: {moves_success}")

@@ -1,6 +1,4 @@
-import time
 import matplotlib.pyplot as plt
-import constants
 from agent import Agent
 
 
@@ -14,17 +12,18 @@ class Agent1(Agent):
         # plan once using BFS 
         # while the agent is alive 
             # if we reach end of maze, reward=+1
-            # agent takes the next action in plan 
+            # agent takes the next action in plan  
             # update ghosts, and environment effective maze
             # if ghost intersects with agent, the agent dies and recieves 0 reward 
         """
         plan = super().plan_path(env, (0, 0))
         while self.is_alive:
-            if self.is_success_state(): return 1
+            if self.is_success_state():
+                return 1
             self.location = plan.pop(0)
-            if self.is_failure_state(env): return 0
+            if self.is_failure_state(env):
+                return 0
             env.step()
-
 
     def run_agent1_video(self, env):
         video_frames = []
@@ -33,7 +32,7 @@ class Agent1(Agent):
         plan = super().plan_path(env, (0, 0))
         while self.is_alive:
             video_frames.append(self.get_image_array(env))
-            if self.is_success_state(): 
+            if self.is_success_state():
                 self.generate_video(video_name + "success", video_frames)
                 return 1
             self.location = plan.pop(0)
@@ -49,13 +48,14 @@ class Agent1(Agent):
         while self.is_alive:
 
             print(f"The Agent's current location is: {self.location}")
-            #env.debugging_all()
+            # env.debugging_all()
 
             if self.is_success_state():
                 print("WIN!")
                 return 1
 
-            print(f"OLD LOCATION: {old_location}\t potential ghosts that swap: {potential_ghosts_that_swap}")
+            print(
+                f"OLD LOCATION: {old_location}\t potential ghosts that swap: {potential_ghosts_that_swap}")
 
             action = plan.pop(0)
             print(f"This is the Agent's next action: {action}")
@@ -73,4 +73,3 @@ class Agent1(Agent):
                 return 0
 
             env.step()
-
