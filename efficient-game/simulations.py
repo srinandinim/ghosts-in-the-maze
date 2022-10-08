@@ -163,9 +163,8 @@ def visualize_simulation_statistics(timestamp):
 
 def lab_report_simulations(a1=False, a2=False, a3=False, a4=False, a5=False):
     a1_stats, a2_stats, a3_stats, a4_stats, a5_stats = {}, {}, {}, {}, {}
-    last_survival_rate, num_ghosts, max_ghosts = 100, 1, constants.SIZE[0] * \
-        constants.SIZE[1]
-    num_simulations = 10
+    last_survival_rate, num_ghosts, max_ghosts = 100, 1, constants.SIZE[0] * constants.SIZE[1]
+    num_simulations = 30
     a1_s = a2_s = a3_s = a4_s = a5_s = 0
 
     start_time = time.time()
