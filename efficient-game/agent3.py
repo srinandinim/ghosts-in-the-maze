@@ -1,4 +1,5 @@
 from copy import deepcopy
+import time
 import constants
 from agent2 import Agent2
 import matplotlib.pyplot as plt
@@ -18,8 +19,10 @@ class Agent3(Agent2):
         return possible_valid_moves
 
     def run_agent3(self, env):
+        starttime = time.time()
+
         visited = {}
-        while self.is_alive:
+        while time.time() <= (starttime + 240) and self.is_alive:
             visited[self.location] = visited.get(self.location, 0) + 1
 
             if self.is_success_state():
@@ -60,6 +63,8 @@ class Agent3(Agent2):
             if self.is_failure_state(env):
                 return 0
             env.step()
+
+        return -1
 
     def run_agent3_video(self, env):
         video_frames = []

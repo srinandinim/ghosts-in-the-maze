@@ -1,4 +1,5 @@
 from copy import deepcopy
+import time
 import constants
 from agent2 import Agent2
 import numpy as np
@@ -167,8 +168,10 @@ class Agent4(Agent2):
             env.step()
 
     def run_agent4(self, env):
+        starttime = time.time()
+
         visited = {(0, 0): 1}
-        while self.is_alive:
+        while time.time() <= (starttime + 180) and self.is_alive:
             if self.is_success_state():
                 return 1
             neighbors = self.get_valid_neighbors(
@@ -210,24 +213,4 @@ class Agent4(Agent2):
                 return 0
             env.step()
 
-"""
-env = Environment(num_ghosts=5) 
-env.debugging_print_maze_grid()
-a4 = Agent4(env)
-a4.run_agent4_debug(env)
-a4.tree_search(env, 5, 'max')
-
-
-"""
-
-
-
-#rewards_distance = a4.distance_rewards(env)
-#print(rewards_distance)3
-#print(a4.distance_rewards)
-#print(a4.location)
-#env.debugging_print_all_ghost_grid()
-#env.debugging_print_all_ghost_locations()
-##knn = a4.get_knearestghosts(env, k=4)
-#print(knn)
-#print(a4.knn_mdsum(knn))
+        return -1

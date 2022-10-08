@@ -2,11 +2,8 @@
 
 ## Synopsis
 -- TBD -- 
-- run agent3, scale it up
-- set up agent1, agent2, agent3 for low information grids [visible ghosts and make sure the env is (grid + visible ghosts)]
-- run low information grids
 
-## Tej Notes
+## Notes
 
 ACTION ITEMS: 
 
@@ -25,6 +22,11 @@ ACTION ITEMS:
 - A4_Low Information: @Nandini, set up this environment and run experiments on multiple TMUX instances and get results.
 - A4_High Information: @Nandini, run experiments on multiple TMUX instances and get results.
 - A5_Low Information: @Nandini, set up environment run experiment on multiple TMUX and get results. 
+
+- Success/Failure Video for Highest # of Ghosts on Largest Grid [Drive]
+- 51 by 51: A1, A2, A4 [Drive]
+- 30 by 30: A1, A2, A3, A4 [Drive]
+- Low Environments
 
 ## Class Structure
 ### Environment
