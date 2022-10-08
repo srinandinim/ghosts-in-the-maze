@@ -23,6 +23,9 @@ class Environment:
         # sets up the effective grid (maze and ghost overlay)
         self.effective_blocked_maze(self.maze_grid, self.ghost_grid)
 
+        # sets up the effective visible grid (maze and visible ghost overlay)
+        self.effective_visible_maze(self.maze_grid, self.visible_ghosts_grid)
+
         # sets up temp ghosts
         self.initialize_temp_ghosts()
 
@@ -34,6 +37,7 @@ class Environment:
         """
         self.update_ghosts()
         self.effective_blocked_maze(self.maze_grid, self.ghost_grid)
+        self.effective_visible_maze(self.maze_grid, self.visible_ghosts_grid)
 
     def make_maze(self, shape):
         """
@@ -216,6 +220,15 @@ class Environment:
         self.effective_maze[maze_grid == 1] = 1
         self.effective_maze[ghost_grid == 1] = 1
 
+    def effective_visible_maze(self, maze_grid, visible_ghost_grid):
+        """
+        takes visible ghost grid and maze grid and overlaps
+        them each other to return the effective visible maze
+        """
+        self.effective_visible_maze = np.zeros_like(maze_grid)
+        self.effective_visible_maze[maze_grid == 1] = 1
+        self.effective_visible_maze[visible_ghost_grid == 1] = 1
+
     def debugging_print_maze_grid(self):
         print(f"THIS IS THE CURRENT MAZE GRID (0: Unblocked, 1: Blocked)\n")
         print(self.maze_grid)
@@ -246,6 +259,11 @@ class Environment:
         print(self.effective_maze)
         print("\n")
 
+    def debugging_effective_visible_maze(self):
+        print(f"THE EFFECTIVE VISIBLE MAZE (VISIBLE GHOST/BLOCKS OVERLAY) (0:Unblocked,1:Blocked)")
+        print(self.effective_visible_maze)
+        print("\n")
+
     def debugging_all(self):
         self.debugging_print_maze_grid()
         self.debugging_print_all_ghost_grid()
@@ -253,3 +271,4 @@ class Environment:
         self.debugging_print_visible_ghost_grid()
         self.debugging_print_visible_ghost_locations()
         self.debugging_effective_maze()
+        self.debugging_effective_visible_maze()
