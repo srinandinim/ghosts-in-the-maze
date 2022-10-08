@@ -209,3 +209,25 @@ class Agent4(Agent2):
             if self.is_failure_state(env):
                 return 0
             env.step()
+
+"""
+env = Environment(num_ghosts=5) 
+env.debugging_print_maze_grid()
+a4 = Agent4(env)
+a4.run_agent4_debug(env)
+a4.tree_search(env, 5, 'max')
+
+
+"""
+
+
+
+#rewards_distance = a4.distance_rewards(env)
+#print(rewards_distance)3
+#print(a4.distance_rewards)
+#print(a4.location)
+#env.debugging_print_all_ghost_grid()
+#env.debugging_print_all_ghost_locations()
+##knn = a4.get_knearestghosts(env, k=4)
+#print(knn)
+#print(a4.knn_mdsum(knn))
