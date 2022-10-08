@@ -96,9 +96,9 @@ class Agent2(Agent):
     def run_agent2(self, env):
         path = self.modified_plan_path(env, self.location)
         while self.is_alive == True:
-            if self.location == (constants.SIZE[0]-1, constants.SIZE[1]-1):
+            if self.is_success_state(): 
                 return 1
-            if self.has_path == False:
+            if self.has_path == False: 
                 path = self.modified_plan_path(env, self.location)
             self.has_path = False
             if len(path) > 0:
@@ -114,15 +114,13 @@ class Agent2(Agent):
                             self.location = action
                             self.has_path = True
                         else:
-                            self.location = self.move_agent_away_from_nearest_ghost(
-                                env)
+                            self.location = self.move_agent_away_from_nearest_ghost(env)
                     else:
-                        self.location = self.move_agent_away_from_nearest_ghost(
-                            env)
+                        self.location = self.move_agent_away_from_nearest_ghost(env)
             else:
                 self.location = self.move_agent_away_from_nearest_ghost(env)
 
-            if self.location in env.ghost_locations.values():
+            if self.is_failure_state(env):
                 self.is_alive = False
                 return 0
 
@@ -135,7 +133,7 @@ class Agent2(Agent):
         path = self.modified_plan_path(env, self.location)
         while self.is_alive == True:
             video_frames.append(self.get_image_array(env))
-            if self.location == (constants.SIZE[0]-1, constants.SIZE[1]-1):
+            if self.is_success_state():
                 self.generate_video(video_name + "success", video_frames)
                 return 1
             if self.has_path == False:
@@ -162,8 +160,7 @@ class Agent2(Agent):
             else:
                 self.location = self.move_agent_away_from_nearest_ghost(env)
 
-            if self.location in env.ghost_locations.values():
-                self.is_alive = False
+            if self.is_failure_state(env):
                 self.generate_video(video_name + "failure", video_frames)
                 return 0
 
@@ -177,7 +174,7 @@ class Agent2(Agent):
             print(f"The Agent's current location is: {self.location}")
             #env.debugging_all()
 
-            if self.location == (constants.SIZE[0]-1, constants.SIZE[1]-1):
+            if self.is_success_state():
                 return 1
 
             if self.has_path == False:
@@ -213,7 +210,7 @@ class Agent2(Agent):
                 print("NO PATH EXISTS, MOVING AWAY FROM NEAREST GHOST!")
                 self.location = self.move_agent_away_from_nearest_ghost(env)
 
-            if self.location in env.ghost_locations.values():
+            if self.is_failure_state(env):
                 self.is_alive = False
                 return 0
 

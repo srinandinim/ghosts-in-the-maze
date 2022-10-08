@@ -23,7 +23,7 @@ class Agent3(Agent2):
         while self.is_alive:
             visited[self.location] = visited.get(self.location, 0) + 1
 
-            if self.location == (constants.SIZE[0]-1, constants.SIZE[1]-1):
+            if self.is_success_state():
                 return 1
 
             self.actionspace = self.actionspaces(env)
@@ -54,8 +54,7 @@ class Agent3(Agent2):
             else:
                 self.location = self.move_agent_away_from_nearest_ghost(env)
 
-            if self.location in env.ghost_locations.values():
-                self.is_alive = False
+            if self.is_failure_state(env):
                 return 0
             env.step()
 
@@ -68,7 +67,7 @@ class Agent3(Agent2):
             video_frames.append(self.get_image_array(env))
             visited[self.location] = visited.get(self.location, 0) + 1
 
-            if self.location == (constants.SIZE[0]-1, constants.SIZE[1]-1):
+            if self.is_success_state():
                 self.generate_video(video_name + "success", video_frames)
                 return 1
 
@@ -84,8 +83,7 @@ class Agent3(Agent2):
                     attempt_success = agent2.run_agent2_forecast(deepcopy(env))
                     moves_success[action] = moves_success.get(
                         action, 0) + attempt_success
-                    maximum_success = max(
-                        maximum_success, moves_success[action])
+                    maximum_success = max(maximum_success, moves_success[action])
 
             # penalize states already visited, encouraging exploration, avoid local minima
             for key in moves_success.keys():
@@ -102,7 +100,7 @@ class Agent3(Agent2):
             else:
                 self.location = self.move_agent_away_from_nearest_ghost(env)
 
-            if self.location in env.ghost_locations.values():
+            if self.is_failure_state(env):
                 self.is_alive = False
                 self.generate_video(video_name + "failure", video_frames)
                 return 0
@@ -116,7 +114,7 @@ class Agent3(Agent2):
             #env.debugging_all()
             visited[self.location] = visited.get(self.location, 0) + 1
 
-            if self.location == (constants.SIZE[0]-1, constants.SIZE[1]-1):
+            if self.is_success_state():
                 return 1
 
             self.actionspace = self.actionspaces(env)
@@ -153,7 +151,7 @@ class Agent3(Agent2):
                 self.location = self.move_agent_away_from_nearest_ghost(env)
 
             print(f"The Agent's new location is: {self.location}")
-            if self.location in env.ghost_locations.values():
+            if self.is_failure_state(env):
                 self.is_alive = False
                 return 0
 

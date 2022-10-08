@@ -11,6 +11,16 @@ class Agent:
         self.location = (0, 0)
         self.is_alive = True
 
+    def is_success_state(self):
+        if self.location == (constants.SIZE[0]-1, constants.SIZE[1]-1): return True
+        else: return False 
+
+    def is_failure_state(self, env):
+        if self.location in env.ghost_locations.values():
+            self.is_alive = False
+            return True  
+        return False 
+
     def get_valid_neighbors(self, pos, grid):
         """
         gets all valid neighbors in-bound

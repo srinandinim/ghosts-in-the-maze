@@ -20,12 +20,9 @@ class Agent1(Agent):
         """
         plan = super().plan_path(env, (0, 0))
         while self.is_alive:
-            if self.location == (constants.SIZE[0]-1, constants.SIZE[1]-1):
-                return 1
+            if self.is_success_state(): return 1
             self.location = plan.pop(0)
-            if self.location in env.ghost_locations.values():
-                self.is_alive = False
-                return 0
+            if self.is_failure_state(env): return 0
             env.step()
 
     def run_agent1_video(self, env):
@@ -35,12 +32,11 @@ class Agent1(Agent):
         plan = super().plan_path(env, (0, 0))
         while self.is_alive:
             video_frames.append(self.get_image_array(env))
-            if self.location == (constants.SIZE[0]-1, constants.SIZE[1]-1):
+            if self.is_success_state(): 
                 self.generate_video(video_name + "success", video_frames)
                 return 1
             self.location = plan.pop(0)
-            if self.location in env.ghost_locations.values():
-                self.is_alive = False
+            if self.is_failure_state(env):
                 self.generate_video(video_name + "failure", video_frames)
                 return 0
             env.step()
@@ -54,7 +50,7 @@ class Agent1(Agent):
             print(f"The Agent's current location is: {self.location}")
             #env.debugging_all()
 
-            if self.location == (constants.SIZE[0]-1, constants.SIZE[1]-1):
+            if self.is_success_state():
                 print("WIN!")
                 return 1
 
@@ -68,7 +64,7 @@ class Agent1(Agent):
             plt.imshow(color_array, cmap='Greys')
             plt.show()
 
-            if self.location in env.ghost_locations.values():
+            if self.is_failure_state(env):
                 print("LOSS!")
                 self.is_alive = False
                 return 0
