@@ -61,6 +61,9 @@ class Agent3(Agent2):
                 self.is_alive = False
                 return 0
             env.step()
+            if self.location in env.ghost_locations.values():
+                self.is_alive = False
+                return 0
 
     def run_agent3_video(self, env):
         video_frames = []
@@ -111,6 +114,12 @@ class Agent3(Agent2):
                 return 0
 
             env.step()
+        
+            if self.location in env.ghost_locations.values():
+                self.is_alive = False
+                self.generate_video(video_name + "failure", video_frames)
+                return 0
+
 
     def run_agent3_debug(self, env):
         visited = {}
@@ -165,3 +174,7 @@ class Agent3(Agent2):
             plt.show()
 
             env.step()
+
+            if self.location in env.ghost_locations.values():
+                self.is_alive = False
+                return 0
