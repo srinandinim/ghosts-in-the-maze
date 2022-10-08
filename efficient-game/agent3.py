@@ -45,7 +45,7 @@ class Agent3(Agent2):
                 if key in visited.keys():
                     moves_success[key] = moves_success[key] * 0.6 ** (visited[key])
                 distance_heuristic = ((moves_success[key] + 1) / (self.manhattan_distance(key, (constants.SIZE[0]-1, constants.SIZE[1]-1)) + 1)**(2))
-                moves_success[key] = round(distance_heuristic, 5)
+                moves_success[key] = round(distance_heuristic, 3)
 
             action = max(moves_success, key=moves_success.get)
             # if action not in self.ghost_actionspace(env, self.nearest_visible_ghost(env)).keys():
@@ -88,11 +88,10 @@ class Agent3(Agent2):
             # penalize states already visited, encouraging exploration, avoid local minima
             for key in moves_success.keys():
                 if key in visited.keys():
-                    moves_success[key] = moves_success[key] * \
-                        0.6 ** (visited[key])
-                moves_success[key] = ((moves_success[key] + 1) / (self.manhattan_distance(
-                    key, (constants.SIZE[0]-1, constants.SIZE[1]-1)) + 1)**(2))
-
+                    moves_success[key] = moves_success[key] * 0.6 ** (visited[key])
+                distance_heuristic = ((moves_success[key] + 1) / (self.manhattan_distance(key, (constants.SIZE[0]-1, constants.SIZE[1]-1)) + 1)**(2))
+                moves_success[key] = round(distance_heuristic, 3)
+                
             action = max(moves_success, key=moves_success.get)
             #if action not in self.ghost_actionspace(env, self.nearest_visible_ghost(env)).keys():
             if action not in env.ghost_locations.values():
@@ -139,7 +138,7 @@ class Agent3(Agent2):
                     moves_success[key] = moves_success[key] * \
                         0.6 ** (visited[key])
                 distance_heuristic = ((moves_success[key] + 1) / (self.manhattan_distance(key, (constants.SIZE[0]-1, constants.SIZE[1]-1)) + 1)**(2))
-                moves_success[key] = round(distance_heuristic, 5)
+                moves_success[key] = round(distance_heuristic, 3)
 
             print(f"Simulation Results With Heuristics: {moves_success}")
 
