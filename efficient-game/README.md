@@ -2,11 +2,9 @@
 
 ## Synopsis
 -- TBD -- 
-- just add comments
-- see if we can checkpoint the json at each ghost so in case it terminates we can just restart at the last position in the json
-    - can just pull last set of statistics - I’ll prob add a method just so we input in the last file and it does the rest from there
-- implemenent videos for the success/failure for each one
-- update this document
+- run agent3, scale it up
+- set up agent1, agent2, agent3 for low information grids [visible ghosts and make sure the env is (grid + visible ghosts)]
+- run low information grids
 
 ## Class Structure
 ### Environment
