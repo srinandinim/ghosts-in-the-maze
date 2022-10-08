@@ -108,7 +108,7 @@ class Environment:
         for ghost in temp_ghosts.keys():
             location = temp_ghosts[ghost]
             possible_inbound_actions = self.get_inbounds_actionspace(location)
-            
+
             choice = np.random.randint(0, len(possible_inbound_actions))
             action = possible_inbound_actions[choice]
 
@@ -119,7 +119,6 @@ class Environment:
                     self.temp_ghosts[ghost] = location
             else:
                 self.temp_ghosts[ghost] = action
-
 
     def generate_ghosts(self, num_ghosts=1):
         """
@@ -133,7 +132,6 @@ class Environment:
                     0, constants.SIZE[0]-1), np.random.randint(0, constants.SIZE[1]-1))
 
         self.ghost_grid = self.update_ghost_grid(self.ghost_locations)
-
 
     def update_ghost_locations(self, ghost_locations):
         """
@@ -205,7 +203,8 @@ class Environment:
         self.update_ghost_locations(self.ghost_locations)
         self.update_visible_ghosts(self.ghost_locations)
         self.ghost_grid = self.update_ghost_grid(self.ghost_locations)
-        self.visible_ghosts_grid = self.update_visible_ghost_grid(self.visible_ghosts)
+        self.visible_ghosts_grid = self.update_visible_ghost_grid(
+            self.visible_ghosts)
 
     def effective_blocked_maze(self, maze_grid, ghost_grid):
         """
