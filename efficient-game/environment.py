@@ -26,6 +26,9 @@ class Environment:
         # sets up temp ghosts
         self.initialize_temp_ghosts()
 
+        # sets up temp visible ghosts
+        self.initialize_temp_visible_ghosts()
+
     def step(self):
         """
         updates environment for 1 step:
@@ -119,6 +122,26 @@ class Environment:
                     self.temp_ghosts[ghost] = location
             else:
                 self.temp_ghosts[ghost] = action
+
+    def initialize_temp_visible_ghosts(self):
+        self.temp_visible_ghosts = deepcopy(self.visible_ghosts)
+
+    def update_temp_visible_ghosts(self):
+        temp_visible_ghosts = self.temp_visible_ghosts
+        for ghost in temp_visible_ghosts.keys():
+            location = temp_visible_ghosts[ghost]
+            possible_inbound_actions = self.get_inbounds_actionspace(location)
+
+            choice = np.random.randint(0, len(possible_inbound_actions))
+            action = possible_inbound_actions[choice]
+
+            if self.maze_grid[action[0]][action[1]] == 1:
+                if random.random() <= 0.5:
+                    self.temp_visible_ghosts[ghost] = action
+                else:
+                    self.temp_visible_ghosts[ghost] = location
+            else:
+                self.temp_visible_ghosts[ghost] = action
 
     def generate_ghosts(self, num_ghosts=1):
         """
