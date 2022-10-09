@@ -24,7 +24,11 @@ def get_graph(filename, save=False, graph_name=""):
     stats = get_stats(filename)
     line_colors = ["#f15854", "#faa43a", "#60bd68", "#5da5da", "#b276b2"]
     for i, agent_stats in enumerate(stats):
-        plt.plot(agent_stats.keys(), agent_stats.values(), linewidth=2.0,
+        plot_data = {}
+        for key, value in agent_stats.items():
+            plot_data[key] = value[0] if isinstance(value, list) else value
+
+        plt.plot(plot_data.keys(), plot_data.values(), linewidth=2.0,
                  color=line_colors[i], marker='o', label="Agent {}".format(i + 1))
 
     plt.legend()
