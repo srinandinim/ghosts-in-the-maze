@@ -14,8 +14,7 @@ class Agent5LI(Agent4LI):
 
     def update_ghosts_in_memory(self, env):
         for ghost, (priority, location) in self.ghosts_in_memory.items():
-            self.ghosts_in_memory[ghost] = (priority + 1, location) 
-            # if priority < constants.SIZE[0] else None
+            self.ghosts_in_memory[ghost] = (priority + 1, location) if priority < constants.SIZE[0] else None
 
         for ghost, location in env.visible_ghosts.items():
             self.ghosts_in_memory[ghost] = (1, deepcopy(location))
@@ -138,42 +137,3 @@ class Agent5LI(Agent4LI):
             self.update_ghosts_in_memory(env)
 
         return -1
-
-    def run_agent5_agent2(self, env):
-        path = self.modified_plan_path(env, self.location)
-        self.update_ghosts_in_memory(env)
-
-        while self.is_alive:
-            if self.is_success_state():
-                return 1
-            if self.has_path == False:
-                path = self.modified_plan_path(env, self.location)
-
-            self.has_path = False
-            if path:
-                action = path.pop(0)
-                if action not in self.get_ghosts_in_memory_values():
-                    self.location = action
-                    self.has_path = True
-                else:
-                    path = self.modified_plan_path(env, self.location)
-                    if len(path) > 0:
-                        action = path.pop(0)
-                        if action not in self.get_ghosts_in_memory_values():
-                            self.location = action
-                            self.has_path = True
-                        else:
-                            self.location = self.move_agent_away_from_nearest_ghost(
-                                env)
-                    else:
-                        self.location = self.move_agent_away_from_nearest_ghost(
-                            env)
-            else:
-                self.location = self.move_agent_away_from_nearest_ghost(env)
-
-            if self.is_failure_state(env):
-                self.is_alive = False
-                return 0
-
-            env.step()
-            self.update_ghosts_in_memory(env)
