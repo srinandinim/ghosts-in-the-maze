@@ -9,10 +9,8 @@ import matplotlib.pyplot as plt
 
 class Agent4LI(Agent2LI):
 
-    def __init__(self, env):
+    def __init__(self):
         super().__init__()
-        #self.score = 1
-        #self.distance_rewards = self.distance_rewards(env)
 
     def knn_mdsum(self, knn_ghosts):
         """
@@ -53,16 +51,11 @@ class Agent4LI(Agent2LI):
         return array
 
     def tree_search(self, env, depth, min_or_max):
-
-        #print(f"The Current Location is {self.location}")
-
         if depth == 1 or self.is_alive == False:
             knn_mdsum = self.knn_mdsum(self.get_knearestghosts(env, k=10))
             evaluation = -knn_mdsum
             if self.is_alive == False:
                 evaluation = 0.00100
-            #print("\nAGENT's TURN:")
-            #print(f"THE VALUE OF {self.location} at d={depth} is {evaluation}")
             return evaluation
 
         if min_or_max == "max":
@@ -82,8 +75,7 @@ class Agent4LI(Agent2LI):
 
             if self.location in env.temp_visible_ghosts.values():
                 self.is_alive = False
-            #print("\nMIN GHOSTS TURN:")
-            #print(f"THE VALUE OF {self.location} at d={depth}is {max_eval}")
+
             return max_eval
 
         if min_or_max == "min":
@@ -95,7 +87,6 @@ class Agent4LI(Agent2LI):
             return min_eval
 
     def run_agent4_debug(self, env):
-
         # have a visited set to account for curiosity
         visited = {(0, 0): 1}
         while self.is_alive:
@@ -149,7 +140,6 @@ class Agent4LI(Agent2LI):
             # find the maxAction that maximizes the evaluation
             maxKey, maxValue = self.location, -float("inf")
             for key, value in evaluation_scores.items():
-
                 # cannot revisit a state that is already visited 10 times!
                 if visited.get(key, 0) <= 10 and evaluation_scores[key] > maxValue:
                     maxKey = key

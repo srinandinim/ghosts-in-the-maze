@@ -15,7 +15,7 @@ def get_stats(filename):
     return stats
 
 
-def get_graph(filename, save=False, graph_name=""):
+def get_graph(filename, save=False, dirname="visualizations/", graph_name=""):
     plt.title('Agents\' Success Rates')
     plt.xlabel('Number of Ghosts')
     plt.ylabel('Success Rate (%)')
@@ -34,7 +34,6 @@ def get_graph(filename, save=False, graph_name=""):
     plt.legend()
 
     if save:
-        dirname = "visualizations/"
         if not os.path.exists(os.path.dirname(dirname)):
             os.makedirs(os.path.dirname(dirname))
 
