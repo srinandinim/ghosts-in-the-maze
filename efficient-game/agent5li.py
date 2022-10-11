@@ -1,5 +1,5 @@
 from copy import deepcopy
-
+import time
 import numpy as np
 import constants
 from agent4li import Agent4LI
@@ -89,10 +89,12 @@ class Agent5LI(Agent4LI):
             return min_eval
 
     def run_agent5(self, env):
+        starttime = time.time()
+
         visited = {(0, 0): 1}
         self.update_ghosts_in_memory(env)
 
-        while self.is_alive:
+        while time.time() <= (starttime + 300) and self.is_alive:
             if self.is_success_state():
                 return 1
             neighbors = self.get_valid_neighbors(

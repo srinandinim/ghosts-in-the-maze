@@ -163,7 +163,7 @@ class Agent4LI(Agent2LI):
         starttime = time.time()
 
         visited = {(0, 0): 1}
-        while time.time() <= (starttime + 180) and self.is_alive:
+        while time.time() <= (starttime + 300) and self.is_alive:
             if self.is_success_state():
                 return 1
             neighbors = self.get_valid_neighbors(
