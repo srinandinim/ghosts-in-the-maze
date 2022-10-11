@@ -152,13 +152,13 @@ def visualize_simulation_statistics(timestamp):
 def lab_report_simulations(a1=False, a2=False, a3=False, a4=False, a5=False):
     a1_stats, a2_stats, a3_stats, a4_stats, a5_stats = {}, {}, {}, {}, {}
     a1_runtimes, a2_runtimes, a3_runtimes, a4_runtimes, a5_runtimes = {}, {}, {}, {}, {}
-    last_survival_rate, num_ghosts, max_ghosts = 100, 90, constants.SIZE[0] * \
+    last_survival_rate, num_ghosts, max_ghosts = 100, 281, constants.SIZE[0] * \
         constants.SIZE[1]
     num_simulations = 30
     a1_s = a2_s = a3_s = a4_s = a5_s = 0
 
-    start_time = "_20_a5_90-end"
-    while last_survival_rate > 0 and num_ghosts < max_ghosts:
+    start_time = "_51_a5_281"
+    while last_survival_rate > 0 and num_ghosts < 282:
         print(f"\nTHE NUMBER OF CURRENT GHOSTS ARE: {num_ghosts}")
 
         environments = []
@@ -199,19 +199,19 @@ def lab_report_simulations(a1=False, a2=False, a3=False, a4=False, a5=False):
 
         last_survival_rate = min(
             last_survival_rate, max(a1_s, a2_s, a3_s, a4_s, a5_s))
-        num_ghosts += 5
+        num_ghosts += 20
 
     # visualize_simulation_statistics(timestamp=start_time)
 
     return a1_stats, a2_stats, a3_stats, a4_stats, a5_stats
 
 if __name__ == "__main__":
-    # a1_stats, a2_stats, a3_stats, a4_stats, a5_stats = lab_report_simulations(
-    #     a1=False, a2=False, a3=False, a4=False, a5=True)
+    a1_stats, a2_stats, a3_stats, a4_stats, a5_stats = lab_report_simulations(
+        a1=False, a2=False, a3=False, a4=False, a5=True)
     # print(f"Agent 1 Stats: {a1_stats}")
     # print(f"Agent 2 Stats: {a2_stats}")
     # print(f"Agent 3 Stats: {a3_stats}")
     # print(f"Agent 4 Stats: {a4_stats}")
     # print(f"Agent 5 Stats: {a5_stats}")
 
-    visualize_simulation_statistics("_20_all")
+    # visualize_simulation_statistics("_20_all")
