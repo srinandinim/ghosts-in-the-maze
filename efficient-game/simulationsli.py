@@ -206,10 +206,12 @@ def lab_report_simulations(a1=False, a2=False, a3=False, a4=False, a5=False):
     return a1_stats, a2_stats, a3_stats, a4_stats, a5_stats
 
 if __name__ == "__main__":
-    a1_stats, a2_stats, a3_stats, a4_stats, a5_stats = lab_report_simulations(
-        a1=False, a2=False, a3=False, a4=False, a5=True)
+    # a1_stats, a2_stats, a3_stats, a4_stats, a5_stats = lab_report_simulations(
+    #     a1=False, a2=False, a3=False, a4=False, a5=True)
     # print(f"Agent 1 Stats: {a1_stats}")
     # print(f"Agent 2 Stats: {a2_stats}")
     # print(f"Agent 3 Stats: {a3_stats}")
     # print(f"Agent 4 Stats: {a4_stats}")
     # print(f"Agent 5 Stats: {a5_stats}")
+
+    visualize_simulation_statistics("_20_all")

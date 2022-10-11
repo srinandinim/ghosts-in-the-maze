@@ -1,7 +1,9 @@
 import json
 import os
 import matplotlib.pyplot as plt
+import statistics as stat
 
+import numpy as np
 
 def get_stats(filename):
     with open(filename, 'r') as fp:
@@ -28,8 +30,30 @@ def get_graph(filename, save=False, dirname="visualizations/", graph_name=""):
         for key, value in agent_stats.items():
             plot_data[key] = value[0] if isinstance(value, list) else value
 
-        plt.plot(plot_data.keys(), plot_data.values(), linewidth=2.0,
+        x = []
+        y = []
+
+        mean = []
+        stddev = []
+        for key, value in plot_data.items():
+            if int(key) % 5 == 0:
+                x.append(int(key))
+                y.append(value)
+
+                wins = round(value * 3/10)
+                losses = 30 - wins
+
+                simulations = []
+                for v in range(max(wins, losses)):
+                    if v < wins: simulations.append(1)
+                    if v < losses: simulations.append(0)
+                
+                mean.append(int(key))
+                stddev.append(2 * stat.stdev(simulations))
+
+        plt.plot(x, y, linewidth=2.0,
                  color=line_colors[i], marker='o', label="Agent {}".format(i + 1))
+        plt.errorbar(x, y, yerr = stddev, linestyle='', color=line_colors[i])
 
     plt.legend()
 
