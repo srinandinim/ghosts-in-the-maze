@@ -167,6 +167,7 @@ def save_simulation_statistics(timestamp, a1_stats=None, a2_stats=None, a3_stats
     with open(filename, 'w') as fp:
         json.dump(file_content, fp)
 
+
 def save_runtime_statistics(timestamp, a1_runtimes=None, a2_runtimes=None, a3_runtimes=None, a4_runtimes=None, a5_runtimes=None):
     file_content = {'a1_runtimes': a1_runtimes, 'a2_runtimes': a2_runtimes,
                     'a3_runtimes': a3_runtimes, 'a4_runtimes': a4_runtimes, 'a5_runtimes': a5_runtimes}
@@ -188,21 +189,30 @@ def visualize_simulation_statistics(timestamp):
         filename, save=True, graph_name="result_statistics{}".format(timestamp))
 
 
+def visualize_simulation_timeouts(timestamp):
+    dirname = "experiments/"
+    filename = "{}simulation_statistics{}.json".format(dirname, timestamp)
+
+    vis_dirname = "timeouts/"
+    visualizations.get_timeouts(
+        filename, save=True, dirname=vis_dirname, graph_name="timeout_statistics{}".format(timestamp))
+
+
 def lab_report_simulations(a1=False, a2=False, a3=False, a4=False, a5=False):
     a1_stats, a2_stats, a3_stats, a4_stats, a5_stats = {}, {}, {}, {}, {}
     a1_runtimes, a2_runtimes, a3_runtimes, a4_runtimes, a5_runtimes = {}, {}, {}, {}, {}
     last_survival_rate, num_ghosts, max_ghosts = 100, 1, constants.SIZE[0] * \
-        constants.SIZE[1]
+        constants.SIZE[1] * 2
     num_simulations = 30
     a1_s = a2_s = a3_s = a4_s = a5_s = 0
 
-    start_time = "_agent4_51"
+    start_time = time.time()
     while last_survival_rate > 0 and num_ghosts < max_ghosts:
         print(f"\nTHE NUMBER OF CURRENT GHOSTS ARE: {num_ghosts}")
 
         environments = []
-        # for _ in range(num_simulations):
-        #     environments.append(Environment(num_ghosts=num_ghosts))
+        for _ in range(num_simulations):
+            environments.append(Environment(num_ghosts=num_ghosts))
 
         if a1 == True:
             a1_s = simulation_statistics_agent1(
@@ -228,12 +238,12 @@ def lab_report_simulations(a1=False, a2=False, a3=False, a4=False, a5=False):
 
         save_simulation_statistics(timestamp=start_time, a1_stats=a1_stats,
                                    a2_stats=a2_stats, a3_stats=a3_stats, a4_stats=a4_stats, a5_stats=a5_stats)
-        save_runtime_statistics(timestamp=start_time, a1_runtimes=a1_runtimes,
-                                a2_runtimes=a2_runtimes, a3_runtimes=a3_runtimes, a4_runtimes=a4_runtimes, a5_runtimes=a5_runtimes)
+        # save_runtime_statistics(timestamp=start_time, a1_runtimes=a1_runtimes,
+        #                         a2_runtimes=a2_runtimes, a3_runtimes=a3_runtimes, a4_runtimes=a4_runtimes, a5_runtimes=a5_runtimes)
 
         last_survival_rate = min(
             last_survival_rate, max(a1_s, a2_s, a3_s, a4_s, a5_s))
-        num_ghosts += 20
+        num_ghosts += 1
 
     # visualize_simulation_statistics(timestamp=start_time)
 
@@ -241,15 +251,12 @@ def lab_report_simulations(a1=False, a2=False, a3=False, a4=False, a5=False):
 
 
 if __name__ == "__main__":
-    # start = time.time()
-    # a1_stats, a2_stats, a3_stats, a4_stats, a5_stats = lab_report_simulations(
-    #     a1=False, a2=False, a3=False, a4=True)
-    # print(f"Agent 1 Stats: {a1_stats}")
-    # print(f"Agent 2 Stats: {a2_stats}")
-    # print(f"Agent 3 Stats: {a3_stats}")
-    # print(f"Agent 4 Stats: {a4_stats}")
+    a1_stats, a2_stats, a3_stats, a4_stats, a5_stats = lab_report_simulations(
+        a1=True, a2=True, a3=True, a4=True)
+    print(f"Agent 1 Stats: {a1_stats}")
+    print(f"Agent 2 Stats: {a2_stats}")
+    print(f"Agent 3 Stats: {a3_stats}")
+    print(f"Agent 4 Stats: {a4_stats}")
 
-    # end = time.time()
-    # print(end - start)
-
-    visualize_simulation_statistics("_all_51")
+    # visualize_simulation_statistics("_all_5")
+    # visualize_simulation_timeouts("_all_30")
