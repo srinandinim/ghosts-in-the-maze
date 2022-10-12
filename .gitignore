@@ -1,6 +1,4 @@
 .DS_Store
+.gitignore
 __pycache__
-game/__pycache__
 efficient-game/__pycache__
-efficient-game/jsontemp.py
-efficient-game/json_numbers.json
