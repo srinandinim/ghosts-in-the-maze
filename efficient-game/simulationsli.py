@@ -29,7 +29,6 @@ def simulation_statistics_agent1(num_simulations, num_ghosts, environments=[]):
         f"Agent1: Wins: {wins}\tLosses: {losses}\tSurvival Rate: {round(survival*100,2)}%")
     return round(survival*100, 2)
 
-
 def simulation_statistics_agent2(num_simulations, num_ghosts, environments=[]):
     """
     run simulation n times and get statistics on survival, and more
@@ -46,7 +45,6 @@ def simulation_statistics_agent2(num_simulations, num_ghosts, environments=[]):
     print(
         f"Agent2: Wins: {wins}\tLosses: {losses}\tSurvival Rate: {round(survival*100,2)}%")
     return round(survival*100, 2)
-
 
 def simulation_statistics_agent3(num_simulations, num_ghosts, environments=[]):
     """
@@ -72,7 +70,6 @@ def simulation_statistics_agent3(num_simulations, num_ghosts, environments=[]):
         f"Agent3: Wins: {wins}\tLosses: {losses}\tTimouts: {timeouts}\tSurvival Rate: {round(survival*100,2)}%")
     return round(survival*100, 2), timeouts, runtimes
 
-
 def simulation_statistics_agent4(num_simulations, num_ghosts, environments=[]):
     """
     run simulation n times and get statistics on survival, and more
@@ -97,7 +94,6 @@ def simulation_statistics_agent4(num_simulations, num_ghosts, environments=[]):
         f"Agent4: Wins: {wins}\tLosses: {losses}\tTimouts: {timeouts}\tSurvival Rate: {round(survival*100,2)}%")
     return round(survival*100, 2), timeouts, runtimes
 
-
 def simulation_statistics_agent5(num_simulations, num_ghosts, environments=[]):
     """
     run simulation n times and get statistics on survival, and more
@@ -119,8 +115,10 @@ def simulation_statistics_agent5(num_simulations, num_ghosts, environments=[]):
         f"Agent5: Wins: {wins}\tLosses: {losses}\tTimouts: {timeouts}\tSurvival Rate: {round(survival*100,2)}%")
     return round(survival*100, 2), timeouts
 
-
 def save_simulation_statistics(timestamp, a1_stats=None, a2_stats=None, a3_stats=None, a4_stats=None, a5_stats=None):
+    """
+    lets us save simulation statistics 
+    """
     file_content = {'a1_stats': a1_stats, 'a2_stats': a2_stats,
                     'a3_stats': a3_stats, 'a4_stats': a4_stats, 'a5_stats': a5_stats}
 
@@ -132,8 +130,10 @@ def save_simulation_statistics(timestamp, a1_stats=None, a2_stats=None, a3_stats
     with open(filename, 'w') as fp:
         json.dump(file_content, fp)
 
-
 def save_runtime_statistics(timestamp, a1_runtimes=None, a2_runtimes=None, a3_runtimes=None, a4_runtimes=None, a5_runtimes=None):
+    """
+    lets us save runtime statistics. 
+    """
     file_content = {'a1_runtimes': a1_runtimes, 'a2_runtimes': a2_runtimes,
                     'a3_runtimes': a3_runtimes, 'a4_runtimes': a4_runtimes, 'a5_runtimes': a5_runtimes}
 
@@ -145,8 +145,10 @@ def save_runtime_statistics(timestamp, a1_runtimes=None, a2_runtimes=None, a3_ru
     with open(filename, 'w') as fp:
         json.dump(file_content, fp)
 
-
 def visualize_simulation_statistics(timestamp):
+    """
+    this allows us to visualize simulation statistics.
+    """
     dirname = "experimentsli/"
     filename = "{}simulation_statistics{}.json".format(dirname, timestamp)
 
@@ -154,15 +156,16 @@ def visualize_simulation_statistics(timestamp):
     visualizations.get_graph(
         filename, save=True, dirname=vis_dirname, graph_name="result_statistics{}".format(timestamp))
 
-
 def visualize_simulation_timeouts(timestamp):
+    """
+    this allows us to visualize the timeouts
+    """
     dirname = "experimentsli/"
     filename = "{}simulation_statistics{}.json".format(dirname, timestamp)
 
     vis_dirname = "timeoutsli/"
     visualizations.get_timeouts(
         filename, save=True, dirname=vis_dirname, graph_name="timeout_statistics{}".format(timestamp))
-
 
 def lab_report_simulations(a1=False, a2=False, a3=False, a4=False, a5=False):
     a1_stats, a2_stats, a3_stats, a4_stats, a5_stats = {}, {}, {}, {}, {}

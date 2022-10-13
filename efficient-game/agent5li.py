@@ -9,12 +9,22 @@ class Agent5LI(Agent4LI):
 
     def __init__(self):
         super().__init__()
+
+        # stores the memory
         self.ghosts_in_memory = {}
+
+        # determines if path exists towards the end
         self.has_path = True
 
     def update_ghosts_in_memory(self, env):
+        """
+        removes ghosts that are above the current priority. 
+        store ghosts in memory and update ghosts in memory with new priorities. 
+        """
+
         for ghost, (priority, location) in self.ghosts_in_memory.items():
-            self.ghosts_in_memory[ghost] = (priority + 1, location) if priority < constants.SIZE[0] else None
+            self.ghosts_in_memory[ghost] = (
+                priority + 1, location) if priority < constants.SIZE[0] else None
 
         for ghost, location in env.visible_ghosts.items():
             self.ghosts_in_memory[ghost] = (1, deepcopy(location))
@@ -24,6 +34,10 @@ class Agent5LI(Agent4LI):
         self.ghosts_in_memory = filtered
 
     def get_ghosts_in_memory_values(self):
+        """
+        find the locations of all ghosts that are stored in memory.
+        """
+
         ghost_locations = set()
         for _, (_, location) in self.ghosts_in_memory.items():
             ghost_locations.add(location)
@@ -52,6 +66,12 @@ class Agent5LI(Agent4LI):
         return nearestkghosts
 
     def tree_search(self, env, depth, min_or_max):
+        """
+        Run a tree simulation and treat this situation as a game. 
+        Suppose that Agent 1 is Player 1 and the Ensemble of Ghosts are player 2 moving according to some sample probability. 
+        Then, we compute the expected utility for a particular action by propogating information up the relevant tree. 
+        That will help us inform what is the best action that we should take. 
+        """
         if depth == 1 or self.is_alive == False:
             knn_mdsum = self.knn_mdsum(self.get_knearestghosts(k=10))
             evaluation = -knn_mdsum

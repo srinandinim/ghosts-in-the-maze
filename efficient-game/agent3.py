@@ -1,8 +1,8 @@
-from copy import deepcopy
 import time
+from copy import deepcopy
+import matplotlib.pyplot as plt
 import constants
 from agent2 import Agent2
-import matplotlib.pyplot as plt
 
 
 class Agent3(Agent2):
@@ -12,6 +12,9 @@ class Agent3(Agent2):
         self.actionspace = []
 
     def actionspaces(self, env):
+        """
+        returns agent's valid moves, including staying in place, based on current location
+        """
         possible_valid_moves = self.get_valid_neighbors(
             self.location, env.effective_maze)
         possible_valid_moves.append(self.location)
@@ -19,6 +22,15 @@ class Agent3(Agent2):
         return possible_valid_moves
 
     def run_agent3(self, env):
+        """
+        # while the agent is alive 
+            # if we reach end of maze, reward=+1
+            # simulate agent 2 starting at each of the possible valid moves (2x) and store the success rate of each one
+            # choose the next move based on the success of the move and how many times it was visited previously, if any
+            # if the chosen move does not collide with a ghost, move there; otherwise, move away from the nearest ghost
+            # update ghosts, and environment effective maze
+            # if ghost intersects with agent, the agent dies and receives 0 reward 
+        """
         starttime = time.time()
 
         visited = {}
@@ -67,6 +79,9 @@ class Agent3(Agent2):
         return -1
 
     def run_agent3_video(self, env):
+        """
+        runs agent and saves video of simulation
+        """
         video_frames = []
         video_name = "agent3_ghosts{}_".format(len(env.ghost_locations))
 
@@ -118,6 +133,9 @@ class Agent3(Agent2):
             env.step()
 
     def run_agent3_debug(self, env):
+        """
+        runs agent with debug statements
+        """
         visited = {}
         while self.is_alive:
             print(f"The Agent's current location is: {self.location}")

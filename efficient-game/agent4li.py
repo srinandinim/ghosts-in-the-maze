@@ -1,10 +1,10 @@
+import time
 from copy import deepcopy
 from pydoc import visiblename
-import time
+import matplotlib.pyplot as plt
+import numpy as np
 import constants
 from agent2li import Agent2LI
-import numpy as np
-import matplotlib.pyplot as plt
 
 
 class Agent4LI(Agent2LI):
@@ -42,13 +42,6 @@ class Agent4LI(Agent2LI):
             nearestkghosts[ghost] = dist
 
         return nearestkghosts
-
-    def distance_rewards(self, env):
-        end_dist = constants.SIZE[0] * constants.SIZE[1] + 1
-        array = np.array([[round((end_dist / self.manhattan_distance(constants.SIZE, (i, j)))**(1/3), 2)
-                         for j in range(constants.SIZE[1])] for i in range(constants.SIZE[0])])
-        array[constants.SIZE[0]-1][constants.SIZE[1]-1] = 1000.000
-        return array
 
     def tree_search(self, env, depth, min_or_max):
         if depth == 1 or self.is_alive == False:
@@ -160,6 +153,12 @@ class Agent4LI(Agent2LI):
             env.step()
 
     def run_agent4(self, env):
+        """
+        We run tree search to get expected utility for every action it the agent's action space.
+        We propogate that utility (which minimizes distance to k nearest ghosts) through heuristics
+        that optimize the board for curiosity and reaching the end of the maze. Then, we greedily
+        select the action that maximizes this new value with greedy hill climbing local search. 
+        """
         starttime = time.time()
 
         visited = {(0, 0): 1}

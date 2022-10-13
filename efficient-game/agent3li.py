@@ -19,6 +19,15 @@ class Agent3LI(Agent2LI):
         return possible_valid_moves
 
     def run_agent3(self, env):
+        """
+        # while the agent is alive 
+            # if we reach end of maze, reward=+1
+            # simulate agent 2 starting at each of the possible valid moves (2x) and store the success rate of each one
+            # choose the next move based on the success of the move and how many times it was visited previously, if any
+            # if the chosen move does not collide with a ghost, move there; otherwise, move away from the nearest ghost
+            # update ghosts, and environment effective maze
+            # if ghost intersects with agent, the agent dies and receives 0 reward 
+        """
         starttime = time.time()
 
         visited = {}

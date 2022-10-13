@@ -17,8 +17,7 @@ class Environment:
         self.update_visible_ghosts(self.ghost_locations)
 
         # sets up visible_ghosts_grid
-        self.visible_ghosts_grid = self.update_visible_ghost_grid(
-            self.visible_ghosts)
+        self.visible_ghosts_grid = self.update_visible_ghost_grid(self.visible_ghosts)
 
         # sets up the effective grid (maze and ghost overlay)
         self.effective_blocked_maze(self.maze_grid, self.ghost_grid)
@@ -104,9 +103,16 @@ class Environment:
         return maze
 
     def initialize_temp_ghosts(self):
+        # this allows us to forecast ghosts with the game tree
         self.temp_ghosts = deepcopy(self.ghost_locations)
 
     def update_temp_ghosts(self):
+
+        """
+        this allows us to simulate the movements 
+        of the temporary ghosts according to the 
+        specified rules of how the ghosts move. 
+        """
         temp_ghosts = self.temp_ghosts
         for ghost in temp_ghosts.keys():
             location = temp_ghosts[ghost]
@@ -124,9 +130,16 @@ class Environment:
                 self.temp_ghosts[ghost] = action
 
     def initialize_temp_visible_ghosts(self):
+        """
+        this lets us initialize temporary ghosts. 
+        """
         self.temp_visible_ghosts = deepcopy(self.visible_ghosts)
 
     def update_temp_visible_ghosts(self):
+        """
+        this allows us to find all the relevant subsets
+        of the ghosts that are that are in temp visible ghosts. 
+        """
         temp_visible_ghosts = self.temp_visible_ghosts
         for ghost in temp_visible_ghosts.keys():
             location = temp_visible_ghosts[ghost]
@@ -213,6 +226,9 @@ class Environment:
         return ghost_grid
 
     def update_visible_ghost_grid(self, ghost_locations):
+        """
+        this updates the visible ghost grid so we can use it. 
+        """
         ghost_grid = np.zeros_like(self.maze_grid)
         for value in ghost_locations.values():
             ghost_grid[value[0]][value[1]] = 1
@@ -269,6 +285,7 @@ class Environment:
         print("\n")
 
     def debugging_all(self):
+        """this runs all the debugging statements at once"""
         self.debugging_print_maze_grid()
         self.debugging_print_all_ghost_grid()
         self.debugging_print_all_ghost_locations()

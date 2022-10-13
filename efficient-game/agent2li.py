@@ -1,8 +1,6 @@
-import time
 import matplotlib.pyplot as plt
 import constants
 from agent import Agent
-
 
 class Agent2LI(Agent):
 
@@ -54,7 +52,7 @@ class Agent2LI(Agent):
 
     def nearest_visible_ghost(self, env):
         """
-        finds coordinates of nearest ghost from current position
+        finds coordinates of nearest visible ghost from current position
         """
         # maximum upper bound on distance for ghosts in the maze, for dist/coords
         min_distance = constants.SIZE[0] * constants.SIZE[1] + 1
@@ -72,6 +70,9 @@ class Agent2LI(Agent):
         return min_coordinates
 
     def move_agent_away_from_nearest_ghost(self, env):
+        """
+        gets the move of the possible valid moves that would ensure agent is farthest away from the nearest visible ghost
+        """
         # retrieves possible valid moves from current location
         possible_valid_moves = self.get_valid_neighbors(
             self.location, env.effective_maze)
@@ -94,6 +95,19 @@ class Agent2LI(Agent):
         return max_move
 
     def run_agent2(self, env):
+        """
+        # plans once using BFS
+        # while the agent is alive
+            # if we reach end of maze, reward=+1
+            # if agent is not on a path currently, plans a new plan using BFS based on current location
+            # if there is a valid path, do as follows. if not, move away from the nearest viisble ghost.
+                # if there is not a ghost at the next step of the path, move agent to that location
+                # if not, generate a new plan using BFS 
+                    # if there is a valid path and it will not result in collision with a visible ghost, move there
+                    # otherwise, move away from the nearest visible ghost
+            # update ghosts, and environment effective maze
+            # if ghost intersects with agent, the agent dies and receives 0 reward
+        """
         path = self.modified_plan_path(env, self.location)
         while self.is_alive == True:
             if self.is_success_state():
@@ -222,6 +236,7 @@ class Agent2LI(Agent):
             env.step()
 
     def ghost_actionspace(self, env, ghost_location):
+
         ghost_actions = {}
         for d in [[0, 1], [1, 0], [0, -1], [-1, 0]]:
             dx = d[0] + ghost_location[0]

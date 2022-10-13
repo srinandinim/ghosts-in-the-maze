@@ -1,17 +1,15 @@
-from copy import deepcopy
 import time
+from copy import deepcopy
+import matplotlib.pyplot as plt
+import numpy as np
 import constants
 from agent2 import Agent2
-import numpy as np
-import matplotlib.pyplot as plt
 
 
 class Agent4(Agent2):
 
     def __init__(self, env):
         super().__init__()
-        #self.score = 1
-        #self.distance_rewards = self.distance_rewards(env)
 
     def knn_mdsum(self, knn_ghosts):
         """
@@ -43,14 +41,13 @@ class Agent4(Agent2):
 
         return nearestkghosts
 
-    def distance_rewards(self, env):
-        end_dist = constants.SIZE[0] * constants.SIZE[1] + 1
-        array = np.array([[round((end_dist / self.manhattan_distance(constants.SIZE, (i, j)))**(1/3), 2)
-                         for j in range(constants.SIZE[1])] for i in range(constants.SIZE[0])])
-        array[constants.SIZE[0]-1][constants.SIZE[1]-1] = 1000.000
-        return array
-
     def tree_search(self, env, depth, min_or_max):
+        """
+        Run a tree simulation and treat this situation as a game. 
+        Suppose that Agent 1 is Player 1 and the Ensemble of Ghosts are player 2 moving according to some sample probability. 
+        Then, we compute the expected utility for a particular action by propogating information up the relevant tree. 
+        That will help us inform what is the best action that we should take. 
+        """
 
         #print(f"The Current Location is {self.location}")
 
@@ -168,6 +165,12 @@ class Agent4(Agent2):
             env.step()
 
     def run_agent4(self, env):
+        """
+        We run tree search to get expected utility for every action it the agent's action space.
+        We propogate that utility (which minimizes distance to k nearest ghosts) through heuristics
+        that optimize the board for curiosity and reaching the end of the maze. Then, we greedily
+        select the action that maximizes this new value with greedy hill climbing local search. 
+        """
         starttime = time.time()
 
         visited = {(0, 0): 1}

@@ -1,4 +1,3 @@
-import time
 import matplotlib.pyplot as plt
 import constants
 from agent import Agent
@@ -72,6 +71,9 @@ class Agent2(Agent):
         return min_coordinates
 
     def move_agent_away_from_nearest_ghost(self, env):
+        """
+        gets the move of the possible valid moves that would ensure agent is farthest away from the nearest ghost
+        """
         # retrieves possible valid moves from current location
         possible_valid_moves = self.get_valid_neighbors(
             self.location, env.effective_maze)
@@ -94,6 +96,19 @@ class Agent2(Agent):
         return max_move
 
     def run_agent2(self, env):
+        """
+        # plans once using BFS
+        # while the agent is alive
+            # if we reach end of maze, reward=+1
+            # if agent is not on a path currently, plans a new plan using BFS based on current location
+            # if there is a valid path, do as follows. if not, move away from the nearest ghost.
+                # if there is not a ghost at the next step of the path, move agent to that location
+                # if not, generate a new plan using BFS
+                    # if there is a valid path and it will not result in collision with a ghost, move there
+                    # otherwise, move away from the nearest ghost
+            # update ghosts, and environment effective maze
+            # if ghost intersects with agent, the agent dies and receives 0 reward
+        """
         path = self.modified_plan_path(env, self.location)
         while self.is_alive == True:
             if self.is_success_state():
@@ -129,6 +144,9 @@ class Agent2(Agent):
             env.step()
 
     def run_agent2_video(self, env):
+        """
+        runs agent and saves video of simulation
+        """
         video_frames = []
         video_name = "agent2_ghosts{}_".format(len(env.ghost_locations))
         path = self.modified_plan_path(env, self.location)
@@ -168,6 +186,9 @@ class Agent2(Agent):
             env.step()
 
     def run_agent2_debug(self, env):
+        """
+        runs agent with debug statements
+        """
         path = self.modified_plan_path(env, self.location)
         print(f"This is the Agent's plan: {path}")
 
@@ -223,7 +244,8 @@ class Agent2(Agent):
 
     def ghost_actionspace(self, env, ghost_location):
         """
-        TODO: @Nandini, clean up the method
+        returns where a ghost can move to based on its current location
+        used when forecasting agent2 while running agent3
         """
         ghost_actions = {}
         for d in [[0, 1], [1, 0], [0, -1], [-1, 0]]:
@@ -238,6 +260,10 @@ class Agent2(Agent):
         return ghost_actions
 
     def run_agent2_forecast(self, env):
+        """
+        runs the first three steps of agent2 and returns whether agent is still alive or not
+        used when forecasting agent2 while running agent3
+        """
         path = self.modified_plan_path(env, self.location)
         num_steps = 0
 

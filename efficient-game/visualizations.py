@@ -1,12 +1,13 @@
 import json
 import os
-import matplotlib.pyplot as plt
 import statistics as stat
-
+import matplotlib.pyplot as plt
 import numpy as np
 
-
 def get_stats(filename):
+    """
+    this lets us get stats for a file
+    """
     with open(filename, 'r') as fp:
         file_content = json.load(fp)
 
@@ -14,11 +15,13 @@ def get_stats(filename):
     for object in file_content:
         if file_content[object]:
             stats.append(file_content[object])
-
     return stats
 
-
 def get_graph(filename, save=False, dirname="visualizations/", graph_name=""):
+    """
+    this lets us get graphs 
+    """
+
     plt.title('Agents\' Success Rates')
     plt.xlabel('Number of Ghosts')
     plt.ylabel('Success Rate (%)')
@@ -69,8 +72,10 @@ def get_graph(filename, save=False, dirname="visualizations/", graph_name=""):
 
     plt.show()
 
-
 def get_timeouts(filename, save=False, dirname="timeouts/", graph_name=""):
+    """
+    this lets us get the timeouts. 
+    """
     plt.title('Agents\' Termination Rates')
     plt.xlabel('Number of Ghosts')
     plt.ylabel('Termination Rate (%)')
