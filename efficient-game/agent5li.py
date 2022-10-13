@@ -109,6 +109,12 @@ class Agent5LI(Agent4LI):
             return min_eval
 
     def run_agent5(self, env):
+        """
+        We run tree search to get expected utility for every action it the agent's action space.
+        We propogate that utility (which minimizes distance to k nearest ghosts) through heuristics
+        that optimize the board for curiosity and reaching the end of the maze. Then, we greedily
+        select the action that maximizes this new value with greedy hill climbing local search. 
+        """
         starttime = time.time()
 
         visited = {(0, 0): 1}
