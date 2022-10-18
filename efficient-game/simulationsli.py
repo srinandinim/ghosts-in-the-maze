@@ -46,6 +46,24 @@ def simulation_statistics_agent2(num_simulations, num_ghosts, environments=[]):
         f"Agent2: Wins: {wins}\tLosses: {losses}\tSurvival Rate: {round(survival*100,2)}%")
     return round(survival*100, 2)
 
+def simulation_statistics_agent2_video(num_simulations, num_ghosts, environments=[]):
+    """
+    run simulation n times and get statistics on survival, and more
+    captures a video of the game
+    """
+    rewards_agent2 = []
+    for i in range(num_simulations):
+        env = deepcopy(environments[i]) if environments else Environment(
+            num_ghosts=num_ghosts)
+        agent2 = Agent2LI()
+        rewards_agent2.append(agent2.run_agent2_video(env))
+    wins = sum(rewards_agent2)
+    losses = len(rewards_agent2) - wins
+    survival = wins / (wins + losses)
+    print(
+        f"Agent2: Wins: {wins}\tLosses: {losses}\tSurvival Rate: {round(survival*100,2)}%")
+    return round(survival*100, 2)
+
 def simulation_statistics_agent3(num_simulations, num_ghosts, environments=[]):
     """
     run simulation n times and get statistics on survival, and more
@@ -69,6 +87,24 @@ def simulation_statistics_agent3(num_simulations, num_ghosts, environments=[]):
     print(
         f"Agent3: Wins: {wins}\tLosses: {losses}\tTimouts: {timeouts}\tSurvival Rate: {round(survival*100,2)}%")
     return round(survival*100, 2), timeouts, runtimes
+
+def simulation_statistics_agent3_video(num_simulations, num_ghosts, environments=[]):
+    """
+    run simulation n times and get statistics on survival, and more
+    captures a video of the game
+    """
+    rewards_agent3 = []
+    for i in range(num_simulations):
+        env = deepcopy(environments[i]) if environments else Environment(
+            num_ghosts=num_ghosts)
+        agent3 = Agent3LI()
+        rewards_agent3.append(agent3.run_agent3_video(env))
+    wins = sum(rewards_agent3)
+    losses = len(rewards_agent3) - wins
+    survival = wins / (wins + losses)
+    print(
+        f"Agent3: Wins: {wins}\tLosses: {losses}\tSurvival Rate: {round(survival*100,2)}%")
+    return round(survival*100, 2)
 
 def simulation_statistics_agent4(num_simulations, num_ghosts, environments=[]):
     """
@@ -94,6 +130,24 @@ def simulation_statistics_agent4(num_simulations, num_ghosts, environments=[]):
         f"Agent4: Wins: {wins}\tLosses: {losses}\tTimouts: {timeouts}\tSurvival Rate: {round(survival*100,2)}%")
     return round(survival*100, 2), timeouts, runtimes
 
+def simulation_statistics_agent4_video(num_simulations, num_ghosts, environments=[]):
+    """
+    run simulation n times and get statistics on survival, and more
+    captures a video of the game
+    """
+    rewards_agent4 = []
+    for i in range(num_simulations):
+        env = deepcopy(environments[i]) if environments else Environment(
+            num_ghosts=num_ghosts)
+        agent4 = Agent4LI()
+        rewards_agent4.append(agent4.run_agent4_video(env))
+    wins = sum(rewards_agent4)
+    losses = len(rewards_agent4) - wins
+    survival = wins / (wins + losses)
+    print(
+        f"Agent4: Wins: {wins}\tLosses: {losses}\tSurvival Rate: {round(survival*100,2)}%")
+    return round(survival*100, 2)
+
 def simulation_statistics_agent5(num_simulations, num_ghosts, environments=[]):
     """
     run simulation n times and get statistics on survival, and more
@@ -114,6 +168,24 @@ def simulation_statistics_agent5(num_simulations, num_ghosts, environments=[]):
     print(
         f"Agent5: Wins: {wins}\tLosses: {losses}\tTimouts: {timeouts}\tSurvival Rate: {round(survival*100,2)}%")
     return round(survival*100, 2), timeouts
+
+def simulation_statistics_agent5_video(num_simulations, num_ghosts, environments=[]):
+    """
+    run simulation n times and get statistics on survival, and more
+    captures a video of the game
+    """
+    rewards_agent5 = []
+    for i in range(num_simulations):
+        env = deepcopy(environments[i]) if environments else Environment(
+            num_ghosts=num_ghosts)
+        agent5 = Agent5LI()
+        rewards_agent5.append(agent5.run_agent5_video(env))
+    wins = sum(rewards_agent5)
+    losses = len(rewards_agent5) - wins
+    survival = wins / (wins + losses)
+    print(
+        f"Agent5: Wins: {wins}\tLosses: {losses}\tSurvival Rate: {round(survival*100,2)}%")
+    return round(survival*100, 2)
 
 def save_simulation_statistics(timestamp, a1_stats=None, a2_stats=None, a3_stats=None, a4_stats=None, a5_stats=None):
     """

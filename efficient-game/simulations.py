@@ -148,6 +148,24 @@ def simulation_statistics_agent4(num_simulations, num_ghosts, environments=[]):
         f"Agent4: Wins: {wins}\tLosses: {losses}\tTimouts: {timeouts}\tSurvival Rate: {round(survival*100,2)}%")
     return round(survival*100, 2), timeouts, runtimes
 
+def simulation_statistics_agent4_video(num_simulations, num_ghosts, environments=[]):
+    """
+    run simulation n times and get statistics on survival, and more
+    captures a video of the game
+    """
+    rewards_agent4 = []
+    for i in range(num_simulations):
+        env = deepcopy(environments[i]) if environments else Environment(
+            num_ghosts=num_ghosts)
+        agent4 = Agent4(env)
+        rewards_agent4.append(agent4.run_agent4_video(env))
+    wins = sum(rewards_agent4)
+    losses = len(rewards_agent4) - wins
+    survival = wins / (wins + losses)
+    print(
+        f"Agent4: Wins: {wins}\tLosses: {losses}\tSurvival Rate: {round(survival*100,2)}%")
+    return round(survival*100, 2)
+
 def save_simulation_statistics(timestamp, a1_stats=None, a2_stats=None, a3_stats=None, a4_stats=None, a5_stats=None):
     """
     these are the simulation statistics. 

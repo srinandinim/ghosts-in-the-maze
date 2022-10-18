@@ -77,7 +77,7 @@ class Agent3LI(Agent2LI):
 
     def run_agent3_video(self, env):
         video_frames = []
-        video_name = "agent3_ghosts{}_".format(len(env.visible_ghosts))
+        video_name = "agent3li_ghosts{}_".format(len(env.ghost_locations))
 
         visited = {}
         while self.is_alive:

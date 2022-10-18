@@ -217,3 +217,62 @@ class Agent4(Agent2):
             env.step()
 
         return -1
+
+    def run_agent4_video(self, env):
+        """
+        We run tree search to get expected utility for every action it the agent's action space.
+        We propogate that utility (which minimizes distance to k nearest ghosts) through heuristics
+        that optimize the board for curiosity and reaching the end of the maze. Then, we greedily
+        select the action that maximizes this new value with greedy hill climbing local search. 
+        """
+        starttime = time.time()
+
+        visited = {(0, 0): 1}
+        video_frames = []
+        video_name = "agent4_ghosts{}_".format(len(env.ghost_locations))
+        while time.time() <= (starttime + 180) and self.is_alive:
+            video_frames.append(self.get_image_array(env))
+            if self.is_success_state():
+                self.generate_video(video_name + "success", video_frames)
+                return 1
+            neighbors = self.get_valid_neighbors(
+                self.location, env.effective_maze) + [self.location]
+
+            original_location = self.location
+            evaluation_scores = {}
+
+            for neighbor in neighbors:
+                self.location = neighbor
+                knn_kdd = self.tree_search(env, 9, 'max')
+                evaluation = max(0.00100, knn_kdd)
+                # print(evaluation)
+                neighbor_score = abs(1 / (evaluation + 1)**(5))
+
+                if neighbor in visited:
+                    neighbor_score = neighbor_score * \
+                        0.6 ** (visited[neighbor])
+                md = self.manhattan_distance(self.location, constants.SIZE)
+                neighbor_score = ((neighbor_score + 1) / (md + 1)**(1))
+                neighbor_score += abs(1 / (evaluation+1)) * 15
+                evaluation_scores[neighbor] = round(neighbor_score, 6)
+
+            self.location = original_location
+            self.is_alive = True
+
+            maxKey, maxValue = self.location, -float("inf")
+            for key, value in evaluation_scores.items():
+                if visited.get(key, 0) <= 15 and evaluation_scores[key] > maxValue:
+                    maxKey = key
+                    maxValue = value
+
+            if maxKey not in env.ghost_locations.values():
+                self.location = maxKey
+            else:
+                self.location = self.move_agent_away_from_nearest_ghost(env)
+            visited[maxKey] = visited.get(maxKey, 0) + 1
+            if self.is_failure_state(env):
+                self.generate_video(video_name + "failure", video_frames)
+                return 0
+            env.step()
+
+        return -1

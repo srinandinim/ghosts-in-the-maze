@@ -144,7 +144,7 @@ class Agent2LI(Agent):
 
     def run_agent2_video(self, env):
         video_frames = []
-        video_name = "agent2_ghosts{}_".format(len(env.visible_ghosts))
+        video_name = "agent2li_ghosts{}_".format(len(env.visible_ghosts))
         path = self.modified_plan_path(env, self.location)
         while self.is_alive == True:
             video_frames.append(self.get_image_array(env))
