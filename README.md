@@ -4,7 +4,7 @@ This project involves building a simulator for the "Ghosts in the Maze" game and
 ## Simulator
 The game is played on a grid, where the goal is for the agent to reach the end of the maze while avoiding ghosts. In the high information environment, the locations of all ghosts are known to the agent. In the low information environment, only the locations of ghosts that are visible to the agent are known.
 
-## Intelligent Agents
+## Agents
 Five intelligent agents were developed for this project:
 
 1. Agent 1 plans an optimal path once, ignoring ghosts, and executes actions in its path until it reaches a terminal state.
