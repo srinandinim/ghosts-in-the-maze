@@ -5,7 +5,7 @@ import constants as constants
 
 
 class Environment:
-
+ 
     def __init__(self, num_ghosts=1):
         # sets up maze_grid
         self.maze_grid = self.make_valid_maze()
@@ -104,7 +104,9 @@ class Environment:
         return maze
 
     def initialize_temp_ghosts(self):
-        # this allows us to forecast ghosts with the game tree
+        """
+        forecasts ghosts with the game tree
+        """
         self.temp_ghosts = deepcopy(self.ghost_locations)
 
     def update_temp_ghosts(self):

@@ -1,14 +1,14 @@
-from copy import deepcopy
 import json
 import os
 import time
+from copy import deepcopy
 import constants
 import visualizations
-from agent1 import Agent1
-from agent2li import Agent2LI
-from agent3li import Agent3LI
-from agent4li import Agent4LI
-from agent5li import Agent5LI
+from agents.agent1 import Agent1
+from agents.lowinfo.agent2 import Agent2
+from agents.lowinfo.agent3 import Agent3
+from agents.lowinfo.agent4 import Agent4
+from agents.lowinfo.agent5 import Agent5
 from environment import Environment
 
 
@@ -38,7 +38,7 @@ def simulation_statistics_agent2(num_simulations, num_ghosts, environments=[]):
     for i in range(num_simulations):
         env = deepcopy(environments[i]) if environments else Environment(
             num_ghosts=num_ghosts)
-        agent2 = Agent2LI()
+        agent2 = Agent2()
         rewards_agent2.append(agent2.run_agent2(env))
     wins = sum(rewards_agent2)
     losses = len(rewards_agent2) - wins
@@ -57,7 +57,7 @@ def simulation_statistics_agent2_video(num_simulations, num_ghosts, environments
     for i in range(num_simulations):
         env = deepcopy(environments[i]) if environments else Environment(
             num_ghosts=num_ghosts)
-        agent2 = Agent2LI()
+        agent2 = Agent2()
         rewards_agent2.append(agent2.run_agent2_video(env))
     wins = sum(rewards_agent2)
     losses = len(rewards_agent2) - wins
@@ -78,7 +78,7 @@ def simulation_statistics_agent3(num_simulations, num_ghosts, environments=[]):
         start_time = time.time()
         env = deepcopy(environments[i]) if environments else Environment(
             num_ghosts=num_ghosts)
-        agent3 = Agent3LI()
+        agent3 = Agent3()
         result = agent3.run_agent3(env)
         rewards_agent3.append(1 if result == 1 else 0)
         if result == -1:
@@ -101,7 +101,7 @@ def simulation_statistics_agent3_video(num_simulations, num_ghosts, environments
     for i in range(num_simulations):
         env = deepcopy(environments[i]) if environments else Environment(
             num_ghosts=num_ghosts)
-        agent3 = Agent3LI()
+        agent3 = Agent3()
         rewards_agent3.append(agent3.run_agent3_video(env))
     wins = sum(rewards_agent3)
     losses = len(rewards_agent3) - wins
@@ -122,7 +122,7 @@ def simulation_statistics_agent4(num_simulations, num_ghosts, environments=[]):
         start_time = time.time()
         env = deepcopy(environments[i]) if environments else Environment(
             num_ghosts=num_ghosts)
-        agent4 = Agent4LI()
+        agent4 = Agent4()
         result = agent4.run_agent4(env)
         rewards_agent4.append(1 if result == 1 else 0)
         if result == -1:
@@ -145,7 +145,7 @@ def simulation_statistics_agent4_video(num_simulations, num_ghosts, environments
     for i in range(num_simulations):
         env = deepcopy(environments[i]) if environments else Environment(
             num_ghosts=num_ghosts)
-        agent4 = Agent4LI()
+        agent4 = Agent4()
         rewards_agent4.append(agent4.run_agent4_video(env))
     wins = sum(rewards_agent4)
     losses = len(rewards_agent4) - wins
@@ -164,7 +164,7 @@ def simulation_statistics_agent5(num_simulations, num_ghosts, environments=[]):
     for i in range(num_simulations):
         env = deepcopy(environments[i]) if environments else Environment(
             num_ghosts=num_ghosts)
-        agent5 = Agent5LI()
+        agent5 = Agent5()
         result = agent5.run_agent5(env)
         rewards_agent5.append(1 if result == 1 else 0)
         if result == -1:
@@ -186,7 +186,7 @@ def simulation_statistics_agent5_video(num_simulations, num_ghosts, environments
     for i in range(num_simulations):
         env = deepcopy(environments[i]) if environments else Environment(
             num_ghosts=num_ghosts)
-        agent5 = Agent5LI()
+        agent5 = Agent5()
         rewards_agent5.append(agent5.run_agent5_video(env))
     wins = sum(rewards_agent5)
     losses = len(rewards_agent5) - wins

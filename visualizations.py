@@ -2,7 +2,6 @@ import json
 import os
 import statistics as stat
 import matplotlib.pyplot as plt
-import numpy as np
 
 
 def get_stats(filename):
