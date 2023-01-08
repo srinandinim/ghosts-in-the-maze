@@ -1,6 +1,10 @@
 # Graduate AI Project 1: Ghosts-In-The-Maze
 This project involves building a simulator for the "Ghosts in the Maze" game and developing intelligent agents to play the game in high and low information environments. The project was completed in collaboration between Tej Shah and Srinandini Marpaka.
 
+The full lab report is here: https://github.com/srinandinim/ghosts-in-the-maze/blob/master/lab-report/tej-nandini-final.pdf
+
+Simulation video of the agents is here: https://github.com/srinandinim/ghosts-in-the-maze/tree/master/videos
+
 ## Motivation
 Can we make even the most efficient algorithms better than they already are? Can we encode inductive biases, human priors, or logical reasoning into these algorithms? Can we optimize our algorithms with respect to some objectives or constraints? In terms of performance, how good is good enough – can we trade off optimality for efficiency? Can we re-frame these algorithms to work in non-obvious settings? In short, can we make our algorithms informed? In this module, we discussed the following key ideas: uninformed search, informed search, classical planning, adversarial search/games, local search, and constraint satisfaction. 
 
