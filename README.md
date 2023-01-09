@@ -1,6 +1,10 @@
 # Graduate AI Project 1: Ghosts-In-The-Maze
 This project involves building a simulator for the "Ghosts in the Maze" game and developing intelligent agents to play the game in high and low information environments. The project was completed in collaboration between Tej Shah and Srinandini Marpaka.
 
+## Links
+
+Assignment: https://github.com/srinandinim/ghosts-in-the-maze/blob/master/lab-report/assignment-writeup.pdf
+
 Lab Report: https://github.com/srinandinim/ghosts-in-the-maze/blob/master/lab-report/tej-nandini-final.pdf
 
 Agent Video Simulations: https://github.com/srinandinim/ghosts-in-the-maze/tree/master/videos
@@ -16,3 +20,6 @@ A1 plans once, ignoring ghosts, using BFS. A2 re-plans whenever a ghost is one a
 
 ## Experimental Results
 The agents were run on high information (HI) and low information (LI) environments for grid sizes of 5x5, 10x10, 15x15, 20x20, 30x30, and 51x51. The experimental results indicate that the survival of the agents generally rank as follows for HI environments: Agent 1 < Agent 2 < Agent 3 ≤ Agent 4. The experimental results also indicate that the survival of the agents generally rank as follows for LI environments: Agent 1 < Agent 2 < Agent 3 ≤ Agent 4 ≤ Agent 5. Similar performance curves were observed in different-sized grids, suggesting that the agents developed are generalizable and agnostic to grid size in terms of success rate.
+
+# Academic Integrity
+Please follow both Rutgers University's Principles of Academic Integrity and the Rutgers Department of Computer Science's Academic Integrity Policy.
